@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.pawpals.databinding.ActivityMainBinding
@@ -102,12 +103,15 @@ class MainActivity : AppCompatActivity() {
 
     // 🔹 Fungsi logout
     fun logout() {
-        getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
+        // sementara ga ngapa2in
+        // bisa kasih Toast biar tau tombolnya kepencet
+        Toast.makeText(this, "Logout disabled (dev mode)", Toast.LENGTH_SHORT).show()
+        /*getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
 
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        finish()
+        finish()*/
     }
 
     // 🔹 Buka EventsListFragment
