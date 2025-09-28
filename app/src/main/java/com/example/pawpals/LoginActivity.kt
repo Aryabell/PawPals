@@ -52,18 +52,23 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val api = ApiClient.instance.create(Api::class.java)
+            val api = ApiClient.instance
             api.login(email, password).enqueue(object : Callback<ResponseModel> {
                 override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
                     val body = response.body()
                     if (response.isSuccessful && body != null) {
                         Toast.makeText(this@LoginActivity, body.message, Toast.LENGTH_SHORT).show()
                         if (body.success) {
-                            // Simpan login status dan role
-                            prefs.edit().putBoolean("IS_LOGGED_IN", true).apply()
-                            prefs.edit().putString("USER_ROLE", body.user?.role ?: "user").apply()
+                            // Simpan login status, role, dan user_id
+                            prefs.edit().apply {
+                                putBoolean("IS_LOGGED_IN", true)
+                                putString("USER_ROLE", body.user?.role ?: "user")
+                                putString("USER_ID", body.user?.id?.toString()) // simpan id user
+                                apply()
+                            }
+
                             Log.d("LoginActivity", "Role disimpan: ${body.user?.role}")
-                            Log.d("LoginActivity", "Raw response: ${response.errorBody()?.string() ?: response.body()}")
+                            Log.d("LoginActivity", "UserID disimpan: ${body.user?.id}")
 
 
                             // Tampilkan profil jika ada

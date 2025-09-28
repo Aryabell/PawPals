@@ -52,7 +52,7 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
 
         // trending posts (sementara pakai DataRepository.posts)
         rvTrending.layoutManager = LinearLayoutManager(requireContext())
-        rvTrending.adapter = CommunityAdapter(DataRepository.posts) { post ->
+        rvTrending.adapter = CommunityAdapter(DataRepository.posts.toMutableList()) { post ->
             val intent = Intent(requireContext(), ReplyActivity::class.java)
             intent.putExtra("post_id", post.id)
             intent.putExtra("post_title", post.author) // bold name
@@ -67,6 +67,25 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "PawPals Forum Community"
             setDisplayHomeAsUpEnabled(false)
+        }
+    }
+
+    fun reloadData(category: String) {
+        // contoh: filter trending posts berdasarkan kategori
+        val filteredPosts = if (category == "talks") {
+            DataRepository.posts
+        } else {
+            DataRepository.posts.filter { it.category == category }
+        }
+
+        view?.findViewById<RecyclerView>(R.id.rvTrendingPosts)?.let { rv ->
+            rv.adapter = CommunityAdapter(filteredPosts.toMutableList()) { post ->
+                val intent = Intent(requireContext(), ReplyActivity::class.java)
+                intent.putExtra("post_id", post.id)
+                intent.putExtra("post_title", post.author)
+                intent.putExtra("post_content", post.content)
+                startActivity(intent)
+            }
         }
     }
 }

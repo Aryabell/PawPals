@@ -66,6 +66,15 @@ class MainActivity : AppCompatActivity() {
                     openEventsFragment()
                     true
                 }
+                R.id.nav_community -> {
+                    openCommunityFragment()
+                    true
+                }
+
+                R.id.nav_profile -> {
+                    openProfileFragment()
+                    true
+                }
                 else -> false
             }
         }
@@ -82,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadPosts(category: String) {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (fragment is CommunityListFragment) {
-            // TODO: panggil fragment.reloadData()
+            fragment.reloadData(category) // pastikan kamu buat fungsi reloadData di CommunityListFragment
         }
     }
 
@@ -105,6 +114,21 @@ class MainActivity : AppCompatActivity() {
     fun openEventsFragment() {
         supportFragmentManager.beginTransaction()
             .replace(binding.fragmentContainer.id, com.example.pawpals.ui.EventsListFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    // 🔹 Buka CommunityListFragment
+    fun openCommunityFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainer.id, CommunityListFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun openProfileFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.ProfileFragment())
             .addToBackStack(null)
             .commit()
     }

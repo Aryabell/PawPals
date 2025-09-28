@@ -74,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
             profilePart = MultipartBody.Part.createFormData("profile_pic", file.name, reqFile)
         }
 
-        val api = ApiClient.instance.create(Api::class.java)
+        val api = ApiClient.instance
         api.register(namePart, emailPart, passwordPart, rolePart, profilePart) // <-- tambahkan rolePart
             .enqueue(object : Callback<ResponseModel> {
                 override fun onResponse(

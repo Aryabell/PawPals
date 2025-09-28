@@ -7,9 +7,9 @@
         android:id="@+id/nav_event"
         android:title="Event" />
     <item
-        android:id="@+id/nav_forum"
-        android:title="Forum" />
+        android:id="@+id/nav_community"
+        android:title="Community" />
     <item
         android:id="@+id/nav_profile"
-        android:title="Profil" />
+        android:title="Profile" />
 </menu>

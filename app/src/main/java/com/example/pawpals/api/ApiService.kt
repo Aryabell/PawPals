@@ -16,6 +16,15 @@ interface Api {
         @Part profile_pic: MultipartBody.Part?
     ): Call<ResponseModel>
 
+    @Multipart
+    @POST("update_profile.php")
+    fun updateProfile(
+        @Part("id") id: RequestBody,
+        @Part("name") name: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part profile_pic: MultipartBody.Part?
+    ): Call<ResponseModel>
+
     @FormUrlEncoded
     @POST("login.php")
     fun login(
