@@ -11,15 +11,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PawPals">
+
+        <meta-data
+            android:name="android.support.vectordrawable"
+            android:value="true"/>
+
+        <!-- Activity utama yang jadi launcher -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Activity untuk membuat post baru -->
+        <activity
+            android:name=".NewPostActivity"
+            android:exported="false" />
+
+        <!-- Activity untuk melihat & membalas post -->
+        <activity
+            android:name=".ReplyActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
