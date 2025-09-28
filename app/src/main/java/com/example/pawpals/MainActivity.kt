@@ -25,15 +25,32 @@ class MainActivity : AppCompatActivity() {
             HomeFragment()
         }
 
-        // Tampilkan fragment utama (admin atau home)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(binding.fragmentContainer.id, fragment)
                 .commit()
         }
+
+        // 🔹 Listener bottom navigation
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, HomeFragment())
+                        .commit()
+                    true
+                }
+                R.id.nav_event -> {
+                    openEventsFragment()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
-    // Fungsi logout yang bisa dipanggil dari fragment
+    // 🔹 Fungsi logout (bisa dipanggil dari fragment)
     fun logout() {
         getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
 
@@ -43,10 +60,10 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    // Fungsi untuk buka EventsListFragment dari mana saja
+    // 🔹 Fungsi untuk buka EventsListFragment dari mana saja
     fun openEventsFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.EventsListFragment())
+            .replace(R.id.fragmentContainer, com.example.pawpals.ui.EventsListFragment())
             .addToBackStack(null) // supaya bisa back ke fragment sebelumnya
             .commit()
     }
