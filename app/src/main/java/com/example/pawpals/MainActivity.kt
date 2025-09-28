@@ -25,20 +25,29 @@ class MainActivity : AppCompatActivity() {
             HomeFragment()
         }
 
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, fragment)
-            .commit()
+        // Tampilkan fragment utama (admin atau home)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentContainer.id, fragment)
+                .commit()
+        }
     }
 
     // Fungsi logout yang bisa dipanggil dari fragment
     fun logout() {
-        // Hapus SharedPreferences
         getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
 
-        // Pindah ke LoginActivity dan bersihkan task
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    // Fungsi untuk buka EventsListFragment dari mana saja
+    fun openEventsFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.EventsListFragment())
+            .addToBackStack(null) // supaya bisa back ke fragment sebelumnya
+            .commit()
     }
 }
