@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Izin internet untuk API/Retrofit -->
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Izin internet untuk API/Retrofit -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,22 +15,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawPals"
         android:usesCleartextTraffic="true">
-        <!-- Activity yang akan dijalankan pertama kali -->
+
+        <meta-data
+            android:name="android.support.vectordrawable"
+            android:value="true" />
+
+        <!-- Activity utama yang jadi launcher -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Activity lain, tanpa intent-filter -->
+        </activity>
+
+        <!-- Activity lain -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".NewPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReplyActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

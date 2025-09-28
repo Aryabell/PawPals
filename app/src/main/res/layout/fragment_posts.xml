@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Judul kategori (dinamis) -->
+    <TextView
+        android:id="@+id/tvForumTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PawPals: Kesehatan"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"/>
+
+    <!-- RecyclerView posts -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Belum ada postingan di kategori ini"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="8dp"/>
+
+</LinearLayout>

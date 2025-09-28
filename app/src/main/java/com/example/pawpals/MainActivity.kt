@@ -1,20 +1,42 @@
 package com.example.pawpals
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.pawpals.databinding.ActivityMainBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var fabAddPost: FloatingActionButton
+    private var currentCategory = "Talks" // default category
+
+    // launcher buat buka NewPostActivity
+    private val newPostLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // refresh fragment/list setelah ada post baru
+            loadPosts(currentCategory)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "PawPals Forum Community"
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+        // SharedPreferences cek role
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val role = prefs.getString("USER_ROLE", "user")
         Log.d("MainActivity", "Role terbaca: $role")
@@ -31,12 +53,12 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        // 🔹 Listener bottom navigation
+        // Bottom navigation
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, HomeFragment())
+                        .replace(binding.fragmentContainer.id, HomeFragment())
                         .commit()
                     true
                 }
@@ -44,13 +66,32 @@ class MainActivity : AppCompatActivity() {
                     openEventsFragment()
                     true
                 }
-
                 else -> false
             }
         }
+
+        // Floating Action Button
+        fabAddPost = findViewById(R.id.fabAddPost)
+        fabAddPost.setOnClickListener {
+            val intent = Intent(this, NewPostActivity::class.java)
+            intent.putExtra("category", currentCategory)
+            newPostLauncher.launch(intent)
+        }
     }
 
-    // 🔹 Fungsi logout (bisa dipanggil dari fragment)
+    private fun loadPosts(category: String) {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (fragment is CommunityListFragment) {
+            // TODO: panggil fragment.reloadData()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
+    }
+
+    // 🔹 Fungsi logout
     fun logout() {
         getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
 
@@ -60,11 +101,11 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    // 🔹 Fungsi untuk buka EventsListFragment dari mana saja
+    // 🔹 Buka EventsListFragment
     fun openEventsFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, com.example.pawpals.ui.EventsListFragment())
-            .addToBackStack(null) // supaya bisa back ke fragment sebelumnya
+            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.EventsListFragment())
+            .addToBackStack(null)
             .commit()
     }
 }
