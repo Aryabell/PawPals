@@ -15,6 +15,7 @@ import com.example.pawpals.databinding.ActivityMainBinding
 /* import com.example.pawpals.ui.HomeFragment
  import com.example.pawpals.ui.EventsListFragment
  import com.example.pawpals.ui.ProfileFragment
+  import com.example.pawpals.ModelFragment
  import com.example.pawpals.CommunityListFragment
  import com.example.pawpals.AdminFragment*/
 
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> loadFragment(HomeFragment())
                 R.id.nav_community -> loadFragment(CommunityListFragment())
                 R.id.nav_event -> loadFragment(com.example.pawpals.ui.EventsListFragment())
+                R.id.nav_model -> loadFragment(com.example.pawpals.ModelFragment())
                 R.id.nav_profile -> loadFragment(com.example.pawpals.ui.ProfileFragment())
 //                R.id.nav_placeholder -> false // Biarkan ini tidak bisa diklik
                 else -> false
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         // 3. Floating Action Button (NEW POST)
         // Gunakan ID FAB yang benar dari layout XML kamu (misal: fabDeteksi atau fabAddPost)
-        binding.fabAdd.setOnClickListener { // GANTI 'fabDeteksi' JIKA ID XML BEDA
+        binding.fabAdd.setOnClickListener {
 
             // Tampilkan pesan konfirmasi (opsional)
             Toast.makeText(this, "Membuka halaman Buat Post Baru", Toast.LENGTH_SHORT).show()
