@@ -16,10 +16,10 @@ class AdminFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin, container, false)
 
-        val btnLogout = view.findViewById<Button>(R.id.btnLogout)
+        /*val btnLogout = view.findViewById<Button>(R.id.btnLogout)
         btnLogout.setOnClickListener {
             (activity as? MainActivity)?.logout()
-        }
+        }*/
 
         return view
     }
