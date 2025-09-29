@@ -18,13 +18,6 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
     private lateinit var viewModel: EventViewModel
     private lateinit var adapter: EventAdapter
 
-    override fun onResume() {
-        super.onResume()
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Events for Pals"
-            setDisplayHomeAsUpEnabled(false)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _b = FragmentEventsListBinding.bind(view)

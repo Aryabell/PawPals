@@ -61,15 +61,6 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // setiap kali fragment Home muncul, kembalikan toolbar ke judul default dan matikan panah back
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "PawPals Forum Community"
-            setDisplayHomeAsUpEnabled(false)
-        }
-    }
-
     fun reloadData(category: String) {
         // contoh: filter trending posts berdasarkan kategori
         val filteredPosts = if (category == "talks") {

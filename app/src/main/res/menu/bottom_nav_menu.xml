@@ -15,16 +15,16 @@
         android:id="@+id/nav_placeholder"
         android:title=""
         android:enabled="false" />-->
+    <item
+        android:id="@+id/nav_model"
+        android:icon="@drawable/ic_scan"
+        android:title="Event" />
 
     <item
         android:id="@+id/nav_event"
         android:icon="@drawable/ic_event"
         android:title="Event" />
 
-    <item
-        android:id="@+id/nav_model"
-        android:icon="@drawable/camera"
-        android:title="Event" />
 
     <item
         android:id="@+id/nav_profile"

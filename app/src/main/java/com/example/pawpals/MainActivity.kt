@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 // HAPUS: import androidx.appcompat.widget.Toolbar (Toolbar sekarang diakses via binding)
 // HAPUS: import com.google.android.material.floatingactionbutton.FloatingActionButton (Tidak perlu lagi)
 import com.example.pawpals.databinding.ActivityMainBinding
+import com.example.pawpals.ui.EventsListFragment
+import com.example.pawpals.ui.ProfileFragment
 
 // PASTIKAN SEMUA FRAGMENT INI SUDAH ADA IMPORTNYA:
 /* import com.example.pawpals.ui.HomeFragment
@@ -62,17 +64,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 2. Bottom Navigation Logic
+        // 2. Bottom Navigation Logic
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> loadFragment(HomeFragment())
+                R.id.nav_home -> {
+                    if (role == "admin") {
+                        loadFragment(AdminFragment()) // admin diarahkan ke AdminFragment
+                    } else {
+                        loadFragment(HomeFragment()) // user biasa ke HomeFragment
+                    }
+                }
                 R.id.nav_community -> loadFragment(CommunityListFragment())
                 R.id.nav_event -> loadFragment(com.example.pawpals.ui.EventsListFragment())
                 R.id.nav_model -> loadFragment(com.example.pawpals.ModelFragment())
                 R.id.nav_profile -> loadFragment(com.example.pawpals.ui.ProfileFragment())
-//                R.id.nav_placeholder -> false // Biarkan ini tidak bisa diklik
                 else -> false
             }
-            true // Harus mengembalikan true untuk item yang valid
+            true
         }
 
         // 3. Floating Action Button (NEW POST)
@@ -96,9 +104,35 @@ class MainActivity : AppCompatActivity() {
     // Fungsi loadFragment yang baru dan lebih rapi
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, fragment) // ID BARU
+            .replace(R.id.main_fragment_container, fragment)
             .commit()
+
+        when (fragment) {
+            is HomeFragment -> {
+                supportActionBar?.title = "PawPals"
+            }
+            is CommunityListFragment -> {
+                supportActionBar?.title = "Community"
+            }
+            is EventsListFragment -> {
+                supportActionBar?.title = "Events for Pals"
+            }
+            is ModelFragment -> {
+                supportActionBar?.title = "Disease Detection"
+            }
+            is ProfileFragment -> {
+                supportActionBar?.title = "My Profile"
+            }
+            is AdminFragment -> {
+                supportActionBar?.title = "Admin Panel"
+            }
+        }
+
+        // Matikan tombol back di semua fragment
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
+
+
 
     // Fungsi loadPosts disederhanakan, ID lama fragment_container DIBUANG
     private fun loadPosts(category: String) {
