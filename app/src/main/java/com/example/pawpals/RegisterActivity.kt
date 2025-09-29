@@ -4,23 +4,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pawpals.api.Api
 import com.example.pawpals.api.ApiClient
 import com.example.pawpals.databinding.ActivityRegisterBinding
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import com.example.pawpals.model.ResponseModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
-
-// Ganti sesuai lokasi ResponseModel Anda
-import com.example.pawpals.model.ResponseModel
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -32,6 +30,11 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set Toolbar
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         // Tombol pilih gambar
         binding.btnSelectImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
@@ -42,12 +45,21 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnRegister.setOnClickListener { registerUser() }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            // kembali ke LoginActivity
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     @Deprecated("onActivityResult is deprecated, but fine for simple use here")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.data
-            // gunakan id yang sesuai di layout
             binding.imageViewProfile.setImageURI(selectedImageUri)
         }
     }
@@ -65,7 +77,7 @@ class RegisterActivity : AppCompatActivity() {
         val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
         val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())
         val passwordPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
-        val rolePart = "user".toRequestBody("text/plain".toMediaTypeOrNull()) // <-- default user
+        val rolePart = "user".toRequestBody("text/plain".toMediaTypeOrNull())
 
         var profilePart: MultipartBody.Part? = null
         selectedImageUri?.let { uri ->
@@ -75,7 +87,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         val api = ApiClient.instance
-        api.register(namePart, emailPart, passwordPart, rolePart, profilePart) // <-- tambahkan rolePart
+        api.register(namePart, emailPart, passwordPart, rolePart, profilePart)
             .enqueue(object : Callback<ResponseModel> {
                 override fun onResponse(
                     call: Call<ResponseModel>,
@@ -102,9 +114,6 @@ class RegisterActivity : AppCompatActivity() {
             })
     }
 
-    /**
-     * Mengubah Uri dari galeri menjadi File sementara untuk upload Retrofit.
-     */
     private fun uriToFile(uri: Uri): File {
         val fileName = getFileName(uri) ?: "temp_image"
         val tempFile = File(cacheDir, fileName)
