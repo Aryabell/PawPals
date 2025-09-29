@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
-        android:elevation="4dp"
+        android:elevation="0dp"
+        app:elevation="0dp"
         android:layout_alignParentTop="true"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -22,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
         app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled" />
+        app:labelVisibilityMode="unlabeled"/>
 
     <FrameLayout
         android:id="@+id/main_fragment_container"

@@ -20,7 +20,7 @@ import com.example.pawpals.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     // HAPUS fabAddPost: sekarang akses langsung via binding.fabDeteksi
     private var currentCategory = "Talks" // default category
 

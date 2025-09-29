@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,14 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
     private val b get() = _b!!
     private lateinit var viewModel: EventViewModel
     private lateinit var adapter: EventAdapter
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Events for Pals"
+            setDisplayHomeAsUpEnabled(false)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _b = FragmentEventsListBinding.bind(view)

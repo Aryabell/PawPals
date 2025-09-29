@@ -68,4 +68,8 @@ class EventViewModel : ViewModel() {
     }
 
     fun getEventById(id: Int): Event? = _events.value?.find { it.id == id }
+
+    fun refreshEvent(){
+        fetchDogImages()
+    }
 }
