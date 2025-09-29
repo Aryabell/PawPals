@@ -1,44 +1,50 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/community_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvForumTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PawPals Forum Community"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:padding="16dp" />
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvForumTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pals Communities"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="16dp" />
 
-    <!-- Horizontal list komunitas -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCommunities"
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        <!-- Horizontal list komunitas -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCommunities"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sedang ramai dibicarakan"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="16dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sedang ramai dibicarakan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp" />
 
-    <!-- Trending posts -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTrending"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <!-- Trending posts -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTrending"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNewPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"
-        android:contentDescription="Tambah Post" />
-</LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            android:contentDescription="Tambah Post" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

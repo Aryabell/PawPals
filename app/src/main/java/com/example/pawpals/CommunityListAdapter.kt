@@ -15,6 +15,9 @@ class CommunityListAdapter(
     private val onClick: (CommunityCategory) -> Unit
 ) : RecyclerView.Adapter<CommunityListAdapter.CatViewHolder>() {
 
+
+    private var selectedCategory: CommunityCategory? = null
+
     inner class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val img: ImageView = itemView.findViewById(R.id.imgCommunity)
         val tv: TextView = itemView.findViewById(R.id.tvCommunityName)
@@ -29,9 +32,17 @@ class CommunityListAdapter(
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val category = items[position]
         holder.tv.text = category.title
-        holder.img.setImageResource(R.drawable.ic_profile_placeholder) // pastikan ada drawable ini
-        holder.itemView.setOnClickListener { onClick(category) }
+        holder.img.setImageResource(R.drawable.ic_profile_placeholder)
+
+        holder.itemView.setOnClickListener {
+            selectedCategory = category // Set kategori yang dipilih saat di-klik
+            onClick(category)
+        }
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun getCurrentSelectedCategory(): CommunityCategory? {
+        return selectedCategory
+    }
 }

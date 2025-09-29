@@ -78,7 +78,7 @@ class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
         super.onDestroyView()
         // begitu fragment hilang (balik ke home), kembalikan toolbar ke default
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "PawPals Forum Community"
+            title = "Pals Communities"
             setDisplayHomeAsUpEnabled(false)
         }
     }

@@ -12,10 +12,10 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
 
     // pasangan (title, id)
     private val categories = listOf(
-        Pair("PawPals: Health", "health"),
-        Pair("PawPals: Playdate", "playdate"),
-        Pair("PawPals: Talks", "talks"),
-        Pair("PawPals: Rekomendasi Barang", "reco")
+        Pair("Health", "health"),
+        Pair("Playdate", "playdate"),
+        Pair("Talks", "talks"),
+        Pair("Recommend", "reco")
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
