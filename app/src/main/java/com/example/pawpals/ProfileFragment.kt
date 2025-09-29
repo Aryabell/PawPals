@@ -7,14 +7,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.pawpals.R
 import com.example.pawpals.api.ApiClient
 import com.example.pawpals.databinding.FragmentProfileBinding
+import com.example.pawpals.LoginActivity
 import com.example.pawpals.model.ResponseModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,17 +31,59 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var selectedImageUri: Uri? = null
 
+    // ✅ Ganti startActivityForResult dengan cara baru
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                selectedImageUri = result.data?.data
+                b.imgProfile.setImageURI(selectedImageUri)
+
+                // simpan sementara ke prefs
+                val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
+                prefs.edit().putString("profile_pic", selectedImageUri.toString()).apply()
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _b = FragmentProfileBinding.bind(view)
 
-        b.btnChangePic.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 100)
+        val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
+        val profilePicPath = prefs.getString("profile_pic", null)
+
+        // tampilkan foto profil
+        if (!profilePicPath.isNullOrEmpty()) {
+            if (profilePicPath.startsWith("content://") || profilePicPath.startsWith("file://")) {
+                b.imgProfile.setImageURI(Uri.parse(profilePicPath))
+            } else {
+                val imageUrl = ApiClient.BASE_URL + profilePicPath
+                Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .error(R.drawable.ic_profile_placeholder)
+                    .circleCrop()
+                    .into(b.imgProfile)
+            }
         }
 
+        // ganti foto
+        b.btnChangePic.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
+        }
+
+        // simpan update profile
         b.btnSave.setOnClickListener {
             updateProfile()
+        }
+
+        // logout
+        b.btnLogout.setOnClickListener {
+            prefs.edit().clear().apply()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 
@@ -45,20 +91,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val name = b.edtName.text.toString().trim()
         val password = b.edtPassword.text.toString().trim()
 
-        // 🔹 Ambil ID user dari SharedPreferences
-        val sharedPref = requireContext().getSharedPreferences("user_session", Activity.MODE_PRIVATE)
         val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
         val id = prefs.getString("USER_ID", null)
-
 
         if (id.isNullOrEmpty()) {
             Toast.makeText(requireContext(), "User ID tidak ditemukan, silakan login ulang.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val idPart = RequestBody.create("text/plain".toMediaTypeOrNull(), id)
-        val namePart = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-        val passPart = RequestBody.create("text/plain".toMediaTypeOrNull(), password)
+        val idPart = id.toRequestBody("text/plain".toMediaTypeOrNull())
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
 
         var profilePicPart: MultipartBody.Part? = null
         selectedImageUri?.let {
@@ -66,7 +109,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             requireContext().contentResolver.openInputStream(it).use { input ->
                 file.outputStream().use { output -> input?.copyTo(output) }
             }
-            val reqFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             profilePicPart = MultipartBody.Part.createFormData("profile_pic", file.name, reqFile)
         }
 
@@ -77,7 +120,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     response: Response<ResponseModel>
                 ) {
                     if (response.isSuccessful) {
-                        Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                        val body = response.body()
+                        Toast.makeText(requireContext(), body?.message ?: "Update berhasil", Toast.LENGTH_SHORT).show()
+
+                        // simpan path foto profil baru ke prefs
+                        if (!body?.user?.profile_pic.isNullOrEmpty()) {
+                            prefs.edit().putString("profile_pic", body.user!!.profile_pic).apply()
+                        } else if (selectedImageUri != null) {
+                            prefs.edit().putString("profile_pic", selectedImageUri.toString()).apply()
+                        }
                     } else {
                         Toast.makeText(requireContext(), "Update gagal", Toast.LENGTH_SHORT).show()
                     }
@@ -87,14 +138,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
                 }
             })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            b.imgProfile.setImageURI(selectedImageUri)
-        }
     }
 
     override fun onDestroyView() {

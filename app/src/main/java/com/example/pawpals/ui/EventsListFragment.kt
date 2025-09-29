@@ -42,6 +42,17 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
             }
         )
 
+        b.swipeRefresh.setOnRefreshListener {
+            viewModel.refereshEvent()
+
+            viewModel.events.observe(viewLifecycleOwner){
+                adapter.submitList(it)
+                b.swipeRefresh.isRefreshing = false
+            }
+        }
+
+
+
         b.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         b.recyclerView.adapter = adapter
 

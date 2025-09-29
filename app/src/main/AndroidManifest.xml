@@ -21,9 +21,8 @@
             android:value="true" />
 
         <!-- Activity utama yang jadi launcher -->
-        <!--aku rubah biar lgsg ke main-->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,14 +30,13 @@
             </intent-filter>
         </activity>
 
-        <!-- LoginActivity tanpa intent-filter -->
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
+        <!-- Activity lain -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".NewPostActivity"
             android:exported="false" />
