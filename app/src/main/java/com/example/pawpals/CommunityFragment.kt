@@ -14,12 +14,18 @@ import androidx.appcompat.app.AppCompatActivity
 
 class CommunityFragment : Fragment(R.layout.fragment_community) {
 
+    private val SCROLLED_ELEVATION_DP = 4f
+    private val SCROLLED_ELEVATION_PX by lazy {
+        resources.displayMetrics.density * SCROLLED_ELEVATION_DP
+    }
+
     override fun onResume() {
         super.onResume()
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Pals Communities"
             setDisplayHomeAsUpEnabled(false)
         }
+        (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
     }
 
     private lateinit var rvCommunities: RecyclerView
@@ -44,6 +50,10 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val nestedScrollView = view.findViewById<androidx.core.widget.NestedScrollView>(R.id.community_scroll_view)
+        val mainActivity = activity as? MainActivity
+        val toolbar = mainActivity?.binding?.toolbar
+
         tvTitle = view.findViewById(R.id.tvForumTitle)
         rvCommunities = view.findViewById(R.id.rvCommunities)
         rvTrending = view.findViewById(R.id.rvTrending)
@@ -51,11 +61,33 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
 
         // List komunitas horizontal
         val communities = listOf(
-            CommunityCategory("health", "PawPals: Kesehatan"),
-            CommunityCategory("talks", "PawPals: Talks"),
-            CommunityCategory("playdate", "PawPals: Playdate"),
-            CommunityCategory("reco", "PawPals: Rekomendasi Barang")
+            CommunityCategory("health", "Health"),
+            CommunityCategory("talks", "Talks"),
+            CommunityCategory("playdate", "Playdate"),
+            CommunityCategory("reco", "Recommend")
         )
+
+        if (nestedScrollView != null && toolbar != null) {
+            // 1. Set elevasi awal ke 0
+            toolbar.elevation = 0f
+
+            // 2. Tambahkan listener scroll
+            nestedScrollView.setOnScrollChangeListener(
+                androidx.core.widget.NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                    if (scrollY > 0) {
+                        // Munculkan shadow (elevasi) saat digulir ke bawah
+                        if (toolbar.elevation != SCROLLED_ELEVATION_PX) {
+                            toolbar.elevation = SCROLLED_ELEVATION_PX
+                        }
+                    } else {
+                        // Hilangkan shadow (elevasi) saat berada di puncak
+                        if (toolbar.elevation != 0f) {
+                            toolbar.elevation = 0f
+                        }
+                    }
+                }
+            )
+        }
 
         rvCommunities.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -79,6 +111,9 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
 
         fabNew.setOnClickListener {
             val intent = Intent(requireContext(), NewPostActivity::class.java)
+            // Asumsi: Kirim categoryId yang sedang aktif jika ada, default ke 'Talks'
+            val currentCategory = (rvCommunities.adapter as? CommunityListAdapter)?.getCurrentSelectedCategory()?.id ?: "Talks"
+            intent.putExtra("category", currentCategory)
             createPostLauncher.launch(intent)
         }
     }
