@@ -11,16 +11,84 @@ object DataRepository {
 
     init {
         // contoh sample post (field category adalah display name seperti "Kesehatan")
-        posts.add(0, Post("1", "Butuh saran vet untuk kulit anjing...", "Ari", "2h", "Kesehatan", null))
-        posts.add(1, Post("2", "Ayo ngumpul playdate minggu depan!", "Sinta", "6h", "Playdate", null))
-        posts.add(2, Post("3", "Ada rekomendasi mainan tahan lama?", "Rizal", "1d", "Rekomendasi", null))
-        posts.add(3, Post("4", "Siapa yang pakai makanan merk X? share dong", "Tia", "1d", "Talks", null))
+        // FIELD WAJIB BARU DITAMBAHKAN di sini:
+        posts.add(0, Post(
+            id = "1",
+            content = "Butuh saran vet untuk kulit anjing...",
+            author = "Ari",
+            timestamp = "2h ago",
+            category = "Health",
+            imageUri = null,
+            userRole = "Anggota", // Default Role
+            commentCount = 5,
+            likeCount = 10,
+            userAvatar = R.drawable.ic_profile_placeholder // Default Avatar
+        ))
+        posts.add(1, Post(
+            id = "2",
+            content = "Ayo ngumpul playdate minggu depan!",
+            author = "Sinta",
+            timestamp = "6h ago",
+            category = "Playdate",
+            imageUri = null,
+            userRole = "Anggota",
+            commentCount = 15,
+            likeCount = 30,
+            userAvatar = R.drawable.ic_profile_placeholder
+        ))
+        posts.add(2, Post(
+            id = "3",
+            content = "Ada rekomendasi mainan tahan lama?",
+            author = "Rizal",
+            timestamp = "1d ago",
+            category = "Recommend",
+            imageUri = null,
+            userRole = "Anggota",
+            commentCount = 2,
+            likeCount = 5,
+            userAvatar = R.drawable.ic_profile_placeholder
+        ))
+        posts.add(3, Post(
+            id = "4",
+            content = "Siapa yang pakai makanan merk X? share dong",
+            author = "Tia",
+            timestamp = "1d ago",
+            category = "Talks",
+            imageUri = null,
+            userRole = "Anggota",
+            commentCount = 20,
+            likeCount = 55,
+            userAvatar = R.drawable.ic_profile_placeholder
+        ))
     }
 
-    fun addPost(content: String, author: String = "Anon", category: String = "Talks", imageUri: String? = null): Post {
+    // Perbarui fungsi addPost juga
+    fun addPost(content: String,
+                author: String = "Anon",
+                category: String = "Talks",
+                imageUri: String? = null,
+                userRole: String = "Anggota",
+                commentCount: Int = 0,
+                likeCount: Int = 0,
+                userAvatar: Int = R.drawable.ic_profile_placeholder): Post {
+
         val id = UUID.randomUUID().toString()
-        val ts = formatNow()
-        val post = Post(id = id, content = content, author = author, timestamp = ts, category = category, imageUri = imageUri)
+
+        // ⭐️ GANTI: Gunakan waktu saat ini (milidetik) dan konversi ke String ⭐️
+        val ts = System.currentTimeMillis().toString()
+
+        val post = Post(
+            id = id,
+            content = content,
+            author = author,
+            timestamp = ts, // Sekarang menyimpan waktu Long dalam bentuk String
+            category = category,
+            imageUri = imageUri,
+            userRole = userRole,
+            commentCount = commentCount,
+            likeCount = likeCount,
+            userAvatar = userAvatar
+        )
         posts.add(0, post)
         return post
     }
@@ -44,19 +112,21 @@ object DataRepository {
 
     fun addReply(postId: String, author: String, content: String, imageUri: String? = null): Reply {
         val id = UUID.randomUUID().toString()
-        val reply = Reply(id, author, content, formatNow(), imageUri)
+
+        // ⭐️ GANTI: Gunakan waktu saat ini dalam milidetik (Long) yang diubah ke String ⭐️
+        val timestamp = System.currentTimeMillis().toString()
+
+        // Perhatikan: Anda harus memastikan data class Reply Anda menerima String/Long untuk timestamp
+        val reply = Reply(id, author, content, timestamp, imageUri)
+
         val list = repliesMap.getOrPut(postId) { mutableListOf() }
         list.add(reply)
+
         return reply
     }
 
     fun getReplies(postId: String): MutableList<Reply> {
         return repliesMap.getOrPut(postId) { mutableListOf() }
-    }
-
-    private fun formatNow(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        return sdf.format(Date())
     }
 
     private fun mapCategoryIdToName(id: String): String {

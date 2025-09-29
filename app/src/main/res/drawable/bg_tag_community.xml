@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#9EEFFF" />
-            <corners android:radius="6dp" />
-        </shape>
-    </item>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-    <item
-        android:drawable="@drawable/ic_paw"
-        android:left="8dp"
-        android:top="5dp"
-        android:bottom="2dp"
-        android:width="10dp"
-        android:height="10dp"
-        />
-</layer-list>
+    <corners android:radius="6dp" />
+</shape>
         <!--<rotate
             android:fromDegrees="15"
             android:toDegrees="15"

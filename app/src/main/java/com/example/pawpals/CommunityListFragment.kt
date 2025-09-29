@@ -12,7 +12,7 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
 
     // pasangan (title, id)
     private val categories = listOf(
-        Pair("PawPals: Kesehatan", "health"),
+        Pair("PawPals: Health", "health"),
         Pair("PawPals: Playdate", "playdate"),
         Pair("PawPals: Talks", "talks"),
         Pair("PawPals: Rekomendasi Barang", "reco")
@@ -45,7 +45,7 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
             val frag = CommunityPostsFragment.newInstance(selectedTitle, id)
 
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, frag)
+                .replace(R.id.main_fragment_container, frag)
                 .addToBackStack(null)
                 .commit()
         }

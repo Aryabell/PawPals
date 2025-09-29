@@ -10,8 +10,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
 
 class CommunityFragment : Fragment(R.layout.fragment_community) {
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Pals Communities"
+            setDisplayHomeAsUpEnabled(false)
+        }
+    }
 
     private lateinit var rvCommunities: RecyclerView
     private lateinit var rvTrending: RecyclerView
@@ -39,9 +48,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         rvCommunities = view.findViewById(R.id.rvCommunities)
         rvTrending = view.findViewById(R.id.rvTrending)
         fabNew = view.findViewById(R.id.fabNewPost)
-
-        // Judul utama
-        tvTitle.text = "PawPals Forum Community"
 
         // List komunitas horizontal
         val communities = listOf(

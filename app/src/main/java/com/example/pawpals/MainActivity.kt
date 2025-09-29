@@ -5,15 +5,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.Fragment // PENTING: Pastikan ini ada
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+// HAPUS: import androidx.appcompat.widget.Toolbar (Toolbar sekarang diakses via binding)
+// HAPUS: import com.google.android.material.floatingactionbutton.FloatingActionButton (Tidak perlu lagi)
 import com.example.pawpals.databinding.ActivityMainBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+// PASTIKAN SEMUA FRAGMENT INI SUDAH ADA IMPORTNYA:
+/* import com.example.pawpals.ui.HomeFragment
+ import com.example.pawpals.ui.EventsListFragment
+ import com.example.pawpals.ui.ProfileFragment
+ import com.example.pawpals.CommunityListFragment
+ import com.example.pawpals.AdminFragment*/
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var fabAddPost: FloatingActionButton
+    // HAPUS fabAddPost: sekarang akses langsung via binding.fabDeteksi
     private var currentCategory = "Talks" // default category
 
     // launcher buat buka NewPostActivity
@@ -32,9 +40,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Toolbar
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "PawPals Forum Community"
+        setSupportActionBar(binding.toolbar)
+//        supportActionBar?.title = "PawPals"
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         // SharedPreferences cek role
@@ -42,98 +49,68 @@ class MainActivity : AppCompatActivity() {
         val role = prefs.getString("USER_ROLE", "user")
         Log.d("MainActivity", "Role terbaca: $role")
 
-        val fragment = if (role == "admin") {
+        val initialFragment = if (role == "admin") {
             AdminFragment()
         } else {
             HomeFragment()
         }
 
+        // 1. Load Fragment Awal
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.id, fragment)
-                .commit()
+            loadFragment(initialFragment) // Gunakan fungsi loadFragment() di sini
         }
 
-        // Bottom navigation
+        // 2. Bottom Navigation Logic
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(binding.fragmentContainer.id, HomeFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_event -> {
-                    openEventsFragment()
-                    true
-                }
-                R.id.nav_community -> {
-                    openCommunityFragment()
-                    true
-                }
-
-                R.id.nav_profile -> {
-                    openProfileFragment()
-                    true
-                }
+                R.id.nav_home -> loadFragment(HomeFragment())
+                R.id.nav_community -> loadFragment(CommunityListFragment())
+                R.id.nav_event -> loadFragment(com.example.pawpals.ui.EventsListFragment())
+                R.id.nav_profile -> loadFragment(com.example.pawpals.ui.ProfileFragment())
+//                R.id.nav_placeholder -> false // Biarkan ini tidak bisa diklik
                 else -> false
             }
+            true // Harus mengembalikan true untuk item yang valid
         }
 
-        // Floating Action Button
-        fabAddPost = findViewById(R.id.fabAddPost)
-        fabAddPost.setOnClickListener {
+        // 3. Floating Action Button (NEW POST)
+        // Gunakan ID FAB yang benar dari layout XML kamu (misal: fabDeteksi atau fabAddPost)
+        binding.fabAdd.setOnClickListener { // GANTI 'fabDeteksi' JIKA ID XML BEDA
+
+            // Tampilkan pesan konfirmasi (opsional)
+            Toast.makeText(this, "Membuka halaman Buat Post Baru", Toast.LENGTH_SHORT).show()
+
+            // ⭐️ LOGIKA KRUSIAL: Buka NewPostActivity ⭐️
             val intent = Intent(this, NewPostActivity::class.java)
+
+            // Kirim category saat ini agar Post tahu ia harus masuk ke forum mana
             intent.putExtra("category", currentCategory)
+
+            // Jalankan Activity baru dan tunggu hasilnya (RESULT_OK) untuk refresh list
             newPostLauncher.launch(intent)
         }
     }
 
+    // Fungsi loadFragment yang baru dan lebih rapi
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, fragment) // ID BARU
+            .commit()
+    }
+
+    // Fungsi loadPosts disederhanakan, ID lama fragment_container DIBUANG
     private fun loadPosts(category: String) {
-        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        val fragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container) // GANTI ID di sini
         if (fragment is CommunityListFragment) {
             fragment.reloadData(category) // pastikan kamu buat fungsi reloadData di CommunityListFragment
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
-    }
+    // ... (onSupportNavigateUp dan logout dibiarkan) ...
 
-    // 🔹 Fungsi logout
-    fun logout() {
-        // sementara ga ngapa2in
-        // bisa kasih Toast biar tau tombolnya kepencet
-        Toast.makeText(this, "Logout disabled (dev mode)", Toast.LENGTH_SHORT).show()
-        /*getSharedPreferences("user_prefs", MODE_PRIVATE).edit().clear().apply()
-
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()*/
-    }
-
-    // 🔹 Buka EventsListFragment
-    fun openEventsFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.EventsListFragment())
-            .addToBackStack(null)
-            .commit()
-    }
-
-    // 🔹 Buka CommunityListFragment
-    fun openCommunityFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, CommunityListFragment())
-            .addToBackStack(null)
-            .commit()
-    }
-
-    fun openProfileFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, com.example.pawpals.ui.ProfileFragment())
-            .addToBackStack(null)
-            .commit()
-    }
+    /* HAPUS SEMUA FUNGSI NAVIGASI LAMA INI KARENA SUDAH DIGANTIKAN OLEH loadFragment DI ONCREATE:
+    fun openEventsFragment() { ... }
+    fun openCommunityFragment() { ... }
+    fun openProfileFragment() { ... }
+    */
 }

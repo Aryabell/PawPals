@@ -46,23 +46,23 @@
                         android:text="Paw Admin"
                         android:textStyle="bold"
                         android:textColor="@android:color/black"
-                        android:fontFamily="@font/poppinsmedium"
+                        android:fontFamily="@font/intervariable"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_community_tag"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:layout_marginStart="8dp"
-                        android:paddingStart="24dp"
+                        android:background="@drawable/bg_tag_community"
+                        android:fontFamily="@font/intervariable"
+                        android:paddingStart="6dp"           android:paddingTop="2dp"
                         android:paddingEnd="6dp"
-                        android:paddingTop="2dp"
                         android:paddingBottom="2dp"
                         android:text="Lost Dogs"
-                        android:textSize="10sp"
                         android:textColor="@android:color/black"
-                        android:fontFamily="@font/poppinsmedium"
-                        android:background="@drawable/bg_tag_community" />
+                        android:textSize="10sp"
+                        android:drawableStart="@drawable/ic_paw_tag"  android:drawablePadding="4dp"          />
                 </LinearLayout>
 
                 <TextView
@@ -89,7 +89,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="56dp" android:text="Halo, Mipaw nemu lost doggi di deket esdisi"
             android:textSize="14sp"
-            android:fontFamily="@font/poppinsmedium" />
+            android:fontFamily="@font/intervariable" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_post_image_container"
@@ -126,14 +126,15 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_chat_bubble" />
+                    android:src="@drawable/ic_comment" />
                 <TextView
                     android:id="@+id/tv_comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="12"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"/>
             </LinearLayout>
 
             <LinearLayout
@@ -147,14 +148,15 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_favorite_border" />
+                    android:src="@drawable/ic_favorite" />
                 <TextView
                     android:id="@+id/tv_like_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="45"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"/>
             </LinearLayout>
         </LinearLayout>
 

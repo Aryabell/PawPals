@@ -36,7 +36,7 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
             onItemClick = { ev ->
                 val frag = EventDetailFragment.newInstance(ev.id)
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, frag)
+                    .replace(R.id.main_fragment_container, frag)
                     .addToBackStack(null)
                     .commit()
             }
