@@ -1,14 +1,11 @@
 package com.example.pawpals
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import androidx.fragment.app.Fragment
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,6 +14,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val SCROLLED_ELEVATION_DP = 4f
     private val SCROLLED_ELEVATION_PX by lazy {
         resources.displayMetrics.density * SCROLLED_ELEVATION_DP
+    }
+
+    // ✨ Tambahan: variabel global biar bisa akses di fungsi lain
+    private lateinit var rvPosts: RecyclerView
+    private lateinit var postAdapter: CommunityAdapter
+    private lateinit var allPosts: MutableList<Post>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Tambahin biar fragment ini bisa punya menu (toolbar)
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,6 +38,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Buat data dummy
         val dummyPosts = getDummyPosts()
 
+        // ✨ Simpan ke variabel global biar bisa difilter nanti
+        allPosts = dummyPosts.toMutableList()
+
         // etup Adapter
         // Asumsi CommunityAdapter menerima List<Post> dan OnClickListener
         val postAdapter = CommunityAdapter(
@@ -38,6 +49,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 // TODO: Logika saat post diklik (misalnya, buka ReplyActivity)
             }
         )
+
+        // ✨ Simpan juga adapter-nya ke variabel global
+        this.rvPosts = rvPosts
+        this.postAdapter = postAdapter
 
         // 3. LOGIKA SCROLLING DAN ELEVASI BARU
         nestedScrollView.setOnScrollChangeListener(
@@ -74,6 +89,45 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // btnLogout.setOnClickListener { (activity as? MainActivity)?.logout() }
     }
 
+    // ✨ Tambahan baru: bikin menu search di toolbar
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_menu, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.queryHint = "Cari post, username, atau role..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filterPosts(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterPosts(newText)
+                return true
+            }
+        })
+    }
+
+    // ✨ Fungsi tambahan buat filter postingan
+    private fun filterPosts(query: String?) {
+        val filteredList = if (query.isNullOrBlank()) {
+            allPosts
+        } else {
+            allPosts.filter {
+                it.content.contains(query, ignoreCase = true) ||
+                        it.author.contains(query, ignoreCase = true) ||
+                        it.category.contains(query, ignoreCase = true)
+            }.toMutableList()
+        }
+
+        rvPosts.adapter = CommunityAdapter(filteredList) { post ->
+            // TODO: Aksi kalau post diklik
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -112,5 +166,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
         )
     }
-
 }
