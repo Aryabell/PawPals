@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = "PawPals"
             }
             is CommunityListFragment -> {
-                supportActionBar?.title = "Community"
+                supportActionBar?.title = "Pals Community"
             }
             is EventsListFragment -> {
                 supportActionBar?.title = "Events for Pals"

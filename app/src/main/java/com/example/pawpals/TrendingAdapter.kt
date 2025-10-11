@@ -11,6 +11,9 @@ class TrendingAdapter(
     private val onClick: (Post) -> Unit
 ) : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>() {
 
+    // 🔹 Tambahan untuk search/filter
+    private var allItems = items.toList()
+
     inner class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
@@ -33,7 +36,20 @@ class TrendingAdapter(
 
     fun updateData(newItems: List<Post>) {
         items = newItems
+        allItems = newItems.toList() // 🔹 update allItems juga
+        notifyDataSetChanged()
+    }
+
+    // 🔹 Tambahkan fungsi filterData
+    fun filterData(query: String) {
+        items = if (query.isEmpty()) {
+            allItems
+        } else {
+            allItems.filter {
+                it.content.contains(query, ignoreCase = true) ||
+                        it.author.contains(query, ignoreCase = true)
+            }
+        }
         notifyDataSetChanged()
     }
 }
-
