@@ -130,12 +130,24 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         when (fragment) {
-            is HomeFragment -> supportActionBar?.title = "PawPals"
-            is CommunityListFragment -> supportActionBar?.title = "Community"
-            is EventsListFragment -> supportActionBar?.title = "Events for Pals"
-            is ModelFragment -> supportActionBar?.title = "Disease Detection"
-            is ProfileFragment -> supportActionBar?.title = "My Profile"
-            is AdminFragment -> supportActionBar?.title = "Admin Panel"
+            is HomeFragment -> {
+                supportActionBar?.title = "PawPals"
+            }
+            is CommunityListFragment -> {
+                supportActionBar?.title = "Pals Community"
+            }
+            is EventsListFragment -> {
+                supportActionBar?.title = "Events for Pals"
+            }
+            is ModelFragment -> {
+                supportActionBar?.title = "Disease Detection"
+            }
+            is ProfileFragment -> {
+                supportActionBar?.title = "My Profile"
+            }
+            is AdminFragment -> {
+                supportActionBar?.title = "Admin Panel"
+            }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
