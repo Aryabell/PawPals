@@ -1,4 +1,4 @@
-package com.example.pawpals.ui
+package com.example.pawpals.event
 
 import android.os.Bundle
 import android.view.View

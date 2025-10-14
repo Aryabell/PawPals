@@ -1,4 +1,4 @@
-package com.example.pawpals.ui
+package com.example.pawpals.event
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

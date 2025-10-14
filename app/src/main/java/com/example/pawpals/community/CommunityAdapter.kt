@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +10,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import android.graphics.Color
+import com.example.pawpals.R
 import java.util.concurrent.TimeUnit
 import java.text.SimpleDateFormat
 import java.util.Date

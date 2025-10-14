@@ -7,26 +7,26 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.pawpals.HomeFragment"
+        android:name="com.example.pawpals.ui.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/eventsListFragment"
-        android:name="com.example.pawpals.ui.EventsListFragment"
+        android:name="com.example.pawpals.event.EventsListFragment"
         android:label="Event"
         tools:layout="@layout/fragment_events_list" />
 
     <fragment
         android:id="@+id/communityListFragment"
-        android:name="com.example.pawpals.CommunityListFragment"
+        android:name="com.example.pawpals.community.CommunityListFragment"
         android:label="Community"
         tools:layout="@layout/fragment_community_list" />
 
 
     <fragment
         android:id="@+id/modelFragment"
-        android:name="com.example.pawpals.ModelFragment"
+        android:name="com.example.pawpals.model.ModelFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_model" />
 

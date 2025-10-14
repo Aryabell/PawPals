@@ -1,7 +1,8 @@
-package com.example.pawpals
+package com.example.pawpals.data
 
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.example.pawpals.R
+import com.example.pawpals.community.Post
+import com.example.pawpals.community.Reply
 import java.util.Locale
 import java.util.UUID
 
@@ -23,7 +24,8 @@ object DataRepository {
             commentCount = 5,
             likeCount = 10,
             userAvatar = R.drawable.ic_profile_placeholder // Default Avatar
-        ))
+        )
+        )
         posts.add(1, Post(
             id = "2",
             content = "Ayo ngumpul playdate minggu depan!",
@@ -35,7 +37,8 @@ object DataRepository {
             commentCount = 15,
             likeCount = 30,
             userAvatar = R.drawable.ic_profile_placeholder
-        ))
+        )
+        )
         posts.add(2, Post(
             id = "3",
             content = "Ada rekomendasi mainan tahan lama?",
@@ -47,7 +50,8 @@ object DataRepository {
             commentCount = 2,
             likeCount = 5,
             userAvatar = R.drawable.ic_profile_placeholder
-        ))
+        )
+        )
         posts.add(3, Post(
             id = "4",
             content = "Siapa yang pakai makanan merk X? share dong",
@@ -59,7 +63,8 @@ object DataRepository {
             commentCount = 20,
             likeCount = 55,
             userAvatar = R.drawable.ic_profile_placeholder
-        ))
+        )
+        )
     }
 
     // Perbarui fungsi addPost juga

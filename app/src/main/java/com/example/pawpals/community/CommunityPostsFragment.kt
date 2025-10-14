@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pawpals.data.DataRepository
+import com.example.pawpals.R
 
 class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
 

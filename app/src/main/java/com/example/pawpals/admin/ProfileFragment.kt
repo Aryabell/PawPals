@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.pawpals.R
 import com.example.pawpals.api.ApiClient
 import com.example.pawpals.databinding.FragmentProfileBinding
-import com.example.pawpals.LoginActivity
+import com.example.pawpals.admin.LoginActivity
 import com.example.pawpals.model.ResponseModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

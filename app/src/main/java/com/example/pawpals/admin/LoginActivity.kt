@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.admin
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.pawpals.api.Api
+import com.example.pawpals.MainActivity
+import com.example.pawpals.R
 import com.example.pawpals.api.ApiClient
 import com.example.pawpals.model.ResponseModel
 import retrofit2.Call

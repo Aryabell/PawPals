@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pawpals.R
 
 // ganti nama biar ga tabrakan
 data class CommunityCategory(val id: String, val title: String)

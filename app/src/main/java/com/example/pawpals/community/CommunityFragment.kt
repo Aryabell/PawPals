@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 import android.app.Activity
 import android.content.Intent
@@ -16,6 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
+import com.example.pawpals.data.DataRepository
+import com.example.pawpals.MainActivity
+import com.example.pawpals.R
 
 class CommunityFragment : Fragment(R.layout.fragment_community) {
 
@@ -60,7 +64,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         super.onViewCreated(view, savedInstanceState)
 
         val nestedScrollView =
-            view.findViewById<androidx.core.widget.NestedScrollView>(R.id.community_scroll_view)
+            view.findViewById<NestedScrollView>(R.id.community_scroll_view)
         val mainActivity = activity as? MainActivity
         val toolbar = mainActivity?.binding?.toolbar
 
@@ -99,7 +103,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         if (nestedScrollView != null && toolbar != null) {
             toolbar.elevation = 0f
             nestedScrollView.setOnScrollChangeListener(
-                androidx.core.widget.NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
                     if (scrollY > 0) {
                         if (toolbar.elevation != SCROLLED_ELEVATION_PX) {
                             toolbar.elevation = SCROLLED_ELEVATION_PX

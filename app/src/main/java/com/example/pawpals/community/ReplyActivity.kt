@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 import android.net.Uri
 import android.os.Bundle
@@ -12,8 +12,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pawpals.data.DataRepository
+import com.example.pawpals.R
 
 class ReplyActivity : AppCompatActivity() {
 
@@ -30,7 +33,7 @@ class ReplyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reply)
 
         // set toolbar sebagai actionbar
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Balasan"

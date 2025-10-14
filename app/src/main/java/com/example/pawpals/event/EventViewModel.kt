@@ -1,4 +1,4 @@
-package com.example.pawpals.ui
+package com.example.pawpals.event
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

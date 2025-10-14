@@ -7,9 +7,9 @@
             android:title="Profil" />
 
         <item
-            android:id="@+id/nav_community"
+            android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_paw_rotated_line"
-            android:title="Komunitas" />
+            android:title="Notifications" />
     </group>
 
     <item android:title="Lainnya">

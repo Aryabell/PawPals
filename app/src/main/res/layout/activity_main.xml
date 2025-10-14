@@ -21,14 +21,6 @@
             android:background="@android:color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="0dp" />
-      
-        <!-- Container Fragment -->
-        <FrameLayout
-            android:id="@+id/main_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
-            android:layout_above="@id/bottom_navigation" />
 
         <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,6 +31,15 @@
             android:background="@android:color/white"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="unlabeled" />
+      
+        <!-- Container Fragment -->
+        <FrameLayout
+            android:id="@+id/main_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/bottom_navigation" />
+
 
         <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton

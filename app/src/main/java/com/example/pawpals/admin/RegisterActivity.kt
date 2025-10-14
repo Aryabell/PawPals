@@ -1,5 +1,6 @@
-package com.example.pawpals
+package com.example.pawpals.admin
 
+import android.R
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -46,7 +47,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+        if (item.itemId == R.id.home) {
             // kembali ke LoginActivity
             startActivity(Intent(this, LoginActivity::class.java))
             finish()

@@ -1,6 +1,5 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
-import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +8,8 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.pawpals.data.DataRepository
+import com.example.pawpals.R
 
 class NewPostActivity : AppCompatActivity() {
     private lateinit var spinnerCategory: Spinner
@@ -99,7 +100,7 @@ class NewPostActivity : AppCompatActivity() {
                 category = selectedCategory // ⭐️ GUNAKAN NILAI SPINNER ⭐️
             )
 
-            setResult(Activity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     }

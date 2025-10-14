@@ -1,15 +1,19 @@
-package com.example.pawpals
+package com.example.pawpals.ui
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pawpals.MainActivity
+import com.example.pawpals.R
+import com.example.pawpals.community.CommunityAdapter
+import com.example.pawpals.community.Post
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val SCROLLED_ELEVATION_DP = 4f

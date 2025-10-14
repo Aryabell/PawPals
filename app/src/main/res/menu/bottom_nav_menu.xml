@@ -7,9 +7,9 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/nav_community"
-        android:icon="@drawable/ic_paw_rotated_line"
-        android:title="Community" />
+        android:id="@+id/nav_event"
+        android:icon="@drawable/ic_event"
+        android:title="Event" />
 
     <!--<item
         android:id="@+id/nav_placeholder"
@@ -18,13 +18,12 @@
     <item
         android:id="@+id/nav_model"
         android:icon="@drawable/ic_scan"
-        android:title="Event" />
+        android:title="Model" />
 
     <item
-        android:id="@+id/nav_event"
-        android:icon="@drawable/ic_event"
-        android:title="Event" />
-
+        android:id="@+id/nav_community"
+        android:icon="@drawable/ic_paw_rotated_line"
+        android:title="Notifications" />
 
     <item
         android:id="@+id/nav_profile"

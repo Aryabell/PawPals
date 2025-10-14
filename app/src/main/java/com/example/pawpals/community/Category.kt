@@ -1,4 +1,4 @@
-package com.example.pawpals
+package com.example.pawpals.community
 
 data class Category(
     val id: String,

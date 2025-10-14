@@ -8,11 +8,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.drawerlayout.widget.DrawerLayout
+import com.example.pawpals.admin.AdminFragment
+import com.example.pawpals.admin.LoginActivity
+import com.example.pawpals.community.CommunityListFragment
+import com.example.pawpals.community.NewPostActivity
 import com.example.pawpals.databinding.ActivityMainBinding
-import com.google.android.material.navigation.NavigationView
-import com.example.pawpals.ui.EventsListFragment
+import com.example.pawpals.event.EventsListFragment
+import com.example.pawpals.model.ModelFragment
+import com.example.pawpals.ui.HomeFragment
 import com.example.pawpals.ui.ProfileFragment
+import com.example.pawpals.notification.NotificationFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,8 +59,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile -> {
                     loadFragment(ProfileFragment())
                 }
-                R.id.nav_community -> {
-                    loadFragment(CommunityListFragment())
+                R.id.nav_notifications -> {
+                    loadFragment(NotificationFragment())
                 }
                 R.id.nav_settings -> {
                     loadFragment(SettingsFragment()) // pastikan kamu punya fragment ini
