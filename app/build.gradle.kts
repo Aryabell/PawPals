@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
+    id("kotlin-parcelize")
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -91,6 +91,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.1")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("io.coil-kt:coil:2.4.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
