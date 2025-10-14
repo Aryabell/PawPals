@@ -82,15 +82,13 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
-                R.id.nav_community -> {
-                    loadFragment(CommunityListFragment())
-                    binding.bottomNavigation.selectedItemId = R.id.nav_community
-                }
+                R.id.nav_community -> loadFragment(CommunityListFragment())
                 R.id.nav_event -> loadFragment(EventsListFragment())
                 R.id.nav_model -> loadFragment(ModelFragment())
             }
             true
         }
+
 
         // 🔹 Floating Action Button
         binding.fabAdd.setOnClickListener {
