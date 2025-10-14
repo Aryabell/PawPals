@@ -22,7 +22,7 @@
 
         <!-- Activity utama yang jadi launcher -->
         <activity
-            android:name=".admin.LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,13 +30,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity lain -->
-        <activity
-            android:name=".admin.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
         <activity
             android:name=".community.NewPostActivity"
             android:exported="false" />
