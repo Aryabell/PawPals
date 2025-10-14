@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.ImageButton
 
 fun getTimeAgo(timeMillis: Long): String {
     val now = System.currentTimeMillis()
@@ -73,6 +76,7 @@ class CommunityAdapter(
         val tvLikeCount: TextView = itemView.findViewById(R.id.tv_like_count)
         val ivLikeIcon: ImageView = itemView.findViewById(R.id.iv_like_icon)
         val likeContainer: View = itemView.findViewById(R.id.ll_like_action)
+        val moreBtn: View = itemView.findViewById(R.id.moreBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostVH {
@@ -123,7 +127,8 @@ class CommunityAdapter(
         if (post.imageUri != null) {
             holder.cvImageContainer.visibility = View.VISIBLE
             val resourceName = post.imageUri.substringAfterLast("/")
-            val resourceId = context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+            val resourceId =
+                context.resources.getIdentifier(resourceName, "drawable", context.packageName)
             if (resourceId != 0) {
                 holder.imgPostImage.setImageResource(resourceId)
             } else {
@@ -157,8 +162,30 @@ class CommunityAdapter(
 
         // ======== ITEM CLICK ========
         holder.itemView.setOnClickListener { onItemClick(post) }
+
+        // ======== MORE BUTTON ========
+        holder.moreBtn.setOnClickListener { view ->
+            val popup = PopupMenu(view.context, view)
+            popup.menuInflater.inflate(R.menu.menu_post_more, popup.menu)
+
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_report -> {
+                        val dialog = ReportDialogFragment.newInstance(post.id)
+                        (view.context as AppCompatActivity)
+                            .supportFragmentManager
+                            .let { dialog.show(it, "reportDialog") }
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            popup.show()
+        }
     }
 
+    // 👉 ini sekarang udah di dalam class, bukan di luar
     override fun getItemCount(): Int = items.size
 
     fun updateData(newList: MutableList<Post>) {

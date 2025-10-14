@@ -75,7 +75,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/iv_more_menu"
+                android:id="@+id/moreBtn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
