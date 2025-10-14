@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.example.pawpals.admin.AdminFragment
+import com.example.pawpals.adoption.AdoptionActivity
 import com.example.pawpals.community.CommunityListFragment
 import com.example.pawpals.community.NewPostActivity
 import com.example.pawpals.databinding.ActivityMainBinding
@@ -59,6 +60,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_notifications -> {
                     loadFragment(NotificationFragment())
+                }
+                R.id.nav_adoption -> {
+                    // ✅ Buka halaman adopsi
+                    val intent = Intent(this, AdoptionActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.nav_settings -> {
                     loadFragment(SettingsFragment()) // pastikan fragment ini ada

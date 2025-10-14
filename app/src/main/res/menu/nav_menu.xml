@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile_placeholder"
@@ -10,6 +11,13 @@
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_paw_rotated_line"
             android:title="Notifications" />
+
+        <!-- 🐶 Tambahan menu untuk Adopsi Anjing -->
+        <item
+            android:id="@+id/nav_adoption"
+            android:icon="@drawable/ic_profile_dog"
+            android:title="Adopsi Anjing" />
+
     </group>
 
     <item android:title="Lainnya">
@@ -22,4 +30,5 @@
                 android:title="Keluar" />
         </menu>
     </item>
+
 </menu>
