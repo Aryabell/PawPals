@@ -59,9 +59,7 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
             adapter.submitList(list)
         }
 
-        b.fabAdd.setOnClickListener {
-            Toast.makeText(requireContext(), "Feature add event nanti ya", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     override fun onDestroyView() {

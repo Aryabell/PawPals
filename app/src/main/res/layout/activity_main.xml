@@ -20,7 +20,18 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="0dp" />
+            android:elevation="0dp">
+
+            <!-- Icon notifikasi di ujung kanan -->
+            <ImageView
+                android:id="@+id/iv_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_notification"
+                android:contentDescription="Notifikasi" />
+        </androidx.appcompat.widget.Toolbar>
 
         <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +42,7 @@
             android:background="@android:color/white"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="unlabeled" />
-      
+
         <!-- Container Fragment -->
         <FrameLayout
             android:id="@+id/main_fragment_container"
@@ -39,7 +50,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
             android:layout_above="@id/bottom_navigation" />
-
 
         <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,7 +59,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="68dp"
+            android:layout_marginBottom="85dp"
             android:src="@drawable/ic_add"
             app:tint="@android:color/white"
             android:contentDescription="Tambah Post"
@@ -67,4 +77,5 @@
         android:background="@android:color/white"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
