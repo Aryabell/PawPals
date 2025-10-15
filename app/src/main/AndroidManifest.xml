@@ -39,11 +39,7 @@
             android:exported="false" />
 
         <!-- adopsi -->
-        <activity
-            android:name=".adoption.AdoptionActivity"
-            android:exported="false"
-            android:label="Adopsi Anjing"
-            android:theme="@style/Theme.PawPals" />
+
         <activity
             android:name=".adoption.DetailActivity"
             android:exported="false"

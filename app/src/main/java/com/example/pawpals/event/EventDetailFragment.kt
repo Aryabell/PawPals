@@ -30,6 +30,10 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
         viewModel = ViewModelProvider(requireActivity()).get(EventViewModel::class.java)
         eventId = arguments?.getInt(ARG_ID) ?: 0
 
+        b.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()   // kembali ke fragment sebelumnya
+        }
+
         viewModel.events.observe(viewLifecycleOwner) { list ->
             val ev = list.find { it.id == eventId } ?: return@observe
             b.tvTitle.text = ev.title
