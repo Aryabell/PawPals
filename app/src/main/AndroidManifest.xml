@@ -20,7 +20,7 @@
             android:name="android.support.vectordrawable"
             android:value="true" />
 
-        <!-- Activity utama yang jadi launcher -->
+        <!-- Activity utama -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,12 +30,15 @@
             </intent-filter>
         </activity>
 
+        <!-- komunitas -->
         <activity
             android:name=".community.NewPostActivity"
             android:exported="false" />
         <activity
             android:name=".community.ReplyActivity"
             android:exported="false" />
+
+        <!-- adopsi -->
         <activity
             android:name=".adoption.AdoptionActivity"
             android:exported="false"
@@ -47,8 +50,21 @@
             android:label="Detail Anjing"
             android:theme="@style/Theme.PawPals" />
 
+        <activity
+            android:name=".adoption.AdoptionFormActivity"
+            android:exported="false"
+            android:label="Formulir Adopsi"
+            android:theme="@style/Theme.PawPals" />
 
+
+        <!-- 💬 direct message -->
+        <activity
+            android:name=".message.ChatActivity"
+            android:exported="false"
+            android:label="Chat"
+            android:theme="@style/Theme.PawPals" />
 
     </application>
+
 
 </manifest>
