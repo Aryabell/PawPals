@@ -8,6 +8,8 @@
     <color name="text_dark">#333333</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="teal_700">#00796B</color>
     <color name="color_tag_lost_dogs">#292826</color>
     <color name="color_tag_playground">#8BC34A</color>
     <color name="color_tag_adoption">#673AB7</color>
@@ -16,6 +18,9 @@
     <color name="color_tag_recommend">#fae85c</color>
     <color name="color_tag_events">#faab5c</color>
     <color name="color_tag_talks">#AFFAFE</color>
+    <color name="blue_dark">#1565C0</color>
+    <color name="background_light">#F2F4F7</color>
+
 
 
 </resources>

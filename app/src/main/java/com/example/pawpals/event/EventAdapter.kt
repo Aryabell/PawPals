@@ -1,18 +1,21 @@
 package com.example.pawpals.event
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.pawpals.R
 import com.example.pawpals.data.Event
 import com.example.pawpals.databinding.ItemEventBinding
-import com.bumptech.glide.Glide
-import com.example.pawpals.R
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class EventAdapter(
     private var items: List<Event>,
-    private val onJoinClick: (Event) -> Unit,
-    private val onItemClick: (Event) -> Unit
+    private val onJoinClick: (Event) -> Unit = {},
+    private val onItemClick: (Event) -> Unit = {},
+    private val onDeleteClick: ((Event) -> Unit)? = null,
+    private val isAdmin: Boolean = false
 ) : RecyclerView.Adapter<EventAdapter.VH>() {
 
     inner class VH(private val b: ItemEventBinding) : RecyclerView.ViewHolder(b.root) {
@@ -20,21 +23,31 @@ class EventAdapter(
             b.tvTitle.text = e.title
             b.tvDate.text = e.date
             b.tvLocation.text = e.location
-            b.btnJoin.text = if (e.isJoined) "Joined" else "Join"
-            b.btnJoin.isEnabled = !e.isJoined
-            b.btnJoin.alpha = if (e.isJoined) 0.6f else 1f
 
-            // Load gambar pake Glide
+            // Gambar banner pakai Glide
             Glide.with(b.root.context)
                 .load(e.imageUrl)
-                .placeholder(R.drawable.ic_placeholder) // tambahin drawable placeholder
-                .error(R.drawable.ic_error) // tambahin gambar error biar ga blank kalau gagal
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_error)
                 .centerCrop()
-                .thumbnail(0.25f) // ✅ load versi kecil dulu
-                .diskCacheStrategy(DiskCacheStrategy.ALL) // ✅ cache di memori & disk
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(b.ivBanner)
 
-            b.btnJoin.setOnClickListener { onJoinClick(e) }
+            if (isAdmin) {
+                // Admin hanya bisa hapus event
+                b.btnJoin.visibility = View.GONE
+                b.btnDelete.visibility = View.VISIBLE
+                b.btnDelete.setOnClickListener { onDeleteClick?.invoke(e) }
+            } else {
+                // Member hanya bisa join
+                b.btnJoin.visibility = View.VISIBLE
+                b.btnDelete.visibility = View.GONE
+                b.btnJoin.text = if (e.isJoined) "Joined" else "Join"
+                b.btnJoin.isEnabled = !e.isJoined
+                b.btnJoin.alpha = if (e.isJoined) 0.6f else 1f
+                b.btnJoin.setOnClickListener { onJoinClick(e) }
+            }
+
             b.root.setOnClickListener { onItemClick(e) }
         }
     }
@@ -48,7 +61,7 @@ class EventAdapter(
         holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount() = items.size
 
     fun submitList(newList: List<Event>) {
         items = newList

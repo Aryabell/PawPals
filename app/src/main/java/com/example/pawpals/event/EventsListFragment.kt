@@ -22,7 +22,8 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
         _b = FragmentEventsListBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity()).get(EventViewModel::class.java)
 
-        adapter = EventAdapter(emptyList(),
+        adapter = EventAdapter(
+            items = emptyList(),
             onJoinClick = { ev ->
                 AlertDialog.Builder(requireContext())
                     .setTitle("Konfirmasi")
@@ -40,7 +41,8 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
                     .replace(R.id.main_fragment_container, frag)
                     .addToBackStack(null)
                     .commit()
-            }
+            },
+            isAdmin = false // <-- ini penting
         )
 
         b.swipeRefresh.setOnRefreshListener{

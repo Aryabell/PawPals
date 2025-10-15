@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.example.pawpals.admin.AdminFragment
 import com.example.pawpals.adoption.AdoptionFragment
 import com.example.pawpals.community.CommunityListFragment
 import com.example.pawpals.community.NewPostActivity
@@ -19,7 +18,7 @@ import com.example.pawpals.model.ModelFragment
 import com.example.pawpals.ui.HomeFragment
 import com.example.pawpals.ui.ProfileFragment
 import com.example.pawpals.notification.NotificationFragment
-
+import com.example.pawpals.admin.LoginActivity
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -80,6 +79,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_logout -> {
                     Toast.makeText(this, "Keluar dari akun", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish() // biar MainActivity ditutup
                 }
             }
 
@@ -140,10 +142,7 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = "My Profile"
                 binding.fabAdd.hide() // ❌ sembunyikan FAB
             }
-            is AdminFragment -> {
-                supportActionBar?.title = "Admin Panel"
-                binding.fabAdd.hide() // ❌ sembunyikan FAB
-            }
+
             is MessageListFragment -> {
                 supportActionBar?.title = "Messages"
                 binding.fabAdd.hide() // ❌ sembunyikan FAB

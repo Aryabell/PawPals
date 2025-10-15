@@ -43,5 +43,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Join" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🗑️ Hapus"
+            android:backgroundTint="@color/red"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:visibility="visible" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

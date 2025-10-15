@@ -13,5 +13,7 @@ data class Post(
     val commentCount: Int,       // Jumlah komentar
     var likeCount: Int,          // Jumlah like
     val userAvatar: Int,         // Avatar drawable
-    var isLiked: Boolean = false // like post
+    var isLiked: Boolean = false, // like post
+    var isTrending: Boolean = false,
+    var isHidden: Boolean = false
 ) : Serializable

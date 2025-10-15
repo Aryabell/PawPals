@@ -28,15 +28,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         resources.displayMetrics.density * SCROLLED_ELEVATION_DP
     }
 
-    override fun onResume() {
-        super.onResume()
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Pals Community"
-            setDisplayHomeAsUpEnabled(false)
-        }
-        (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
-    }
-
     private lateinit var rvCommunities: RecyclerView
     private lateinit var rvTrending: RecyclerView
     private lateinit var tvTitle: TextView
@@ -45,17 +36,15 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
     private lateinit var searchContainer: LinearLayout
     private lateinit var btnSearchCommunityToggle: ImageView
 
-
     private lateinit var trendingAdapter: TrendingAdapter
     private lateinit var createPostLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         createPostLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    loadTrendingPosts() // reload saat balik dari NewPostActivity
+                    loadTrendingPosts()
                 }
             }
     }
@@ -63,8 +52,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val nestedScrollView =
-            view.findViewById<NestedScrollView>(R.id.community_scroll_view)
+        val nestedScrollView = view.findViewById<NestedScrollView>(R.id.community_scroll_view)
         val mainActivity = activity as? MainActivity
         val toolbar = mainActivity?.binding?.toolbar
 
@@ -72,8 +60,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         rvCommunities = view.findViewById(R.id.rvCommunities)
         rvTrending = view.findViewById(R.id.rvTrending)
         fabNew = view.findViewById(R.id.fabNewPost)
-
-        // 🔍 Tambahan: view untuk search bar
         etSearch = view.findViewById(R.id.etSearchCommunity)
         searchContainer = view.findViewById(R.id.searchBarContainer)
         btnSearchCommunityToggle = view.findViewById(R.id.btnSearchCommunityToggle)
@@ -90,9 +76,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             }
         }
 
-
-
-        // List komunitas horizontal
+        // Horizontal category list
         val communities = listOf(
             CommunityCategory("health", "Health"),
             CommunityCategory("talks", "Talks"),
@@ -104,15 +88,8 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             toolbar.elevation = 0f
             nestedScrollView.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                    if (scrollY > 0) {
-                        if (toolbar.elevation != SCROLLED_ELEVATION_PX) {
-                            toolbar.elevation = SCROLLED_ELEVATION_PX
-                        }
-                    } else {
-                        if (toolbar.elevation != 0f) {
-                            toolbar.elevation = 0f
-                        }
-                    }
+                    toolbar.elevation =
+                        if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
                 }
             )
         }
@@ -142,7 +119,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             createPostLauncher.launch(intent)
         }
 
-        // 🔍 Fitur filter realtime
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -152,12 +128,26 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Pals Community"
+            setDisplayHomeAsUpEnabled(false)
+        }
+        (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
+
+        rvTrending.adapter = trendingAdapter
+        loadTrendingPosts()
+    }
+
     private fun loadTrendingPosts(categoryId: String? = null) {
         val trending = if (categoryId != null) {
             DataRepository.getTrendingPostsByCategory(categoryId)
         } else {
             DataRepository.getTrendingPosts()
         }
-        trendingAdapter.updateData(trending)
+
+        val visiblePosts = trending.filter { !it.isHidden }
+        trendingAdapter.updateData(visiblePosts)
     }
 }
