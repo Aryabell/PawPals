@@ -13,6 +13,7 @@ import com.example.pawpals.community.CommunityListFragment
 import com.example.pawpals.community.NewPostActivity
 import com.example.pawpals.databinding.ActivityMainBinding
 import com.example.pawpals.event.EventsListFragment
+import com.example.pawpals.message.MessageListFragment
 import com.example.pawpals.model.ModelFragment
 import com.example.pawpals.ui.HomeFragment
 import com.example.pawpals.ui.ProfileFragment
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_community -> loadFragment(CommunityListFragment())
                 R.id.nav_event -> loadFragment(EventsListFragment())
                 R.id.nav_model -> loadFragment(ModelFragment())
+                R.id.nav_message -> loadFragment(MessageListFragment())
             }
             true
         }

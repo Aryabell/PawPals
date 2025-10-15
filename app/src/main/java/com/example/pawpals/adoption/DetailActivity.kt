@@ -47,20 +47,20 @@ class DetailActivity : AppCompatActivity() {
             }
 
             btnMessage.setOnClickListener {
-                val smsIntent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("smsto:${dog.ownerPhone}")
-                    putExtra("sms_body", "Halo, saya tertarik mengadopsi ${dog.name} — boleh tanya2?")
-                }
-                startActivity(smsIntent)
+                val intent = Intent(this@DetailActivity, com.example.pawpals.message.ChatActivity::class.java)
+                intent.putExtra("receiverId", dog.ownerId) // ID user pemilik anjing
+                intent.putExtra("receiverName", dog.ownerName)
+                intent.putExtra("dogName", dog.name)
+                startActivity(intent)
             }
 
+
             btnAdopt.setOnClickListener {
-                val i = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("smsto:${dog.ownerPhone}")
-                    putExtra("sms_body", "Halo, saya ingin adopsi ${dog.name}. Mohon info selanjutnya.")
-                }
-                startActivity(i)
+                val intent = Intent(this@DetailActivity, AdoptionFormActivity::class.java)
+                intent.putExtra("dogName", dog.name)
+                startActivity(intent)
             }
+
         }
     }
 }

@@ -13,6 +13,7 @@ data class Dog(
     val imageUrl: String,
     val ageInYears: Int,
     val weightKg: Double,
+    val ownerId: String = "",
     val ownerName: String,
     val ownerPhone: String,
     val ownerMessageHandle: String // misal username atau bisa kosong
