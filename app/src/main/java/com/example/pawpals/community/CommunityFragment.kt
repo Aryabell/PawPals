@@ -39,12 +39,14 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
     private lateinit var trendingAdapter: TrendingAdapter
     private lateinit var createPostLauncher: ActivityResultLauncher<Intent>
 
+    private var selectedCategoryId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createPostLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    loadTrendingPosts()
+                    // Tidak perlu reload manual — LiveData otomatis update
                 }
             }
     }
@@ -64,6 +66,31 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         searchContainer = view.findViewById(R.id.searchBarContainer)
         btnSearchCommunityToggle = view.findViewById(R.id.btnSearchCommunityToggle)
 
+        // 🟣 Observasi perubahan post
+        DataRepository.posts.observe(viewLifecycleOwner) { allPosts ->
+            val trending = if (selectedCategoryId != null) {
+                allPosts.filter {
+                    it.isTrending && !it.isHidden &&
+                            it.category.equals(selectedCategoryId, ignoreCase = true)
+                }
+            } else {
+                allPosts.filter { it.isTrending && !it.isHidden }
+            }
+            trendingAdapter.updateData(trending)
+        }
+
+        // 🌫️ Elevasi toolbar saat scroll
+        if (nestedScrollView != null && toolbar != null) {
+            toolbar.elevation = 0f
+            nestedScrollView.setOnScrollChangeListener(
+                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                    toolbar.elevation =
+                        if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
+                }
+            )
+        }
+
+        // 🔎 Toggle search bar
         btnSearchCommunityToggle.setOnClickListener {
             if (searchContainer.visibility == View.GONE) {
                 searchContainer.visibility = View.VISIBLE
@@ -76,30 +103,28 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             }
         }
 
-        // Horizontal category list
+        // 🏷️ List kategori
         val communities = listOf(
             CommunityCategory("health", "Kesehatan"),
             CommunityCategory("talks", "Talks"),
             CommunityCategory("playdate", "Playdate"),
-            CommunityCategory("reco", "Rekomendasi")
+            CommunityCategory("recommend", "Recommend")
         )
-
-        if (nestedScrollView != null && toolbar != null) {
-            toolbar.elevation = 0f
-            nestedScrollView.setOnScrollChangeListener(
-                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                    toolbar.elevation =
-                        if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
-                }
-            )
-        }
 
         rvCommunities.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvCommunities.adapter = CommunityListAdapter(communities) { category ->
-            loadTrendingPosts(category.id)
+            selectedCategoryId = category.id
+            DataRepository.posts.value?.let { allPosts ->
+                val filtered = allPosts.filter {
+                    it.isTrending && !it.isHidden &&
+                            it.category.equals(selectedCategoryId, ignoreCase = true)
+                }
+                trendingAdapter.updateData(filtered)
+            }
         }
 
+        // 🔥 Trending list
         rvTrending.layoutManager = LinearLayoutManager(requireContext())
         trendingAdapter = TrendingAdapter(listOf()) { post ->
             val intent = Intent(requireContext(), ReplyActivity::class.java)
@@ -108,8 +133,8 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             startActivity(intent)
         }
         rvTrending.adapter = trendingAdapter
-        loadTrendingPosts()
 
+        // ➕ Tombol posting baru
         fabNew.setOnClickListener {
             val intent = Intent(requireContext(), NewPostActivity::class.java)
             val currentCategory =
@@ -119,6 +144,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             createPostLauncher.launch(intent)
         }
 
+        // 🔍 Filter teks
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -135,19 +161,5 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             setDisplayHomeAsUpEnabled(false)
         }
         (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
-
-        rvTrending.adapter = trendingAdapter
-        loadTrendingPosts()
-    }
-
-    private fun loadTrendingPosts(categoryId: String? = null) {
-        val trending = if (categoryId != null) {
-            DataRepository.getTrendingPostsByCategory(categoryId)
-        } else {
-            DataRepository.getTrendingPosts()
-        }
-
-        val visiblePosts = trending.filter { !it.isHidden }
-        trendingAdapter.updateData(visiblePosts)
     }
 }

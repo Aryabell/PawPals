@@ -6,43 +6,40 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pawpals.data.DataRepository
 import com.example.pawpals.R
+import com.example.pawpals.data.DataRepository
 
 class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
 
-    // pasangan (title, id)
+    private lateinit var rvTrending: RecyclerView
+    private lateinit var rvCategories: RecyclerView
+
     private val categories = listOf(
-        Pair("Health", "health"),
-        Pair("Playdate", "playdate"),
-        Pair("Talks", "talks"),
-        Pair("Recommend", "reco")
+        "Health" to "health",
+        "Playdate" to "playdate",
+        "Talks" to "talks",
+        "Recommend" to "reco"
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rvCategories = view.findViewById<RecyclerView>(R.id.rvCategories)
-        val rvTrending = view.findViewById<RecyclerView>(R.id.rvTrendingPosts)
+        rvCategories = view.findViewById(R.id.rvCategories)
+        rvTrending = view.findViewById(R.id.rvTrendingPosts)
 
-        // -- safe hide header jika ada (lookup dinamis mencegah unresolved reference)
         val headerId = resources.getIdentifier("tvForumMainTitle", "id", requireContext().packageName)
         if (headerId != 0) {
             view.findViewById<View>(headerId)?.visibility = View.GONE
         }
 
-        // horizontal categories
         rvCategories.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // adapter category expects list of titles (String)
         val titles = categories.map { it.first }
         rvCategories.adapter = CategoryAdapter(titles) { selectedTitle ->
-            // cari id dari title yang dipilih
             val pair = categories.find { it.first == selectedTitle }
             val id = pair?.second ?: "talks"
 
-            // langsung pakai CommunityPostsFragment agar tidak double fragment
             val frag = CommunityPostsFragment.newInstance(selectedTitle, id)
 
             parentFragmentManager.beginTransaction()
@@ -51,33 +48,39 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
                 .commit()
         }
 
-        // trending posts (sementara pakai DataRepository.posts)
+        loadTrendingPosts()
+    }
+
+    private fun loadTrendingPosts() {
+        val trendingPosts = DataRepository.posts.value
+            ?.filter { it.isTrending && !it.isHidden }
+            ?: emptyList()
+
         rvTrending.layoutManager = LinearLayoutManager(requireContext())
-        rvTrending.adapter = CommunityAdapter(DataRepository.posts.toMutableList()) { post ->
-            val intent = Intent(requireContext(), ReplyActivity::class.java)
-            intent.putExtra("post_id", post.id)
-            intent.putExtra("post_title", post.author) // bold name
-            intent.putExtra("post_content", post.content)
+        rvTrending.adapter = CommunityAdapter(trendingPosts.toMutableList()) { post ->
+            val intent = Intent(requireContext(), ReplyActivity::class.java).apply {
+                putExtra("post_id", post.id)
+                putExtra("post_title", post.author)
+                putExtra("post_content", post.content)
+            }
             startActivity(intent)
         }
     }
 
     fun reloadData(category: String) {
-        // contoh: filter trending posts berdasarkan kategori
-        val filteredPosts = if (category == "talks") {
-            DataRepository.posts
-        } else {
-            DataRepository.posts.filter { it.category == category }
-        }
+        if (!this::rvTrending.isInitialized) return
 
-        view?.findViewById<RecyclerView>(R.id.rvTrendingPosts)?.let { rv ->
-            rv.adapter = CommunityAdapter(filteredPosts.toMutableList()) { post ->
-                val intent = Intent(requireContext(), ReplyActivity::class.java)
-                intent.putExtra("post_id", post.id)
-                intent.putExtra("post_title", post.author)
-                intent.putExtra("post_content", post.content)
-                startActivity(intent)
+        val filteredPosts = DataRepository.posts.value
+            ?.filter { !it.isHidden && (category == "talks" || it.category == category) }
+            ?: emptyList()
+
+        rvTrending.adapter = CommunityAdapter(filteredPosts.toMutableList()) { post ->
+            val intent = Intent(requireContext(), ReplyActivity::class.java).apply {
+                putExtra("post_id", post.id)
+                putExtra("post_title", post.author)
+                putExtra("post_content", post.content)
             }
+            startActivity(intent)
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.pawpals.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.pawpals.R
 import com.example.pawpals.community.Post
 import com.example.pawpals.community.Reply
@@ -12,13 +14,15 @@ data class Report(
 )
 
 object DataRepository {
-    val posts: MutableList<Post> = mutableListOf()
+
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> get() = _posts
+
     private val repliesMap: MutableMap<String, MutableList<Reply>> = mutableMapOf()
     private val reports = mutableListOf<Report>()
 
     init {
-        // 🐶 Contoh data awal
-        posts.add(
+        val initialPosts = listOf(
             Post(
                 id = "1",
                 content = "Butuh saran vet untuk kulit anjing...",
@@ -32,9 +36,7 @@ object DataRepository {
                 userAvatar = R.drawable.ic_profile_placeholder,
                 isTrending = true,
                 isHidden = false
-            )
-        )
-        posts.add(
+            ),
             Post(
                 id = "2",
                 content = "Ayo ngumpul playdate minggu depan!",
@@ -48,10 +50,7 @@ object DataRepository {
                 userAvatar = R.drawable.ic_profile_placeholder,
                 isTrending = true,
                 isHidden = false
-            )
-        )
-
-        posts.add(
+            ),
             Post(
                 id = "3",
                 content = "Ada rekomendasi mainan tahan lama?",
@@ -65,10 +64,7 @@ object DataRepository {
                 userAvatar = R.drawable.ic_profile_placeholder,
                 isTrending = true,
                 isHidden = false
-            )
-        )
-
-        posts.add(
+            ),
             Post(
                 id = "4",
                 content = "Siapa yang pakai makanan merk X? share dong",
@@ -84,6 +80,8 @@ object DataRepository {
                 isHidden = false
             )
         )
+
+        _posts.value = initialPosts
     }
 
     // 📝 Tambah post baru
@@ -97,57 +95,62 @@ object DataRepository {
         likeCount: Int = 0,
         userAvatar: Int = R.drawable.ic_profile_placeholder
     ): Post {
-        val id = UUID.randomUUID().toString()
-        val ts = System.currentTimeMillis().toString()
-        val post = Post(
-            id, content, author, ts, category, imageUri,
-            userRole, commentCount, likeCount, userAvatar,
+        val newPost = Post(
+            id = UUID.randomUUID().toString(),
+            content = content,
+            author = author,
+            timestamp = System.currentTimeMillis().toString(),
+            category = category,
+            imageUri = imageUri,
+            userRole = userRole,
+            commentCount = commentCount,
+            likeCount = likeCount,
+            userAvatar = userAvatar,
             isTrending = false,
             isHidden = false
         )
-        posts.add(0, post)
-        return post
+
+        val currentList = _posts.value?.toMutableList() ?: mutableListOf()
+        currentList.add(0, newPost)
+        _posts.value = currentList
+        return newPost
     }
 
-    // 📂 Ambil post per kategori (hanya yang tidak disembunyikan)
+    // 📂 Filter
     fun getPostsByCategory(category: String): List<Post> {
-        return posts.filter { p ->
-            !p.isHidden && p.category.equals(category, ignoreCase = true)
-        }
+        return _posts.value?.filter {
+            !it.isHidden && it.category.equals(category, ignoreCase = true)
+        } ?: emptyList()
     }
 
-    // 🔥 Ambil post trending (tanpa yang disembunyikan)
     fun getTrendingPosts(limit: Int = 5): List<Post> {
-        return posts
-            .filter { it.isTrending && !it.isHidden }
-            .take(limit)
-    }
-
-    // 🆕 Ambil semua post (admin view)
-    fun getAllPosts(includeHidden: Boolean = true): List<Post> {
-        return if (includeHidden) posts else posts.filter { !it.isHidden }
+        return _posts.value?.filter {
+            it.isTrending && !it.isHidden
+        }?.take(limit) ?: emptyList()
     }
 
     fun getTrendingPostsByCategory(category: String, limit: Int = 5): List<Post> {
-        // Tampilkan hanya post trending, kategori sesuai, dan tidak disembunyikan
-        return posts.filter {
-            it.isTrending &&
-                    !it.isHidden &&
-                    it.category.equals(category, ignoreCase = true)
-        }.take(limit)
+        return _posts.value?.filter {
+            it.isTrending && !it.isHidden && it.category.equals(category, ignoreCase = true)
+        }?.take(limit) ?: emptyList()
     }
 
     // 💬 Balasan
     fun addReply(postId: String, author: String, content: String, imageUri: String? = null): Reply {
-        val id = UUID.randomUUID().toString()
-        val timestamp = System.currentTimeMillis().toString()
-        val reply = Reply(id, author, content, timestamp, imageUri)
+        val reply = Reply(
+            id = UUID.randomUUID().toString(),
+            author = author,
+            content = content,
+            timestamp = System.currentTimeMillis().toString(),
+            imageUri = imageUri
+        )
         val list = repliesMap.getOrPut(postId) { mutableListOf() }
         list.add(reply)
         return reply
     }
 
-    fun getReplies(postId: String): MutableList<Reply> = repliesMap.getOrPut(postId) { mutableListOf() }
+    fun getReplies(postId: String): MutableList<Reply> =
+        repliesMap.getOrPut(postId) { mutableListOf() }
 
     // 🚨 Laporan
     fun reportPost(postId: String, reason: String) {
@@ -156,37 +159,45 @@ object DataRepository {
 
     fun getReports(): List<Report> = reports
 
-    // ⭐ Admin-only: Tandai post sebagai trending
-    fun markPostTrending(postId: String) {
-        posts.find { it.id == postId }?.isTrending = true
-    }
-
+    // ⭐ Admin-only: Toggle trending
     fun toggleTrending(postId: String): Boolean {
-        val post = posts.find { it.id == postId }
-        post?.let {
-            it.isTrending = !it.isTrending
-            return it.isTrending
+        val list = _posts.value?.toMutableList() ?: return false
+        val index = list.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val post = list[index]
+            val updated = post.copy(isTrending = !post.isTrending)
+            list[index] = updated
+            _posts.value = list
+            return updated.isTrending
         }
         return false
     }
 
-
     // 🙈 Admin-only: Sembunyikan post
     fun hidePost(postId: String) {
-        posts.find { it.id == postId }?.apply {
-            isHidden = true
-            isTrending = false // optional, supaya tidak tampil di trending list user
+        val list = _posts.value?.toMutableList() ?: return
+        val index = list.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val post = list[index]
+            list[index] = post.copy(isHidden = true, isTrending = false)
+            _posts.value = list
         }
     }
 
-
     // 👁️‍🗨️ Admin-only: Tampilkan kembali post
     fun unhidePost(postId: String) {
-        posts.find { it.id == postId }?.isHidden = false
+        val list = _posts.value?.toMutableList() ?: return
+        val index = list.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val post = list[index]
+            list[index] = post.copy(isHidden = false)
+            _posts.value = list
+        }
     }
 
-    // ❌ Admin-only: Hapus permanen post
+    // ❌ Admin-only: Hapus permanen
     fun deletePost(postId: String) {
-        posts.removeIf { it.id == postId }
+        val newList = _posts.value?.filterNot { it.id == postId } ?: return
+        _posts.value = newList
     }
 }
