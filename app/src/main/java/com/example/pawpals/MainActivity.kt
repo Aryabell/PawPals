@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import com.example.pawpals.adoption.AdoptionFragment
 import com.example.pawpals.community.CommunityListFragment
 import com.example.pawpals.community.NewPostActivity
@@ -78,10 +79,18 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(SettingsFragment())
                 }
                 R.id.nav_logout -> {
-                    Toast.makeText(this, "Keluar dari akun", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish() // biar MainActivity ditutup
+                    // Tampilkan konfirmasi sebelum logout
+                    AlertDialog.Builder(this)
+                        .setTitle("Konfirmasi Logout")
+                        .setMessage("Apakah kamu yakin ingin keluar dari akun?")
+                        .setPositiveButton("Ya") { _, _ ->
+                            Toast.makeText(this, "Keluar dari akun", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish() // Tutup MainActivity biar gak bisa balik pakai tombol back
+                        }
+                        .setNegativeButton("Batal", null)
+                        .show()
                 }
             }
 

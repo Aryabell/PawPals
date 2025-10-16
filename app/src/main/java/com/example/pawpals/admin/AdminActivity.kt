@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import com.example.pawpals.R
@@ -47,10 +48,17 @@ class AdminActivity : AppCompatActivity() {
                 R.id.nav_announcements -> replaceFragment(AnnouncementFragment())
                 R.id.nav_posts -> replaceFragment(PostFragment())
                 R.id.nav_logout -> {
-                    // 🚪 Logout -> balik ke LoginActivity
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish() // menutup AdminActivity
+                    // Tampilan konfirmasi sebelum logout
+                    AlertDialog.Builder(this)
+                        .setTitle("Konfirmasi Logout")
+                        .setMessage("Apakah kamu yakin ingin keluar dari akun admin?")
+                        .setPositiveButton("Ya") { _, _ ->
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish() // Tutup AdminActivity
+                        }
+                        .setNegativeButton("Batal", null)
+                        .show()
                 }
             }
             drawerLayout.closeDrawers()
