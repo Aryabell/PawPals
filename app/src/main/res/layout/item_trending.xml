@@ -1,24 +1,42 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:padding="8dp">
+    android:padding="10dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="6dp">
 
-    <ImageView
-        android:id="@+id/imgTrending"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_star"
-        android:visibility="gone"
-        android:layout_marginEnd="6dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <!-- ⭐ Icon Trending -->
+        <ImageView
+            android:id="@+id/imgTrending"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_star"
+            android:contentDescription="Trending Icon"
+            android:visibility="gone"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:text="Author" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvContent"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Post content..."
-        android:textSize="14sp"/>
-
+        android:textSize="14sp"
+        android:layout_marginTop="2dp" />
 </LinearLayout>

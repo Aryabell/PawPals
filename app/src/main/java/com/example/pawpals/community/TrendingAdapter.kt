@@ -3,6 +3,7 @@ package com.example.pawpals.community
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
@@ -12,12 +13,12 @@ class TrendingAdapter(
     private val onClick: (Post) -> Unit
 ) : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>() {
 
-    // 🔹 Tambahan untuk search/filter
     private var allItems = items.toList()
 
     inner class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
+        val imgTrending: ImageView = itemView.findViewById(R.id.imgTrending)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingViewHolder {
@@ -30,6 +31,10 @@ class TrendingAdapter(
         val post = items[position]
         holder.tvAuthor.text = post.author
         holder.tvContent.text = post.content
+
+        // ⭐ Tampilkan ikon kalau post trending
+        holder.imgTrending.visibility = if (post.isTrending) View.VISIBLE else View.GONE
+
         holder.itemView.setOnClickListener { onClick(post) }
     }
 
@@ -37,11 +42,10 @@ class TrendingAdapter(
 
     fun updateData(newItems: List<Post>) {
         items = newItems
-        allItems = newItems.toList() // 🔹 update allItems juga
+        allItems = newItems.toList()
         notifyDataSetChanged()
     }
 
-    // 🔹 Tambahkan fungsi filterData
     fun filterData(query: String) {
         items = if (query.isEmpty()) {
             allItems
