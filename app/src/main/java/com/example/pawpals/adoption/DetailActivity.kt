@@ -21,7 +21,7 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back) // pastikan file ini ada di res/drawable
-        supportActionBar?.title = "Pals Adoption"
+        supportActionBar?.title = "PawPals: Adopsi Anjing"
 
         binding.toolbarDetail.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -34,7 +34,7 @@ class DetailActivity : AppCompatActivity() {
             imgDogLarge.load(dog.imageUrl) { crossfade(true) }
             tvNameDetail.text = dog.name
             tvBreedDetail.text = "${dog.breed} • ${dog.location}"
-            tvAge.text = "${dog.ageInYears} years"
+            tvAge.text = "${dog.ageInYears} tahun"
             tvWeight.text = "${dog.weightKg} kg"
             tvOwnerName.text = dog.ownerName
             tvOwnerHandle.text = dog.ownerMessageHandle

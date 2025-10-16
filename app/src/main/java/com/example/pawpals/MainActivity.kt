@@ -123,31 +123,39 @@ class MainActivity : AppCompatActivity() {
 
         when (fragment) {
             is HomeFragment -> {
-                supportActionBar?.title = "PawPals"
-                binding.fabAdd.show() // ✅ tampilkan FAB di Home
+                supportActionBar?.title = "PawPals: Beranda"
+                binding.fabAdd.hide()
             }
             is CommunityListFragment -> {
-                supportActionBar?.title = "Pals Community"
-                binding.fabAdd.show() // ✅ tampilkan FAB di Community
+                supportActionBar?.title = "PawPals: Komunitas"
+                binding.fabAdd.show()
             }
             is EventsListFragment -> {
-                supportActionBar?.title = "Events for Pals"
-                binding.fabAdd.hide() // ❌ sembunyikan FAB
+                supportActionBar?.title = "PawPals: Event"
+                binding.fabAdd.hide()
             }
             is ModelFragment -> {
-                supportActionBar?.title = "Disease Detection"
-                binding.fabAdd.hide() // ❌ sembunyikan FAB
+                supportActionBar?.title = "PawPals: Deteksi Penyakit"
+                binding.fabAdd.hide()
             }
             is ProfileFragment -> {
-                supportActionBar?.title = "My Profile"
-                binding.fabAdd.hide() // ❌ sembunyikan FAB
+                supportActionBar?.title = "PawPals: Profile"
+                binding.fabAdd.hide()
             }
-
             is MessageListFragment -> {
-                supportActionBar?.title = "Messages"
-                binding.fabAdd.hide() // ❌ sembunyikan FAB
+                supportActionBar?.title = "PawPals: Pesan"
+                binding.fabAdd.hide()
+            }
+            is AdoptionFragment -> {
+                supportActionBar?.title = "PawPals: Adopsi Anjing"
+                binding.fabAdd.hide()
+            }
+            is NotificationFragment -> {
+                supportActionBar?.title = "PawPals: Notifikasi"
+                binding.fabAdd.hide()
             }
         }
+
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

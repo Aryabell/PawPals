@@ -18,7 +18,7 @@ class AdoptionFormActivity : AppCompatActivity() {
         // Toolbar
         setSupportActionBar(binding.toolbarForm)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Formulir Adopsi"
+        supportActionBar?.title = "PawPals: Formulir Adopsi"
         binding.toolbarForm.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         val dogName = intent.getStringExtra("dogName") ?: "Anjing"

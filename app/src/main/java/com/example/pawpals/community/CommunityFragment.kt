@@ -78,10 +78,10 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
 
         // Horizontal category list
         val communities = listOf(
-            CommunityCategory("health", "Health"),
+            CommunityCategory("health", "Kesehatan"),
             CommunityCategory("talks", "Talks"),
             CommunityCategory("playdate", "Playdate"),
-            CommunityCategory("reco", "Recommend")
+            CommunityCategory("reco", "Rekomendasi")
         )
 
         if (nestedScrollView != null && toolbar != null) {

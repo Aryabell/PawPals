@@ -51,8 +51,8 @@ class NewPostActivity : AppCompatActivity() {
 
         // ⭐️ LOGIKA SPINNER BARU ⭐️
         val categories = listOf(
-            "Lost Dogs", "Paw Playground", "Adoption",
-            "Health", "Playdate", "Recommend", "Events", "Talks"
+            "Lost Dogs", "Paw Playground", "Adopsi",
+            "Kesehatan", "Playdate", "Rekomendasi", "Events", "Talks"
         )
 
         val adapter = ArrayAdapter(
@@ -96,7 +96,7 @@ class NewPostActivity : AppCompatActivity() {
 
             DataRepository.addPost(
                 content = content,
-                author = "You", // Ganti dengan user yang login
+                author = "Kamu", // Ganti dengan user yang login
                 category = selectedCategory // ⭐️ GUNAKAN NILAI SPINNER ⭐️
             )
 
