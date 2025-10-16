@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="Beranda" />
 
     <item
         android:id="@+id/nav_event"
@@ -27,7 +27,7 @@
     <item
         android:id="@+id/nav_message"
         android:icon="@drawable/ic_chat"
-        android:title="Messages" />
+        android:title="Pesan" />
 
 
 

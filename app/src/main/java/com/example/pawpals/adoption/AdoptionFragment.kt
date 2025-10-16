@@ -39,7 +39,7 @@ class AdoptionFragment : Fragment() {
 
         // === SET ACTION BAR TITLE ===
         (requireActivity() as? androidx.appcompat.app.AppCompatActivity)?.supportActionBar?.title =
-            "Pals Adoption"
+            "PawPals: Adopsi Anjing"
     }
 
     override fun onDestroyView() {

@@ -139,7 +139,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="ADOPTION" />
+                android:text="ADOPSI AKU!" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

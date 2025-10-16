@@ -105,7 +105,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
 
         // 🏷️ List kategori
         val communities = listOf(
-            CommunityCategory("health", "Health"),
+            CommunityCategory("health", "Kesehatan"),
             CommunityCategory("talks", "Talks"),
             CommunityCategory("playdate", "Playdate"),
             CommunityCategory("recommend", "Recommend")
