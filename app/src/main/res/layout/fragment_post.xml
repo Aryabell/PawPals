@@ -5,18 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/txtPost"
-        android:hint="Tambahkan postingan penting/trending..."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnAddPost"
-        android:text="Tandai Postingan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         android:id="@+id/layoutPosts"
         android:orientation="vertical"
