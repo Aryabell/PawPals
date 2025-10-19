@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
-    android:background="@color/teal_200"
-    android:layout_width="match_parent"
-    android:layout_height="180dp">
 
-    <ImageView
-        android:id="@+id/img_profile"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ava_paw"
-        android:contentDescription="Profile Picture"
-        android:scaleType="centerCrop"
-        android:background="@drawable/circle_background"
-        android:padding="4dp" />
+    android:gravity="center_horizontal"  android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="48dp"             android:paddingBottom="24dp"
+
+    android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"> <ImageView
+    android:id="@+id/img_profile"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:src="@drawable/ava_paw"
+    android:contentDescription="Profile Picture"
+    android:scaleType="centerCrop"
+
+    />
+
+    <TextView
+        android:id="@+id/tv_display_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Paw Admin"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@minpaw"
+        android:textSize="14sp"
+        android:textColor="#666666" />
+
 </LinearLayout>

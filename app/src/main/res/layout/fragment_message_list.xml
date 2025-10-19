@@ -3,23 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginBottom="12dp" />
-
+    android:orientation="vertical">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:clipToPadding="false"
+
+        android:paddingTop="16dp"
         android:paddingBottom="8dp"
+
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+
         tools:listitem="@layout/item_message" />
 
 </LinearLayout>

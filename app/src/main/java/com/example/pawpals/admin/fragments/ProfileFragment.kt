@@ -24,11 +24,28 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                b.imgProfile.setImageURI(selectedImageUri)
 
-                // Simpan sementara ke prefs
-                val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
-                prefs.edit().putString("profile_pic", selectedImageUri.toString()).apply()
+                selectedImageUri?.let { uri ->
+
+                    // 1. Ambil izin akses persisten
+                    val contentResolver = requireContext().contentResolver
+                    val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+                    // Coba ambil izin persisten.
+                    try {
+                        contentResolver.takePersistableUriPermission(uri, takeFlags)
+                    } catch (e: SecurityException) {
+                        // Jika gagal (misalnya bukan persistable URI), log error
+                        e.printStackTrace()
+                        Toast.makeText(requireContext(), "Gagal mendapatkan izin URI persisten.", Toast.LENGTH_LONG).show()
+                        return@registerForActivityResult // Hentikan proses
+                    }
+
+                    // 2. Tampilkan gambar dan simpan ke prefs (hanya setelah izin berhasil)
+                    b.imgProfile.setImageURI(uri)
+                    val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
+                    prefs.edit().putString("profile_pic", uri.toString()).apply()
+                }
             }
         }
 
@@ -38,21 +55,33 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val prefs = requireContext().getSharedPreferences("user_prefs", Activity.MODE_PRIVATE)
         val profilePicPath = prefs.getString("profile_pic", null)
-        val savedName = prefs.getString("name", "")
+
+        val savedName = prefs.getString("name", "Paw Admin")
+        val savedUsername = prefs.getString("username", "@minpaw")
         val savedPassword = prefs.getString("password", "")
 
         // Tampilkan foto profil terakhir
         if (!profilePicPath.isNullOrEmpty()) {
-            b.imgProfile.setImageURI(Uri.parse(profilePicPath))
+            val imageUri = Uri.parse(profilePicPath)
+
+            // Tampilkan gambar menggunakan Glide
+            Glide.with(this)
+                .load(imageUri)
+                .error(R.drawable.ic_profile_placeholder) // FALLBACK JIKA GAGAL LOAD
+                .circleCrop()
+                .into(b.imgProfile)
         } else {
+            // Tampilkan placeholder jika tidak ada URI tersimpan
             Glide.with(this)
                 .load(R.drawable.ic_profile_placeholder)
                 .circleCrop()
                 .into(b.imgProfile)
         }
 
-        // Tampilkan nama & password tersimpan
+        // Tampilkan data tersimpan
         b.edtName.setText(savedName)
+        // Tampilkan Username
+        b.edtUsername.setText(savedUsername)
         b.edtPassword.setText(savedPassword)
 
         // Ganti foto
@@ -61,13 +90,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             pickImageLauncher.launch(intent)
         }
 
-        // Simpan perubahan profil ke SharedPreferences
+        // Simpan perubahan profil
         b.btnSave.setOnClickListener {
             val name = b.edtName.text.toString().trim()
+            val username = b.edtUsername.text.toString().trim() // Ambil Username
             val password = b.edtPassword.text.toString().trim()
 
             prefs.edit()
                 .putString("name", name)
+                .putString("username", username) // Simpan Username
                 .putString("password", password)
                 .apply()
 

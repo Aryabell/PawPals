@@ -17,7 +17,7 @@ import java.util.Date
 import java.util.Locale
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.ImageButton
+import android.content.Intent // Import Intent
 
 fun getTimeAgo(timeMillis: Long): String {
     val now = System.currentTimeMillis()
@@ -61,7 +61,7 @@ fun isColorDark(color: Int): Boolean {
 
 class CommunityAdapter(
     private var items: MutableList<Post>,
-    private val onItemClick: (Post) -> Unit
+    private val onItemClick: (Post) -> Unit // Fungsi ini mungkin tidak lagi digunakan jika logika Intent ada di sini
 ) : RecyclerView.Adapter<CommunityAdapter.PostVH>() {
 
     inner class PostVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -118,7 +118,7 @@ class CommunityAdapter(
         }
 
         // ======== BIND DATA ========
-        holder.imgProfile.setImageResource(post.userAvatar)
+        holder.imgProfile.setImageResource(R.drawable.ava_paw)
         holder.tvAuthor.text = post.author
         holder.tvTime.text = post.timestamp
         holder.tvRoleTag.text = post.category
@@ -143,7 +143,7 @@ class CommunityAdapter(
 
         // ======== LIKE SYSTEM ========
         holder.ivLikeIcon.setImageResource(
-            if (post.isLiked) R.drawable.ic_favoritered else R.drawable.ic_favorite
+            if (post.isLiked) R.drawable.ic_favoritered else R.drawable.ic_favorite // Pastikan R.drawable.ic_favoritered tersedia
         )
 
         holder.likeContainer.setOnClickListener {
@@ -160,8 +160,21 @@ class CommunityAdapter(
             holder.tvLikeCount.text = post.likeCount.toString()
         }
 
-        // ======== ITEM CLICK ========
-        holder.itemView.setOnClickListener { onItemClick(post) }
+        // ======== ITEM CLICK (Navigasi ke ReplyActivity) ========
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ReplyActivity::class.java).apply {
+                // Mengirim semua data post yang dibutuhkan oleh ReplyActivity
+                putExtra("post_id", post.id)
+                putExtra("author", post.author)
+                putExtra("content", post.content)
+                putExtra("community_tag", post.category) // Menggunakan 'category' sebagai tag
+                putExtra("time", post.timestamp)
+                putExtra("like_count", post.likeCount)
+                putExtra("comment_count", post.commentCount)
+                putExtra("is_liked", post.isLiked)
+            }
+            context.startActivity(intent)
+        }
 
         // ======== MORE BUTTON ========
         holder.moreBtn.setOnClickListener { view ->
@@ -183,9 +196,9 @@ class CommunityAdapter(
             }
             popup.show()
         }
-    }
+    } // <<< TUTUP onBindViewHolder DI SINI
 
-    // 👉 ini sekarang udah di dalam class, bukan di luar
+    // ini adalah fungsi override member class yang benar
     override fun getItemCount(): Int = items.size
 
     fun updateData(newList: MutableList<Post>) {

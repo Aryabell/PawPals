@@ -31,7 +31,7 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
         eventId = arguments?.getInt(ARG_ID) ?: 0
 
         b.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()   // kembali ke fragment sebelumnya
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         viewModel.events.observe(viewLifecycleOwner) { list ->
@@ -51,12 +51,12 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
                 .into(b.ivBannerDetail)
 
             if (ev.isJoined) {
-                b.btnJoin.text = getString(R.string.joined)
-                b.btnJoin.isEnabled = false
+                // Jika sudah Joined, tampilkan tombol Cancel
+                b.btnJoin.visibility = View.GONE
                 b.btnCancelJoin.visibility = View.VISIBLE
             } else {
-                b.btnJoin.text = getString(R.string.join)
-                b.btnJoin.isEnabled = true
+                // Jika belum Joined, tampilkan tombol Join
+                b.btnJoin.visibility = View.VISIBLE
                 b.btnCancelJoin.visibility = View.GONE
             }
 

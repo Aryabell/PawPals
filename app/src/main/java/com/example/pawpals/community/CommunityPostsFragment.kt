@@ -47,12 +47,7 @@ class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
         tvTitle.visibility = View.GONE
 
         rv.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CommunityAdapter(mutableListOf()) { post ->
-            val intent = Intent(requireContext(), ReplyActivity::class.java)
-            intent.putExtra("post_id", post.id)
-            intent.putExtra("post_content", post.content)
-            startActivity(intent)
-        }
+        adapter = CommunityAdapter(mutableListOf()) { }
         rv.adapter = adapter
 
         loadPosts()

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawpals.databinding.FragmentMessageListBinding
-import com.example.pawpals.message.ChatPreview
+import com.example.pawpals.R
 
 class MessageListFragment : Fragment() {
 
@@ -22,8 +22,8 @@ class MessageListFragment : Fragment() {
         _binding = FragmentMessageListBinding.inflate(inflater, container, false)
 
         val dummyChats = listOf(
-            ChatPreview("1", "Nadhifa", "Kapan bisa ketemuan buat adopsi?", "", System.currentTimeMillis()),
-            ChatPreview("2", "Andi", "Makasih ya infonya!", "", System.currentTimeMillis() - 3600000)
+            ChatPreview("1", "Nadhira", "Kapan bisa ketemuan buat adopsi?", R.drawable.ava_user1, System.currentTimeMillis()),
+            ChatPreview("2", "yeonjun", "Makasih ya infonya!", R.drawable.ava_user2, System.currentTimeMillis() - 3600000)
         )
 
         val adapter = MessageListAdapter(dummyChats) { chat ->

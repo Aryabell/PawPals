@@ -1,49 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:background="#F9FAFB">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/title_login"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
+        android:textColor="#45A0D0"
+        android:layout_marginTop="50dp"/>
 
-    <EditText
-        android:id="@+id/etEmail"
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/pawpals_logo"
+        android:contentDescription="@string/desc_logo"
+        android:scaleType="fitCenter"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:background="@drawable/edittext_bg"
-        android:padding="12dp" />
+        android:layout_marginBottom="12dp"
+        android:hint="@string/hint_email"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:textColorHint="#AAAAAA"   app:hintTextColor="#6ABFED"      app:boxStrokeColor="#FFF87B"     app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:autofillHints="emailAddress"
+            android:text=""/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:hint="@string/hint_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:textColorHint="#AAAAAA"  app:hintTextColor="#6ABFED"     app:boxStrokeColor="#FFF87B"    app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="#45A0D0">     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
         android:inputType="textPassword"
-        android:background="@drawable/edittext_bg"
         android:padding="12dp"
-        android:layout_marginTop="12dp" />
+        android:autofillHints="password"
+        android:text=""/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_marginTop="20dp" />
+        android:text="@string/btn_login"
+        android:background="@drawable/button_login"
+        android:textColor="@android:color/white"
+        android:paddingVertical="12dp"
+        android:layout_marginBottom="12dp"
+        android:textStyle="bold"
+        android:stateListAnimator="@null"
+        app:backgroundTint="@null"/>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:text="@string/btn_regis"
+        android:background="@drawable/button_regist"
+        android:textColor="#46A4D6"
+        android:paddingVertical="12dp"
+        android:layout_marginBottom="12dp"
+        android:textStyle="bold"
+        android:stateListAnimator="@null"
+        app:backgroundTint="@null"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/agreement_prefix"
+        android:textSize="12sp"
+        android:textColor="#333333"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvTermsPrivacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/agreement_terms"
+        android:textSize="12sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
 
 </LinearLayout>

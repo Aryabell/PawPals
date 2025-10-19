@@ -21,6 +21,9 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
         "Recommend" to "reco"
     )
 
+    // FIX 2: Pindahkan variabel ini agar bisa diakses oleh reloadData
+    private var trendingPosts: List<Post> = emptyList()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,19 +55,14 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
     }
 
     private fun loadTrendingPosts() {
-        val trendingPosts = DataRepository.posts.value
+        // Hapus 'val' di sini karena sudah dideklarasikan sebagai member class di atas
+        trendingPosts = DataRepository.posts.value
             ?.filter { it.isTrending && !it.isHidden }
             ?: emptyList()
 
         rvTrending.layoutManager = LinearLayoutManager(requireContext())
-        rvTrending.adapter = CommunityAdapter(trendingPosts.toMutableList()) { post ->
-            val intent = Intent(requireContext(), ReplyActivity::class.java).apply {
-                putExtra("post_id", post.id)
-                putExtra("post_title", post.author)
-                putExtra("post_content", post.content)
-            }
-            startActivity(intent)
-        }
+        // FIX 1: Berikan lambda kosong untuk memenuhi konstruktor
+        rvTrending.adapter = CommunityAdapter(trendingPosts.toMutableList()) {}
     }
 
     fun reloadData(category: String) {
@@ -74,13 +72,7 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
             ?.filter { !it.isHidden && (category == "talks" || it.category == category) }
             ?: emptyList()
 
-        rvTrending.adapter = CommunityAdapter(filteredPosts.toMutableList()) { post ->
-            val intent = Intent(requireContext(), ReplyActivity::class.java).apply {
-                putExtra("post_id", post.id)
-                putExtra("post_title", post.author)
-                putExtra("post_content", post.content)
-            }
-            startActivity(intent)
-        }
-    }
-}
+        // FIX 1: Berikan lambda kosong untuk memenuhi konstruktor
+        rvTrending.adapter = CommunityAdapter(filteredPosts.toMutableList()) {}
+    } // FIX 3: Kurung kurawal penutup fungsi reloadData sudah benar di sini
+} // FIX 3: Kurung kurawal penutup class CommunityListFragment sudah benar di sini

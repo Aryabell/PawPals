@@ -26,7 +26,10 @@ class ReplyAdapter(
         val r = items[position]
         holder.tvAuthor.text = r.author
         holder.tvContent.text = r.content
-        holder.tvTime.text = r.timestamp
+        // Konversi timestamp (String) ke Long dan gunakan getTimeAgo()
+        // Menggunakan toLongOrNull() untuk keamanan jika data timestamp error.
+        val timestampLong = r.timestamp.toLongOrNull() ?: System.currentTimeMillis()
+        holder.tvTime.text = getTimeAgo(timestampLong)
     }
 
     override fun getItemCount(): Int = items.size

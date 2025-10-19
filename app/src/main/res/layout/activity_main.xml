@@ -76,6 +76,15 @@
         android:layout_gravity="start"
         android:background="@android:color/white"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"/>
+        app:menu="@menu/nav_menu"
+
+        app:itemIconTint="@color/nav_item_selector"
+        app:itemTextColor="@color/nav_item_selector"
+
+        app:itemBackground="@drawable/nav_item_background"
+
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.NavigationView"
+
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

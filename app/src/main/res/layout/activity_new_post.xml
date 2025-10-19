@@ -4,13 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"> <androidx.appcompat.widget.Toolbar
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    app:titleTextColor="@color/white"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/white"
+        app:title="Buat Postingan Baru" android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,15 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pilih Kategori Komunitas:"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
+                android:textColor="@color/gray_light" android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_spinner_border" android:padding="12dp"
+                android:layout_height="48dp" android:background="@drawable/bg_spinner_border"
+                android:padding="12dp"
                 android:layout_marginBottom="16dp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -53,7 +54,7 @@
                     android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgPreview"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -61,7 +62,9 @@
                 android:adjustViewBounds="true"
                 android:visibility="gone"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_image_placeholder" /> <LinearLayout
+                android:background="@drawable/bg_image_placeholder"
+                android:contentDescription="Pratinjau Gambar"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorners" /> <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -75,6 +78,9 @@
                 android:text="Pilih Gambar"
                 app:icon="@drawable/ic_photo_library"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:strokeColor="@color/primary_blue"
+                android:textColor="@color/primary_blue"
+                app:iconTint="@color/primary_blue"
                 android:layout_marginEnd="8dp"/>
 
             <com.google.android.material.button.MaterialButton
@@ -84,7 +90,10 @@
                 android:text="Hapus"
                 app:icon="@drawable/ic_close"
                 android:visibility="gone"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:strokeColor="@color/pink_badge"
+                android:textColor="@color/pink_badge"
+                app:iconTint="@color/pink_badge"/>
         </LinearLayout>
 
             <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
@@ -96,8 +105,7 @@
                 android:text="Kirim Post"
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
-                app:cornerRadius="8dp" />
-
-        </LinearLayout>
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/primary_blue" /> </LinearLayout>
     </ScrollView>
 </LinearLayout>
