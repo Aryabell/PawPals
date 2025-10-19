@@ -33,10 +33,20 @@ class CommunityListAdapter(
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val category = items[position]
         holder.tv.text = category.title
-        holder.img.setImageResource(R.drawable.ic_profile_placeholder)
+
+        // Tentukan Drawable yang Benar
+        val drawableRes = when (category.id.lowercase()) {
+            "health" -> R.drawable.ic_community_health
+            "talks" -> R.drawable.ic_community_talks
+            "playdate" -> R.drawable.ic_community_playdate
+            "recommend" -> R.drawable.ic_community_recommend
+            else -> R.drawable.ic_placeholder
+        }
+
+        holder.img.setImageResource(drawableRes)
 
         holder.itemView.setOnClickListener {
-            selectedCategory = category // Set kategori yang dipilih saat di-klik
+            selectedCategory = category
             onClick(category)
         }
     }

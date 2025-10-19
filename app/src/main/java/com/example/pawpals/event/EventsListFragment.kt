@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pawpals.MainActivity
 import com.example.pawpals.R
 import com.example.pawpals.databinding.FragmentEventsListBinding
 
@@ -37,10 +38,7 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
             },
             onItemClick = { ev ->
                 val frag = EventDetailFragment.newInstance(ev.id)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_fragment_container, frag)
-                    .addToBackStack(null)
-                    .commit()
+                (requireActivity() as? MainActivity)?.openEventDetail(ev.id)
             },
             isAdmin = false // <-- ini penting
         )

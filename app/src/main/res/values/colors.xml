@@ -20,6 +20,10 @@
     <color name="color_tag_talks">#AFFAFE</color>
     <color name="blue_dark">#1565C0</color>
     <color name="background_light">#F2F4F7</color>
+    <color name="gray_light">#9E9E9E</color>
+    <color name="primary_blue">#6ABFED</color>
+    <color name="yellow_badge">#FFF87B</color>
+    <color name="pink_badge">#FF8484</color>
 
 
 

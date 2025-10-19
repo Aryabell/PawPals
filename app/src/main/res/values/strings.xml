@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">PawPals</string>
 
+    <string name="title_login">Login</string>
+    <string name="desc_logo">Logo PawPals</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="title_regist">Registrasi</string>
+    <string name="btn_regis">Registrasi</string>
+    <string name="agreement_prefix">By continuing, you agree to our</string>
+    <string name="agreement_terms">Terms &amp; Privacy Policy</string>
+    <string name="placeholder_email">pawpals@example.com</string>
+    <string name="hint_name">Nama</string>
+
     <string name="join">Join</string>
     <string name="joined">Joined</string>
     <string name="cancel_join">Cancel Join</string>
@@ -13,7 +25,12 @@
     <string name="navigation_drawer_close">Tutup Navigasi</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="delete">Delete</string>
 
+    <string name="hint_new_pw">Password baru</string>
+    <string name="hint_username">Username</string>
+    <string name="btn_save">Simpan</string>
+    <string name="btn_ch_pic">Ganti Foto Profil</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

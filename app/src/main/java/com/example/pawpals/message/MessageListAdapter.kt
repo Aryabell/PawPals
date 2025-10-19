@@ -3,9 +3,10 @@ package com.example.pawpals.message
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.pawpals.databinding.ItemMessageBinding
 import com.example.pawpals.message.ChatPreview
+import com.example.pawpals.R
+import coil.load
 
 class MessageListAdapter(
     private val chats: List<ChatPreview>,
@@ -18,7 +19,7 @@ class MessageListAdapter(
                 tvUserName.text = chat.userName
                 tvLastMessage.text = chat.lastMessage
                 tvTime.text = android.text.format.DateFormat.format("HH:mm", chat.timestamp)
-                imgProfile.load(chat.userImage) {
+                imgProfile.load(chat.userImageResId) {
                     placeholder(com.example.pawpals.R.drawable.ic_profile_placeholder)
                 }
                 root.setOnClickListener { onClick(chat) }

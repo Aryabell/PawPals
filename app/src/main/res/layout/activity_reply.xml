@@ -5,45 +5,196 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar di luar padding supaya full width -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary_blue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Reply" />
+        app:title="Balasan" />
 
-    <!-- Konten di bawah toolbar yang diberi padding -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="12dp">
 
-        <!-- Detail post -->
-        <TextView
-            android:id="@+id/tvPostTitle"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:layout_marginBottom="8dp"
+            app:cardElevation="0dp">
 
-        <TextView
-            android:id="@+id/tvPostContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="12dp"
-            android:layout_marginTop="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ava_paw"
+                        android:layout_marginEnd="8dp"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                    <LinearLayout
+                        android:id="@+id/author_info_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imgProfile"
+                        android:layout_marginStart="8dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tvAuthor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rizal"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_community_tag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/bg_tag_community"
+                                android:paddingStart="6dp"
+                                android:paddingTop="2dp"
+                                android:paddingEnd="6dp"
+                                android:paddingBottom="2dp"
+                                android:text="Mainan"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp"
+                                android:drawableStart="@drawable/ic_paw_tag"
+                                android:drawablePadding="4dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 min ago"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/moreBtn"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_more"
+                        app:tint="@color/gray_light" /> </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="56dp"
+                    android:text="Ada rekomendasi mainan tahan lama?"
+                    android:textSize="14sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_post_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="56dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imgPostImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Gambar Post" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="56dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_comment_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_comment" />
+                        <TextView
+                            android:id="@+id/tv_comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="0"
+                            android:textSize="12sp"
+                            android:textColor="@color/gray_light"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_like_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:id="@+id/iv_like_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_favorite"/>
+                        <TextView
+                            android:id="@+id/tv_like_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="0"
+                            android:textSize="12sp"
+                            android:textColor="@color/gray_light" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:background="#DDDDDD" />
 
-        <!-- List balasan -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvReplies"
             android:layout_width="match_parent"
@@ -51,7 +202,6 @@
             android:layout_weight="1"
             android:layout_marginTop="8dp" />
 
-        <!-- Preview gambar reply -->
         <ImageView
             android:id="@+id/imgReplyPreview"
             android:layout_width="match_parent"
@@ -59,52 +209,58 @@
             android:scaleType="centerCrop"
             android:visibility="gone"
             android:adjustViewBounds="true"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:layout_marginBottom="8dp" />
 
-        <!-- Input balasan -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="8dp">
+            android:background="@drawable/bg_rounded_reply_input"
+            android:padding="4dp">
 
             <EditText
                 android:id="@+id/etReply"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:hint="Tulis balasan..."
                 android:background="@null"
-                android:padding="8dp" />
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:textSize="16sp"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="5" />
 
-            <!-- Tombol pilih gambar -->
             <ImageButton
                 android:id="@+id/btnPickReplyImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_image" />
+                android:contentDescription="Pilih Gambar untuk Balasan"
+                android:src="@drawable/ic_image"
+                app:tint="@color/primary_blue" />
 
-            <!-- Tombol hapus gambar -->
             <ImageButton
                 android:id="@+id/btnRemoveReplyImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@null"
+                android:contentDescription="Hapus Gambar Balasan"
                 android:src="@drawable/ic_close"
+                app:tint="@color/pink_badge"
                 android:visibility="gone" />
 
-            <!-- Tombol kirim -->
             <ImageButton
                 android:id="@+id/btnSend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_send" />
+                android:contentDescription="Kirim Balasan"
+                android:src="@drawable/ic_send"
+                app:tint="@color/primary_blue" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

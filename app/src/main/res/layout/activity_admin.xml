@@ -1,119 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9FAFB"
-    android:padding="16dp">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <!-- Judul Halaman -->
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👑 Panel Admin"
-            android:textSize="22sp"
+            android:text="🐾 Panel Admin PawPals"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#111827"
-            android:layout_marginBottom="16dp" />
+            android:textColor="@color/black"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Statistik Pengguna -->
-        <TextView
-            android:id="@+id/txtStats"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="👥 Total: 0 | Pengurus: 0 | Member: 0"
-            android:textSize="16sp"
-            android:textColor="#374151"
-            android:padding="8dp"
-            android:background="#E5E7EB"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="4dp" />
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:backgroundTint="@color/primary_blue">
 
-        <!-- Pengumuman -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ringkasan Pengguna Aplikasi"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total: 0 | Pengurus: 0 | Member: 0"
+                    android:textSize="16sp"
+                    android:textColor="@color/yellow_badge"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📢 Kirim Pengumuman"
+            android:text="📣 Kirim Pengumuman Global"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#111827"
-            android:layout_marginBottom="8dp" />
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/txtAnnouncement"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tulis pengumuman..."
-            android:background="@drawable/edittext_bg"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="12dp"
+            app:hintEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtAnnouncement"
+                android:hint="Tulis pengumuman..."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="3"
+                android:gravity="top" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnSendAnnouncement"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kirim Pengumuman"
-            android:backgroundTint="#2563EB"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="56dp"
+            android:text="KIRIM PENGUMUMAN"
+            android:backgroundTint="@color/primary_blue"
+            android:textColor="@color/white"
+            app:cornerRadius="10dp"
+            android:layout_marginBottom="40dp" />
 
-        <!-- Kelola Pengguna -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👥 Daftar Pengguna"
+            android:text="👥 Kelola Daftar Pengguna"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#111827"
-            android:layout_marginBottom="8dp" />
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="40dp" />
 
-        <!-- Tambah Event -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📅 Tambah Event Komunitas"
+            android:text="📅 Tambah Event Baru"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#111827"
-            android:layout_marginBottom="8dp" />
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/txtEvent"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nama event..."
-            android:background="@drawable/edittext_bg"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="12dp"
+            app:hintEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEvent"
+                android:hint="Judul event..."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:id="@+id/btnAddEvent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tambah Event"
-            android:backgroundTint="#10B981"
-            android:textColor="#FFFFFF"
+            android:layout_height="56dp"
+            android:text="TAMBAH EVENT"
+            android:backgroundTint="@color/pink_badge"
+            android:textColor="@color/white"
+            app:cornerRadius="10dp"
             android:layout_marginBottom="16dp" />
 
-        <!-- Daftar Event yang ditambahkan -->
         <LinearLayout
             android:id="@+id/layoutEvents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F3F4F6"
+            android:padding="12dp"
+            android:background="@drawable/rounded_light"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp" />
 
     </LinearLayout>

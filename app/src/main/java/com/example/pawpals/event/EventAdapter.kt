@@ -10,7 +10,7 @@ import com.example.pawpals.R
 import com.example.pawpals.data.Event
 import com.example.pawpals.databinding.ItemEventBinding
 
-class EventAdapter(
+class   EventAdapter(
     private var items: List<Event>,
     private val onJoinClick: (Event) -> Unit = {},
     private val onItemClick: (Event) -> Unit = {},
@@ -42,9 +42,20 @@ class EventAdapter(
                 // Member hanya bisa join
                 b.btnJoin.visibility = View.VISIBLE
                 b.btnDelete.visibility = View.GONE
-                b.btnJoin.text = if (e.isJoined) "Joined" else "Join"
-                b.btnJoin.isEnabled = !e.isJoined
-                b.btnJoin.alpha = if (e.isJoined) 0.6f else 1f
+
+                // *********** LOGIKA TAMPILAN TOMBOL JOIN ***********
+                if (e.isJoined) {
+                    b.btnJoin.text = "Joined"
+                    b.btnJoin.isEnabled = false
+                    // Menggunakan warna yang lebih terang/abu-abu saat sudah joined
+                    b.btnJoin.backgroundTintList = b.root.context.getColorStateList(R.color.gray_light)
+                } else {
+                    b.btnJoin.text = "Join"
+                    b.btnJoin.isEnabled = true
+                    // Menggunakan primary_blue saat belum joined
+                    b.btnJoin.backgroundTintList = b.root.context.getColorStateList(R.color.primary_blue)
+                }
+
                 b.btnJoin.setOnClickListener { onJoinClick(e) }
             }
 
