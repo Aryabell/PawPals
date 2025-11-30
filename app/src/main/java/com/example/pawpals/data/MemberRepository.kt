@@ -1,49 +1,63 @@
 package com.example.pawpals.data
 
 import com.example.pawpals.model.Member
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 object MemberRepository {
 
-    // Data awal (dummy)
-    val members = mutableListOf(
-        Member("Arya", "arya@gmail.com", "123456", "Member", false),
-        Member("Admin", "admin@admin.com", "admin123", "Pengurus", false),
-    )
+    private val db = FirebaseFirestore.getInstance()
+    private val memberRef = db.collection("members")
 
-    // Tambah member baru
-    fun addMember(member: Member) {
-        members.add(member)
+    // ➤ Tambah member ke Firestore
+    suspend fun addMember(member: Member) {
+        memberRef.add(member).await()
     }
 
-    // Hapus member
-    fun removeMember(member: Member) {
-        members.remove(member)
+    // ➤ Hapus member berdasarkan document ID
+    suspend fun removeMember(id: String) {
+        memberRef.document(id).delete().await()
     }
 
-    // Update role
-    fun updateRole(member: Member, newRole: String) {
-        member.role = newRole
+    // ➤ Update role
+    suspend fun updateRole(id: String, newRole: String) {
+        memberRef.document(id).update("role", newRole).await()
     }
 
-    // Blokir member
-    fun blockMember(member: Member) {
-        member.blocked = true
+    // ➤ Blokir member
+    suspend fun blockMember(id: String) {
+        memberRef.document(id).update("blocked", true).await()
     }
 
-    // Cari member berdasarkan nama
-    fun findMemberByName(name: String): Member? {
-        return members.find { it.name.equals(name, ignoreCase = true) }
+    // ➤ Cari member berdasarkan email
+    suspend fun findMemberByEmail(email: String): Member? {
+        val result = memberRef.whereEqualTo("email", email).get().await()
+
+        return if (!result.isEmpty) {
+            val doc = result.documents[0]
+            doc.toObject(Member::class.java)?.apply { this.id = doc.id }
+        } else null
     }
 
-    // Cari member berdasarkan email
-    fun findMemberByEmail(email: String): Member? {
-        return members.find { it.email.equals(email, ignoreCase = true) }
-    }
-
-    // 🔐 Validasi login berdasarkan email & password
-    fun validateLogin(email: String, password: String): Member? {
-        return members.find {
-            it.email.equals(email, ignoreCase = true) && it.password == password
+    suspend fun getAllMembers(): List<Member> {
+        val result = memberRef.get().await()
+        return result.documents.mapNotNull { doc ->
+            doc.toObject(Member::class.java)?.apply { id = doc.id }
         }
+    }
+
+
+    // ➤ Validasi login
+    suspend fun validateLogin(email: String, password: String): Member? {
+        val result = memberRef
+            .whereEqualTo("email", email)
+            .whereEqualTo("password", password)
+            .get()
+            .await()
+
+        return if (!result.isEmpty) {
+            val doc = result.documents[0]
+            doc.toObject(Member::class.java)?.apply { this.id = doc.id }
+        } else null
     }
 }

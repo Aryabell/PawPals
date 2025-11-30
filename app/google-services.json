@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "136313668958",
+    "project_id": "pawpals-9cefd",
+    "storage_bucket": "pawpals-9cefd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136313668958:android:406ee66bd539857bf8bbcf",
+        "android_client_info": {
+          "package_name": "com.example.pawpals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBt1NvUWPzH69x6OTI97SC2S6NHBEo15Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
