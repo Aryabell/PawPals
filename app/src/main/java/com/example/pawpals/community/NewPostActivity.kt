@@ -85,8 +85,6 @@ class NewPostActivity : AppCompatActivity() {
         // submit post
         btnSubmit.setOnClickListener {
             val content = etContent.text.toString().trim()
-
-            // ⭐️ AMBIL KATEGORI YANG DIPILIH DARI SPINNER ⭐️
             val selectedCategory = spinnerCategory.selectedItem.toString()
 
             if (content.isEmpty() && selectedImageUri == null) {
@@ -96,8 +94,9 @@ class NewPostActivity : AppCompatActivity() {
 
             DataRepository.addPost(
                 content = content,
-                author = "Kamu", // Ganti dengan user yang login
-                category = selectedCategory // ⭐️ GUNAKAN NILAI SPINNER ⭐️
+                author = "Kamu",
+                category = selectedCategory,
+                imageUri = selectedImageUri?.toString()
             )
 
             setResult(RESULT_OK)

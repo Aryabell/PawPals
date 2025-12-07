@@ -22,8 +22,8 @@ class MessageListFragment : Fragment() {
         _binding = FragmentMessageListBinding.inflate(inflater, container, false)
 
         val dummyChats = listOf(
-            ChatPreview("1", "Nadhira", "Kapan bisa ketemuan buat adopsi?", R.drawable.ava_user1, System.currentTimeMillis()),
-            ChatPreview("2", "yeonjun", "Makasih ya infonya!", R.drawable.ava_user2, System.currentTimeMillis() - 3600000)
+            ChatPreview("1", "Nadhira", "Kapan bisa ketemuan buat adopsi?", R.drawable.profilepicture, System.currentTimeMillis()),
+            ChatPreview("2", "yeonjun", "Makasih ya infonya!", R.drawable.profilepicture, System.currentTimeMillis() - 3600000)
         )
 
         val adapter = MessageListAdapter(dummyChats) { chat ->

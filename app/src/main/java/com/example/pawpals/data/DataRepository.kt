@@ -22,12 +22,14 @@ object DataRepository {
     private val reports = mutableListOf<Report>()
 
     init {
+        val now = System.currentTimeMillis()
+
         val initialPosts = listOf(
             Post(
                 id = "1",
                 content = "Butuh saran vet untuk kulit anjing...",
                 author = "Ari",
-                timestamp = "2h ago",
+                timestamp = now - 2 * 60 * 60 * 1000, // 2h ago
                 category = "Health",
                 imageUri = null,
                 userRole = "Anggota",
@@ -41,7 +43,7 @@ object DataRepository {
                 id = "2",
                 content = "Ayo ngumpul playdate minggu depan!",
                 author = "Sinta",
-                timestamp = "6h ago",
+                timestamp = now - 6 * 60 * 60 * 1000, // 6h ago
                 category = "Playdate",
                 imageUri = null,
                 userRole = "Anggota",
@@ -55,7 +57,7 @@ object DataRepository {
                 id = "3",
                 content = "Ada rekomendasi mainan tahan lama?",
                 author = "Rizal",
-                timestamp = "1d ago",
+                timestamp = now - 24 * 60 * 60 * 1000, // 1 day ago
                 category = "Recommend",
                 imageUri = null,
                 userRole = "Anggota",
@@ -69,7 +71,7 @@ object DataRepository {
                 id = "4",
                 content = "Siapa yang pakai makanan merk X? share dong",
                 author = "Tia",
-                timestamp = "1d ago",
+                timestamp = now - 26 * 60 * 60 * 1000, // 1d 2h ago
                 category = "Talks",
                 imageUri = null,
                 userRole = "Anggota",
@@ -99,7 +101,7 @@ object DataRepository {
             id = UUID.randomUUID().toString(),
             content = content,
             author = author,
-            timestamp = System.currentTimeMillis().toString(),
+            timestamp = System.currentTimeMillis(),
             category = category,
             imageUri = imageUri,
             userRole = userRole,
@@ -139,10 +141,11 @@ object DataRepository {
     fun addReply(postId: String, author: String, content: String, imageUri: String? = null): Reply {
         val reply = Reply(
             id = UUID.randomUUID().toString(),
+            post_id = postId,
             author = author,
             content = content,
-            timestamp = System.currentTimeMillis().toString(),
-            imageUri = imageUri
+            timestamp = System.currentTimeMillis(),
+            image_path = imageUri
         )
         val list = repliesMap.getOrPut(postId) { mutableListOf() }
         list.add(reply)
@@ -184,7 +187,6 @@ object DataRepository {
         }
     }
 
-    // 👁️‍🗨️ Admin-only: Tampilkan kembali post
     fun unhidePost(postId: String) {
         val list = _posts.value?.toMutableList() ?: return
         val index = list.indexOfFirst { it.id == postId }
@@ -195,7 +197,6 @@ object DataRepository {
         }
     }
 
-    // ❌ Admin-only: Hapus permanen
     fun deletePost(postId: String) {
         val newList = _posts.value?.filterNot { it.id == postId } ?: return
         _posts.value = newList

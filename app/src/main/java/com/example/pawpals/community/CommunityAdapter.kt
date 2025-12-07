@@ -120,7 +120,7 @@ class CommunityAdapter(
         // ======== BIND DATA ========
         holder.imgProfile.setImageResource(R.drawable.ava_paw)
         holder.tvAuthor.text = post.author
-        holder.tvTime.text = post.timestamp
+        holder.tvTime.text = getTimeAgo(post.timestamp)
         holder.tvRoleTag.text = post.category
         holder.tvContent.text = post.content
 

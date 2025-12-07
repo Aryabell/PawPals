@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawpals.admin.LoginActivity
+import com.example.pawpals.api.ApiClient
 import com.example.pawpals.data.MemberRepository
 import com.example.pawpals.databinding.ActivityRegisterBinding
 import com.example.pawpals.model.Member
+import com.google.gson.JsonObject
+import retrofit2.Call
 
 class RegisterActivity : AppCompatActivity() {
-
     private lateinit var b: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,42 +20,46 @@ class RegisterActivity : AppCompatActivity() {
         b = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        // Tombol Register
         b.btnRegister.setOnClickListener {
             val name = b.edtName.text.toString().trim()
             val email = b.edtEmail.text.toString().trim()
             val password = b.edtPassword.text.toString().trim()
 
-            // Validasi input
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Cek apakah email sudah terdaftar
-            val existingMember = MemberRepository.findMemberByEmail(email)
-            if (existingMember != null) {
-                Toast.makeText(this, "Email sudah terdaftar!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+            ApiClient.instance.register(name, email, password)
+                .enqueue(object : retrofit2.Callback<JsonObject> {
+                    override fun onResponse(call: Call<JsonObject>, response: retrofit2.Response<JsonObject>) {
+                        if (response.isSuccessful && response.body()!=null) {
+                            val body = response.body()!!
+                            val status = body.get("status").asString
+                            when (status) {
+                                "success" -> {
+                                    Toast.makeText(this@RegisterActivity, "Registrasi berhasil! Silakan login.", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                                    finish()
+                                }
+                                "exists" -> Toast.makeText(this@RegisterActivity, "Email sudah terdaftar!", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(this@RegisterActivity, "Gagal register", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this@RegisterActivity, "Response error", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-            // Buat member baru dengan role default = Member
-            val newMember = Member(name, email, password, "Member", false)
-            MemberRepository.addMember(newMember)
-
-            Toast.makeText(this, "Registrasi berhasil! Silakan login.", Toast.LENGTH_SHORT).show()
-
-            // Pindah ke LoginActivity
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                        Toast.makeText(this@RegisterActivity, "Gagal koneksi: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
 
-        // Tombol ke Login
         b.txtLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
 }
+

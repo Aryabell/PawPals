@@ -6,7 +6,7 @@ data class Post(
     val id: String,              // ID post
     val content: String,         // Konten post
     val author: String,          // Nama pengguna
-    val timestamp: String,       // Waktu
+    val timestamp: Long,       // Waktu
     val category: String,        // Tag komunitas
     val imageUri: String? = null, // Bisa null
     val userRole: String,        // Role pengguna

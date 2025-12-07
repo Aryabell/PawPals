@@ -3,31 +3,31 @@ package com.example.pawpals.adoption
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.pawpals.R
 import com.example.pawpals.databinding.ItemAdoptionBinding
 
 class DogAdapter(
-    private val dogs: List<Dog>,
+    private val list: List<Dog>,
     private val onClick: (Dog) -> Unit
 ) : RecyclerView.Adapter<DogAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: ItemAdoptionBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemAdoptionBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dog: Dog) = with(binding) {
-            tvName.text = dog.name
-            tvBreed.text = dog.breed
-            tvLocation.text = dog.location
 
-            val genderIcon = if (dog.gender == Gender.MALE)
-                R.drawable.ic_male else R.drawable.ic_female
-            ivGender.setImageResource(genderIcon)
+            // TEXT
+            tvDogName.text = dog.name
+            tvAdopterName.text = dog.breed
+            tvStatus.text = dog.location
+            tvReason.text = "Klik untuk detail"
+            tvCreatedAt.text = ""
 
-            imgDog.load(dog.imageUrl) {
-                placeholder(R.drawable.ic_image_placeholder)
-                crossfade(true)
-            }
+            // === LOAD IMAGE FROM dog.imageUrl ===
+            Glide.with(root.context)
+                .load(dog.imageUrl)                // URL dari database
+                .into(ivDog)                   // ImageView dari layout
 
             root.setOnClickListener { onClick(dog) }
         }
@@ -43,8 +43,8 @@ class DogAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(dogs[position])
+        holder.bind(list[position])
     }
 
-    override fun getItemCount(): Int = dogs.size
+    override fun getItemCount(): Int = list.size
 }

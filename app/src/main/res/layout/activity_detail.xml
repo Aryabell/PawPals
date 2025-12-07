@@ -63,6 +63,16 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_light"
                     tools:text="Husky" />
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_light"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:drawablePadding="4dp"
+                    tools:text="Jakarta" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -146,6 +156,13 @@
                         android:layout_height="wrap_content">
                         <TextView android:id="@+id/tvOwnerName" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="Maya Johnson"/>
                         <TextView android:id="@+id/tvOwnerHandle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textColor="#666" tools:text="@mayaJ"/>
+                        <TextView
+                            android:id="@+id/tvOwnerPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
                     </LinearLayout>
                     <ImageButton android:id="@+id/btnCall" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_phone" android:contentDescription="Hubungi Pemilik Anjing" android:background="?attr/selectableItemBackgroundBorderless"/>
                     <ImageButton android:id="@+id/btnMessage" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_message" android:contentDescription="Kirim Pesan ke Pemilik Anjing" android:layout_marginStart="8dp" android:background="?attr/selectableItemBackgroundBorderless"/>

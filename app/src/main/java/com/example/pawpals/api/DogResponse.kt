@@ -1,6 +1,10 @@
 package com.example.pawpals.api
 
+import com.example.pawpals.adoption.Dog
+
 data class DogResponse(
-    val message: String, // URL gambar anjing
-    val status: String   // biasanya "success"
+    val status: String,
+    val message: String,
+    val dogs: List<Dog>
 )
+

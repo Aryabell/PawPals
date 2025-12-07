@@ -24,7 +24,7 @@ import com.example.pawpals.admin.LoginActivity
 import android.widget.TextView
 import com.example.pawpals.event.EventDetailFragment
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,12 +34,14 @@ class MainActivity : AppCompatActivity() {
 
     // launcher buat buka NewPostActivity
     private val newPostLauncher = registerForActivityResult(
-        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             loadPosts(currentCategory)
         }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +83,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_adoption -> {
                     loadFragment(AdoptionFragment())
                 }
-                R.id.nav_settings -> {
-                    loadFragment(SettingsFragment())
-                }
+
                 R.id.nav_logout -> {
                     // Tampilkan konfirmasi sebelum logout
                     AlertDialog.Builder(this)

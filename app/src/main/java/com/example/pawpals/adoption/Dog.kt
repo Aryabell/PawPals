@@ -13,10 +13,14 @@ data class Dog(
     val imageUrl: String,
     val ageInYears: Int,
     val weightKg: Double,
-    val ownerId: String = "",
-    val ownerName: String,
-    val ownerPhone: String,
-    val ownerMessageHandle: String // misal username atau bisa kosong
+    val ownerId: Int,
+    val ownerName: String?,
+    val ownerPhone: String?,
+    val ownerMessageHandle: String? // misal username atau bisa kosong
 ) : Parcelable
 
-enum class Gender { MALE, FEMALE }
+
+@Parcelize
+enum class Gender : Parcelable {
+    MALE, FEMALE
+}

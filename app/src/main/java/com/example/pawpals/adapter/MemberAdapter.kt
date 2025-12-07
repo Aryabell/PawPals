@@ -26,7 +26,7 @@ class MemberAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = users[position]
         holder.name.text = user.name
-        holder.role.text = if (user.blocked) "🚫 Diblokir" else user.role
+        holder.role.text = if (user.blocked == 1) "🚫 Diblokir" else user.role
         holder.itemView.setOnClickListener { onClick(user) }
     }
 

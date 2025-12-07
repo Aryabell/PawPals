@@ -35,6 +35,25 @@
             android:paddingTop="20dp"
             android:paddingBottom="24dp">
 
+            <!-- Preview image -->
+            <ImageView
+                android:id="@+id/ivPreview"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image_placeholder"
+                android:contentDescription="Preview gambar (opsional)" />
+
+            <Button
+                android:id="@+id/btnPickImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilih Foto (opsional)"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -36,10 +36,10 @@ class CommunityListAdapter(
 
         // Tentukan Drawable yang Benar
         val drawableRes = when (category.id.lowercase()) {
-            "health" -> R.drawable.ic_community_health
-            "talks" -> R.drawable.ic_community_talks
-            "playdate" -> R.drawable.ic_community_playdate
-            "recommend" -> R.drawable.ic_community_recommend
+            "health" -> R.drawable.profilepicture
+            "talks" -> R.drawable.profilepicture
+            "playdate" -> R.drawable.profilepicture
+            "recommend" -> R.drawable.profilepicture
             else -> R.drawable.ic_placeholder
         }
 

@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawPals"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".adoption.AdoptionOwnerFormActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PawPals" />
         <activity
             android:name=".admin.AdminActivity"
             android:exported="false" />

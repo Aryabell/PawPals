@@ -3,84 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    android:layout_margin="4dp"
+    android:padding="0dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <ImageView
-            android:id="@+id/imgDog"
+            android:id="@+id/ivDog"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/rounded_gray_placeholder"
-            android:contentDescription="dog photo" />
+            android:background="@drawable/rounded_top_image"
+            android:layout_marginBottom="12dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvDogName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:text="Dog Name"
+            android:fontFamily="@font/poppinsbold"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tvAdopterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adopter Name"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="#555" />
 
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Beet"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:fontFamily="@font/poppinsmedium"
+            android:layout_marginTop="6dp"
+            android:textStyle="bold"
+            android:textColor="#3F51B5" />
 
-                <ImageView
-                    android:id="@+id/ivGender"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_male"
-                    android:contentDescription="gender" />
-            </LinearLayout>
+        <TextView
+            android:id="@+id/tvReason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="Reason"
+            android:layout_marginTop="6dp"
+            android:textColor="#555" />
 
-            <TextView
-                android:id="@+id/tvBreed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Japanese Spitz"
-                android:textSize="13sp"
-                android:textColor="#555555" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="2dp">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_location"
-                    android:contentDescription="location icon" />
-
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tangerang (1.2 km)"
-                    android:textSize="12sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginStart="4dp" />
-            </LinearLayout>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvCreatedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="Created At"
+            android:layout_marginTop="10dp"
+            android:textColor="#888"
+            android:textSize="12sp" />
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

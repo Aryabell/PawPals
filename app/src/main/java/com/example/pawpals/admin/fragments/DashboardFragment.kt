@@ -22,19 +22,22 @@ class DashboardFragment : Fragment() {
     ): View {
         val v = inflater.inflate(R.layout.fragment_dashboard, container, false)
         txtStats = v.findViewById(R.id.txtStats)
+
         updateStats()
         observeLiveData()
+
         return v
     }
 
     private fun observeLiveData() {
-        // Observasi perubahan di LiveData biar auto update
+        // Observasi perubahan data
         DataRepository.posts.observe(viewLifecycleOwner, Observer { updateStats() })
         EventRepository.events.observe(viewLifecycleOwner, Observer { updateStats() })
     }
 
     private fun updateStats() {
-        val members = MemberRepository.members
+        val members = MemberRepository.getMembers()
+
         val totalUsers = members.size
         val pengurus = members.count { it.role.equals("Pengurus", ignoreCase = true) }
         val memberCount = members.count { it.role.equals("Member", ignoreCase = true) }
