@@ -7,7 +7,7 @@
     <string name="hint_password">Password</string>
     <string name="btn_login">LOGIN</string>
     <string name="title_regist">Registrasi</string>
-    <string name="btn_regis">Registrasi</string>
+    <string name="btn_regis">REGISTRASI</string>
     <string name="agreement_prefix">By continuing, you agree to our</string>
     <string name="agreement_terms">Terms &amp; Privacy Policy</string>
     <string name="placeholder_email">pawpals@example.com</string>

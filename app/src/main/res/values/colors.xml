@@ -1,9 +1,12 @@
 <resources>
-    <color name="blue_bright">#04CBFC</color>    <!-- primary -->
+    <color name="blue_bright">#04CBFC</color>
+    <!--  primary  -->
     <color name="blue_light">#42DEFE</color>
-    <color name="blue_pale">#AFFAFE</color>      <!-- background -->
+    <color name="blue_pale">#AFFAFE</color>
+    <!--  background  -->
     <color name="cream_pale">#F4FED5</color>
-    <color name="yellow_bright">#FFEA54</color>  <!-- accent (FAB, badge) -->
+    <color name="yellow_bright">#FFEA54</color>
+    <!--  accent (FAB, badge)  -->
     <color name="yellow_gold">#FADC13</color>
     <color name="text_dark">#333333</color>
     <color name="white">#FFFFFF</color>
@@ -24,7 +27,12 @@
     <color name="primary_blue">#6ABFED</color>
     <color name="yellow_badge">#FFF87B</color>
     <color name="pink_badge">#FF8484</color>
-
-
-
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="blue_scan_border">#5CE4FF</color>
+    <color name="blue_gradient_bottom">#9EEFFF</color>
+    <color name="text_disclaimer">#9C9C9C</color>
+    <color name="bg_result_healthy">#E8F5E9</color>
+    <color name="bg_result_sick">#FFEBEE</color>
+    <color name="bg_result_error">#FFFDE7</color>
+    <color name="overlay_dark">#99000000</color>
 </resources>
