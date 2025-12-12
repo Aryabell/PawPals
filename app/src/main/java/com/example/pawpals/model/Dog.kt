@@ -1,4 +1,4 @@
-package com.example.pawpals.adoption
+package com.example.pawpals.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -16,7 +16,7 @@ data class Dog(
     val ownerId: Int,
     val ownerName: String?,
     val ownerPhone: String?,
-    val ownerMessageHandle: String? // misal username atau bisa kosong
+    val ownerMessageHandle: String?
 ) : Parcelable
 
 

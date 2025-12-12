@@ -23,16 +23,13 @@ class ChatActivity : AppCompatActivity() {
                     ?: "Teman Baru"
         val dogName = intent.getStringExtra("dogName")
 
-        // Toolbar
         binding.toolbarChat.title = userName
         binding.toolbarChat.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        // Ambil chat lama dari storage
         val messages = ChatStorage.getMessages(userName)
 
-        // Kalau baru pertama kali buka & datang dari halaman adoption → buat auto message
         if (messages.isEmpty() && !dogName.isNullOrEmpty()) {
             messages.add(
                 ChatMessage(
@@ -42,7 +39,6 @@ class ChatActivity : AppCompatActivity() {
                 )
             )
         } else if (messages.isEmpty()) {
-            // Kalau bukan dari adoption, buat dummy chat awal
             messages.addAll(
                 listOf(
                     ChatMessage("USER_2", "Hai! Kamu tertarik adopsi anjingku?", System.currentTimeMillis()),
@@ -52,13 +48,12 @@ class ChatActivity : AppCompatActivity() {
             )
         }
 
-        // Setup RecyclerView
+
         adapter = ChatAdapter(messages, currentUserId)
         binding.rvChat.layoutManager = LinearLayoutManager(this)
         binding.rvChat.adapter = adapter
         binding.rvChat.scrollToPosition(messages.size - 1)
 
-        // Tombol kirim
         binding.btnSend.setOnClickListener {
             val text = binding.etMessage.text.toString().trim()
             if (text.isNotEmpty()) {

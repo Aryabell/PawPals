@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.pawpals.R
 import com.example.pawpals.data.DataRepository
+import com.example.pawpals.model.Post
 
 class PostFragment : Fragment() {
 
@@ -22,7 +23,6 @@ class PostFragment : Fragment() {
         layout = v.findViewById(R.id.layoutPosts)
         inflaterRef = inflater
 
-        // Observe LiveData posts agar otomatis refresh saat data berubah
         DataRepository.posts.observe(viewLifecycleOwner) { postList ->
             refreshPosts(postList)
         }
@@ -30,7 +30,7 @@ class PostFragment : Fragment() {
         return v
     }
 
-    private fun refreshPosts(posts: List<com.example.pawpals.community.Post>?) {
+    private fun refreshPosts(posts: List<Post>?) {
         layout.removeAllViews()
 
         if (posts.isNullOrEmpty()) {
@@ -52,7 +52,6 @@ class PostFragment : Fragment() {
             txtAuthor.text = "👤 ${post.author} • ${post.category}"
             txtContent.text = if (post.isHidden) "(disembunyikan)" else post.content
 
-            // ⭐ Tombol Trending
             btnMark.text = if (post.isTrending) "⭐ Trending" else "☆ Jadikan Trending"
             btnMark.setOnClickListener {
                 val isNowTrending = DataRepository.toggleTrending(post.id)
@@ -64,7 +63,6 @@ class PostFragment : Fragment() {
                 ).show()
             }
 
-            // ❌ Tombol Sembunyikan / 🔄 Tampilkan Kembali
             if (post.isHidden) {
                 btnDelete.text = "Tampilkan"
                 btnDelete.isEnabled = true

@@ -1,5 +1,6 @@
 package com.example.pawpals.api
 
+import com.example.pawpals.api.AdoptionResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

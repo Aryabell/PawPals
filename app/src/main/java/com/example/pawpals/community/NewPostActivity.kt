@@ -13,14 +13,14 @@ import com.example.pawpals.R
 
 class NewPostActivity : AppCompatActivity() {
     private lateinit var spinnerCategory: Spinner
-    // menyimpan uri gambar yang dipilih user
+
     private var selectedImageUri: Uri? = null
 
-    // view preview & button hapus
+
     private lateinit var imgPreview: ImageView
     private lateinit var btnRemoveImage: Button
 
-    // ActivityResult API untuk pilih gambar
+
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -36,20 +36,20 @@ class NewPostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_post)
 
-        // toolbar custom
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Buat Post Baru"
 
-        val etContent = findViewById<EditText>(R.id.etContent) // Sekarang Material TextInputEditText
+        val etContent = findViewById<EditText>(R.id.etContent)
         val btnSubmit = findViewById<Button>(R.id.btnSubmit)
         val btnPickImage = findViewById<Button>(R.id.btnPickImage)
         btnRemoveImage = findViewById(R.id.btnRemoveImage)
         imgPreview = findViewById(R.id.imgPreview)
-        spinnerCategory = findViewById(R.id.spinnerCategory) // ⭐️ INI BARU ⭐️
+        spinnerCategory = findViewById(R.id.spinnerCategory)
 
-        // ⭐️ LOGIKA SPINNER BARU ⭐️
+
         val categories = listOf(
             "Lost Dogs", "Paw Playground", "Adopsi",
             "Kesehatan", "Playdate", "Rekomendasi", "Events", "Talks"
@@ -62,19 +62,19 @@ class NewPostActivity : AppCompatActivity() {
         )
         spinnerCategory.adapter = adapter
 
-        // Set nilai default spinner berdasarkan category yang dibawa dari MainActivity (jika ada)
+
         val initialCategory = intent.getStringExtra("category") ?: "Talks"
         val initialPosition = categories.indexOf(initialCategory)
         if (initialPosition >= 0) {
             spinnerCategory.setSelection(initialPosition)
         }
 
-        // pilih gambar
+
         btnPickImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
 
-        // hapus gambar
+
         btnRemoveImage.setOnClickListener {
             selectedImageUri = null
             imgPreview.setImageDrawable(null)
@@ -82,7 +82,7 @@ class NewPostActivity : AppCompatActivity() {
             btnRemoveImage.visibility = View.GONE
         }
 
-        // submit post
+
         btnSubmit.setOnClickListener {
             val content = etContent.text.toString().trim()
             val selectedCategory = spinnerCategory.selectedItem.toString()

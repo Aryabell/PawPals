@@ -43,7 +43,7 @@ class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
         tvTitle = view.findViewById(R.id.tvForumTitle)
         rv = view.findViewById(R.id.rvCommunity)
 
-        // kita sembunyikan text title di layout fragment (biar tidak dobel)
+
         tvTitle.visibility = View.GONE
 
         rv.layoutManager = LinearLayoutManager(requireContext())
@@ -52,19 +52,18 @@ class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
 
         loadPosts()
 
-        // set judul & tombol back di Toolbar activity
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = categoryTitle
             setDisplayHomeAsUpEnabled(true)
         }
 
-        // supaya fragment bisa handle panah back
+
         setHasOptionsMenu(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            // klik panah back di toolbar → kembali
+
             requireActivity().onBackPressedDispatcher.onBackPressed()
             return true
         }
@@ -73,7 +72,7 @@ class CommunityPostsFragment : Fragment(R.layout.fragment_posts) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // begitu fragment hilang (balik ke home), kembalikan toolbar ke default
+
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Pals Communities"
             setDisplayHomeAsUpEnabled(false)

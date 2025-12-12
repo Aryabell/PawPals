@@ -17,7 +17,8 @@ import java.util.Date
 import java.util.Locale
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent // Import Intent
+import android.content.Intent
+import com.example.pawpals.model.Post
 
 fun getTimeAgo(timeMillis: Long): String {
     val now = System.currentTimeMillis()
@@ -61,7 +62,7 @@ fun isColorDark(color: Int): Boolean {
 
 class CommunityAdapter(
     private var items: MutableList<Post>,
-    private val onItemClick: (Post) -> Unit // Fungsi ini mungkin tidak lagi digunakan jika logika Intent ada di sini
+    private val onItemClick: (Post) -> Unit
 ) : RecyclerView.Adapter<CommunityAdapter.PostVH>() {
 
     inner class PostVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -88,7 +89,7 @@ class CommunityAdapter(
         val post = items[position]
         val context = holder.itemView.context
 
-        // ======== TAG COLOR ========
+
         val colorInt = getTagColor(context, post.category)
         val backgroundDrawable = holder.tvRoleTag.background
         if (backgroundDrawable != null) {
@@ -105,7 +106,7 @@ class CommunityAdapter(
             holder.tvRoleTag.setTextColor(ContextCompat.getColor(context, R.color.text_dark))
         }
 
-        // Tint ikon paw
+
         val drawableLeft = holder.tvRoleTag.compoundDrawablesRelative[0]
         if (drawableLeft != null) {
             val wrappedDrawable = DrawableCompat.wrap(drawableLeft).mutate()
@@ -117,7 +118,7 @@ class CommunityAdapter(
             )
         }
 
-        // ======== BIND DATA ========
+
         holder.imgProfile.setImageResource(R.drawable.ava_paw)
         holder.tvAuthor.text = post.author
         holder.tvTime.text = getTimeAgo(post.timestamp)
@@ -141,9 +142,9 @@ class CommunityAdapter(
         holder.tvCommentCount.text = post.commentCount.toString()
         holder.tvLikeCount.text = post.likeCount.toString()
 
-        // ======== LIKE SYSTEM ========
+
         holder.ivLikeIcon.setImageResource(
-            if (post.isLiked) R.drawable.ic_favoritered else R.drawable.ic_favorite // Pastikan R.drawable.ic_favoritered tersedia
+            if (post.isLiked) R.drawable.ic_favoritered else R.drawable.ic_favorite
         )
 
         holder.likeContainer.setOnClickListener {
@@ -160,14 +161,14 @@ class CommunityAdapter(
             holder.tvLikeCount.text = post.likeCount.toString()
         }
 
-        // ======== ITEM CLICK (Navigasi ke ReplyActivity) ========
+
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ReplyActivity::class.java).apply {
-                // Mengirim semua data post yang dibutuhkan oleh ReplyActivity
+
                 putExtra("post_id", post.id)
                 putExtra("author", post.author)
                 putExtra("content", post.content)
-                putExtra("community_tag", post.category) // Menggunakan 'category' sebagai tag
+                putExtra("community_tag", post.category)
                 putExtra("time", post.timestamp)
                 putExtra("like_count", post.likeCount)
                 putExtra("comment_count", post.commentCount)
@@ -176,7 +177,7 @@ class CommunityAdapter(
             context.startActivity(intent)
         }
 
-        // ======== MORE BUTTON ========
+
         holder.moreBtn.setOnClickListener { view ->
             val popup = PopupMenu(view.context, view)
             popup.menuInflater.inflate(R.menu.menu_post_more, popup.menu)
@@ -196,9 +197,9 @@ class CommunityAdapter(
             }
             popup.show()
         }
-    } // <<< TUTUP onBindViewHolder DI SINI
+    }
 
-    // ini adalah fungsi override member class yang benar
+
     override fun getItemCount(): Int = items.size
 
     fun updateData(newList: MutableList<Post>) {

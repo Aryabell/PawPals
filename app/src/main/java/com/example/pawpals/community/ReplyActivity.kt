@@ -26,7 +26,6 @@ class ReplyActivity : AppCompatActivity() {
     private lateinit var adapter: ReplyAdapter
     private lateinit var postId: String
 
-    // image picking
     private var selectedImageUri: Uri? = null
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private var isPostLiked: Boolean = false
@@ -39,35 +38,35 @@ class ReplyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply)
 
-        // set toolbar sebagai actionbar
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Balasan"
 
         postId = intent.getStringExtra("post_id") ?: ""
-        // Ambil SEMUA DATA DARI INTENT
+
         val author = intent.getStringExtra("author") ?: "Unknown"
         val content = intent.getStringExtra("content") ?: ""
         val communityTag = intent.getStringExtra("community_tag") ?: "Umum"
         val time = intent.getStringExtra("time") ?: "Baru saja"
         currentLikeCount = intent.getIntExtra("like_count", 0)
         val commentCount = intent.getIntExtra("comment_count", 0)
-        isPostLiked = intent.getBooleanExtra("is_liked", false) // Ambil status like
+        isPostLiked = intent.getBooleanExtra("is_liked", false)
 
-        // Cari semua View yang dibutuhkan (Post Detail)
+
         val tvAuthor = findViewById<TextView>(R.id.tvAuthor)
         val tvContentPost = findViewById<TextView>(R.id.tvContent)
         val tvCommunityTag = findViewById<TextView>(R.id.tv_community_tag)
         val tvTime = findViewById<TextView>(R.id.tvTime)
 
-        // View untuk Like/Comment Count
+
         tvLikeCount = findViewById(R.id.tv_like_count)
         val tvCommentCount = findViewById<TextView>(R.id.tv_comment_count)
         ivLikeIcon = findViewById(R.id.iv_like_icon)
-        llLikeAction = findViewById(R.id.ll_like_action) // Container aksi Like
+        llLikeAction = findViewById(R.id.ll_like_action)
 
-        // View Reply Input (sudah ada)
+
         rvReplies = findViewById(R.id.rvReplies)
         val etReply = findViewById<EditText>(R.id.etReply)
         val btnSend = findViewById<ImageButton>(R.id.btnSend)
@@ -76,7 +75,6 @@ class ReplyActivity : AppCompatActivity() {
         val imgReplyPreview = findViewById<ImageView>(R.id.imgReplyPreview)
 
 
-        // ISI DATA POST DETAIL DARI INTENT
         tvAuthor.text = author
         tvContentPost.text = content
         tvCommunityTag.text = communityTag
@@ -84,7 +82,7 @@ class ReplyActivity : AppCompatActivity() {
         tvLikeCount.text = currentLikeCount.toString()
         tvCommentCount.text = commentCount.toString()
 
-        // ===== START: LOGIKA TAG COLORING (Disalin dari CommunityAdapter) =====
+
         val colorInt = getTagColor(this, communityTag)
         val backgroundDrawable = tvCommunityTag.background
 
@@ -96,14 +94,14 @@ class ReplyActivity : AppCompatActivity() {
             tvCommunityTag.setBackgroundColor(colorInt)
         }
 
-        // Mengatur warna teks
+
         if (isColorDark(colorInt)) {
             tvCommunityTag.setTextColor(ContextCompat.getColor(this, R.color.white))
         } else {
-            tvCommunityTag.setTextColor(ContextCompat.getColor(this, R.color.text_dark)) // Asumsi R.color.text_dark ada
+            tvCommunityTag.setTextColor(ContextCompat.getColor(this, R.color.text_dark))
         }
 
-        // Mengatur Tint Ikon Paw (jika ada)
+
         val drawableLeft = tvCommunityTag.compoundDrawablesRelative[0]
         if (drawableLeft != null) {
             val wrappedDrawable = androidx.core.graphics.drawable.DrawableCompat.wrap(drawableLeft).mutate()
@@ -115,10 +113,10 @@ class ReplyActivity : AppCompatActivity() {
             )
         }
 
-        // SETUP Awal Ikon Like
+
         updateLikeUI()
 
-        // LOGIKA LIKE (Agar bisa di-like di ReplyActivity)
+
         llLikeAction.setOnClickListener {
             isPostLiked = !isPostLiked
             if (isPostLiked) {
@@ -134,7 +132,7 @@ class ReplyActivity : AppCompatActivity() {
         adapter = ReplyAdapter(repliesList)
         rvReplies.adapter = adapter
 
-        // setup launcher pilih gambar (GetContent -> returns Uri)
+
         pickImageLauncher = registerForActivityResult(
             ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
@@ -146,12 +144,12 @@ class ReplyActivity : AppCompatActivity() {
             }
         }
 
-        // tombol pilih gambar
+
         btnPickReplyImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
 
-        // tombol hapus preview
+
         btnRemoveReplyImage.setOnClickListener {
             selectedImageUri = null
             imgReplyPreview.setImageDrawable(null)
@@ -159,7 +157,6 @@ class ReplyActivity : AppCompatActivity() {
             btnRemoveReplyImage.visibility = View.GONE
         }
 
-        // aksi kirim balasan (kirim juga imageUri sebagai String)
         btnSend.setOnClickListener {
             val text = etReply.text.toString().trim()
             if (text.isEmpty() && selectedImageUri == null) {
@@ -171,13 +168,13 @@ class ReplyActivity : AppCompatActivity() {
                 postId = postId,
                 author = "You",
                 content = text,
-                imageUri = selectedImageUri?.toString() // <-- PENTING: konversi Uri? -> String?
+                imageUri = selectedImageUri?.toString()
             )
 
             adapter.notifyItemInserted(DataRepository.getReplies(postId).lastIndex)
             rvReplies.scrollToPosition(DataRepository.getReplies(postId).lastIndex)
 
-            // reset input
+
             etReply.setText("")
             selectedImageUri = null
             imgReplyPreview.setImageDrawable(null)

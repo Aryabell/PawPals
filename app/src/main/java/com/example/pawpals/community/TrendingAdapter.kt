@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
+import com.example.pawpals.model.Post
 
 class TrendingAdapter(
     private var items: List<Post>,
@@ -32,7 +33,6 @@ class TrendingAdapter(
         holder.tvAuthor.text = post.author
         holder.tvContent.text = post.content
 
-        // ⭐ Tampilkan ikon kalau post trending
         holder.imgTrending.visibility = if (post.isTrending) View.VISIBLE else View.GONE
 
         holder.itemView.setOnClickListener { onClick(post) }

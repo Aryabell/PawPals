@@ -4,7 +4,7 @@ import com.example.pawpals.model.Member
 
 object MemberRepository {
 
-    // Cache local
+
     private val members = mutableListOf<Member>()
 
     fun setMembers(list: List<Member>) {

@@ -3,7 +3,6 @@ package com.example.pawpals.message
 import com.example.pawpals.message.ChatMessage
 
 object ChatStorage {
-    // Simpan semua chat per userName
     private val chatMap = mutableMapOf<String, MutableList<ChatMessage>>()
 
     fun getMessages(userName: String): MutableList<ChatMessage> {

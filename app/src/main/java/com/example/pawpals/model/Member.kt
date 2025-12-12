@@ -5,5 +5,5 @@ data class Member(
     val name: String,
     val email: String,
     val role: String,
-    val blocked: Int // 0 atau 1
+    val blocked: Int
 )

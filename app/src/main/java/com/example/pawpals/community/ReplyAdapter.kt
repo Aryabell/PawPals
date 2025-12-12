@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
+import com.example.pawpals.model.Reply
 
 class ReplyAdapter(
     private val items: MutableList<Reply>
@@ -27,7 +28,7 @@ class ReplyAdapter(
         holder.tvAuthor.text = r.author
         holder.tvContent.text = r.content
 
-        holder.tvTime.text = getTimeAgo(r.timestamp) // langsung
+        holder.tvTime.text = getTimeAgo(r.timestamp) 
     }
 
 

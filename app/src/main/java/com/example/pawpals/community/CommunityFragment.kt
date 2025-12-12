@@ -46,7 +46,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         createPostLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    // Tidak perlu reload manual — LiveData otomatis update
                 }
             }
     }
@@ -66,7 +65,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         searchContainer = view.findViewById(R.id.searchBarContainer)
         btnSearchCommunityToggle = view.findViewById(R.id.btnSearchCommunityToggle)
 
-        // 🟣 Observasi perubahan post
+
         DataRepository.posts.observe(viewLifecycleOwner) { allPosts ->
             val trending = if (selectedCategoryId != null) {
                 allPosts.filter {
@@ -79,7 +78,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             trendingAdapter.updateData(trending)
         }
 
-        // 🌫️ Elevasi toolbar saat scroll
+
         if (nestedScrollView != null && toolbar != null) {
             toolbar.elevation = 0f
             nestedScrollView.setOnScrollChangeListener(
@@ -90,7 +89,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             )
         }
 
-        // 🔎 Toggle search bar
+
         btnSearchCommunityToggle.setOnClickListener {
             if (searchContainer.visibility == View.GONE) {
                 searchContainer.visibility = View.VISIBLE
@@ -103,7 +102,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             }
         }
 
-        // 🏷️ List kategori
+
         val communities = listOf(
             CommunityCategory("health", "Kesehatan"),
             CommunityCategory("talks", "Talks"),
@@ -124,7 +123,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             }
         }
 
-        // 🔥 Trending list
+
         rvTrending.layoutManager = LinearLayoutManager(requireContext())
         trendingAdapter = TrendingAdapter(listOf()) { post ->
             val intent = Intent(requireContext(), ReplyActivity::class.java)
@@ -134,7 +133,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         }
         rvTrending.adapter = trendingAdapter
 
-        // ➕ Tombol posting baru
+
         fabNew.setOnClickListener {
             val intent = Intent(requireContext(), NewPostActivity::class.java)
             val currentCategory =
@@ -144,7 +143,6 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             createPostLauncher.launch(intent)
         }
 
-        // 🔍 Filter teks
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

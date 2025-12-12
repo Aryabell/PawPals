@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.MainActivity
 import com.example.pawpals.R
 import com.example.pawpals.community.CommunityAdapter
-import com.example.pawpals.community.Post
+import com.example.pawpals.model.Post
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val SCROLLED_ELEVATION_DP = 4f
@@ -31,7 +31,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val nestedScrollView: NestedScrollView = view.findViewById(R.id.home)
         rvPosts = view.findViewById(R.id.rv_posts)
-        etSearch = view.findViewById(R.id.et_search_home) // 🔍 ambil EditText dari layout
+        etSearch = view.findViewById(R.id.et_search_home)
 
         val dummyPosts = getDummyPosts()
         allPosts = dummyPosts.toMutableList()
@@ -39,7 +39,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         postAdapter = CommunityAdapter(
             items = dummyPosts.toMutableList(),
             onItemClick = { post ->
-                // TODO: Logika saat post diklik (misalnya buka ReplyActivity)
             }
         )
 
@@ -57,7 +56,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
 
-        // 🔍 Tambahan: fitur filter realtime saat user mengetik
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
@@ -80,7 +78,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }.toMutableList()
         }
         rvPosts.adapter = CommunityAdapter(filteredList) { post ->
-            // TODO: Aksi kalau post diklik
         }
     }
 

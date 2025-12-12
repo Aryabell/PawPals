@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.pawpals.R
 import com.example.pawpals.databinding.ItemAdoptionBinding
+import com.example.pawpals.model.Dog
 
 class DogAdapter(
     private val list: List<Dog>,

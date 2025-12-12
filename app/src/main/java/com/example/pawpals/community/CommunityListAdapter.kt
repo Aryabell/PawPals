@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
 
-// ganti nama biar ga tabrakan
+
 data class CommunityCategory(val id: String, val title: String)
 
 class CommunityListAdapter(
@@ -34,7 +34,7 @@ class CommunityListAdapter(
         val category = items[position]
         holder.tv.text = category.title
 
-        // Tentukan Drawable yang Benar
+
         val drawableRes = when (category.id.lowercase()) {
             "health" -> R.drawable.profilepicture
             "talks" -> R.drawable.profilepicture

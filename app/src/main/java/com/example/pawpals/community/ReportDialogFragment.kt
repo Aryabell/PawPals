@@ -35,7 +35,6 @@ class ReportDialogFragment : DialogFragment() {
             .setTitle("Laporkan Postingan")
             .setItems(reasons) { _, which ->
                 val reason = reasons[which]
-                // ⏳ Nanti bisa kamu ganti dengan Firebase / API
                 DataRepository.reportPost(postId ?: "", reason)
                 Toast.makeText(requireContext(), "Laporan dikirim: $reason", Toast.LENGTH_SHORT).show()
             }

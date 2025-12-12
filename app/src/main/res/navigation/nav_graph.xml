@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/modelFragment"
-        android:name="com.example.pawpals.model.ModelFragment"
+        android:name="com.example.pawpals.admin.fragments.ModelFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_model" />
 

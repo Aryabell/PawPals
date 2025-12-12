@@ -70,7 +70,6 @@ object EventRepository {
         currentList.add(newEvent)
         _events.value = currentList
 
-        // Ambil gambar random dari API
         dogApi.getRandomDog().enqueue(object : Callback<DogResponse> {
             override fun onResponse(call: Call<DogResponse>, response: Response<DogResponse>) {
                 val url = response.body()?.message

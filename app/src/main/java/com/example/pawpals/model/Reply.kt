@@ -1,4 +1,4 @@
-package com.example.pawpals.community
+package com.example.pawpals.model
 
 data class Reply(
     val id: String,

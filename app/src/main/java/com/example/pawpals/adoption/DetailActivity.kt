@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import coil.load
 import com.example.pawpals.R
 import com.example.pawpals.databinding.ActivityDetailBinding
+import com.example.pawpals.model.Dog
+import com.example.pawpals.model.Gender
 
 class DetailActivity : AppCompatActivity() {
 

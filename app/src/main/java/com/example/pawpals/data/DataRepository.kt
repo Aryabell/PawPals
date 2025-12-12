@@ -3,8 +3,8 @@ package com.example.pawpals.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pawpals.R
-import com.example.pawpals.community.Post
-import com.example.pawpals.community.Reply
+import com.example.pawpals.model.Post
+import com.example.pawpals.model.Reply
 import java.util.*
 
 data class Report(
@@ -29,7 +29,7 @@ object DataRepository {
                 id = "1",
                 content = "Butuh saran vet untuk kulit anjing...",
                 author = "Ari",
-                timestamp = now - 2 * 60 * 60 * 1000, // 2h ago
+                timestamp = now - 2 * 60 * 60 * 1000,
                 category = "Health",
                 imageUri = null,
                 userRole = "Anggota",
@@ -43,7 +43,7 @@ object DataRepository {
                 id = "2",
                 content = "Ayo ngumpul playdate minggu depan!",
                 author = "Sinta",
-                timestamp = now - 6 * 60 * 60 * 1000, // 6h ago
+                timestamp = now - 6 * 60 * 60 * 1000,
                 category = "Playdate",
                 imageUri = null,
                 userRole = "Anggota",
@@ -57,7 +57,7 @@ object DataRepository {
                 id = "3",
                 content = "Ada rekomendasi mainan tahan lama?",
                 author = "Rizal",
-                timestamp = now - 24 * 60 * 60 * 1000, // 1 day ago
+                timestamp = now - 24 * 60 * 60 * 1000,
                 category = "Recommend",
                 imageUri = null,
                 userRole = "Anggota",
@@ -71,7 +71,7 @@ object DataRepository {
                 id = "4",
                 content = "Siapa yang pakai makanan merk X? share dong",
                 author = "Tia",
-                timestamp = now - 26 * 60 * 60 * 1000, // 1d 2h ago
+                timestamp = now - 26 * 60 * 60 * 1000,
                 category = "Talks",
                 imageUri = null,
                 userRole = "Anggota",
@@ -86,7 +86,7 @@ object DataRepository {
         _posts.value = initialPosts
     }
 
-    // 📝 Tambah post baru
+
     fun addPost(
         content: String,
         author: String = "Anon",
@@ -118,7 +118,6 @@ object DataRepository {
         return newPost
     }
 
-    // 📂 Filter
     fun getPostsByCategory(category: String): List<Post> {
         return _posts.value?.filter {
             !it.isHidden && it.category.equals(category, ignoreCase = true)
@@ -137,7 +136,6 @@ object DataRepository {
         }?.take(limit) ?: emptyList()
     }
 
-    // 💬 Balasan
     fun addReply(postId: String, author: String, content: String, imageUri: String? = null): Reply {
         val reply = Reply(
             id = UUID.randomUUID().toString(),
@@ -155,14 +153,12 @@ object DataRepository {
     fun getReplies(postId: String): MutableList<Reply> =
         repliesMap.getOrPut(postId) { mutableListOf() }
 
-    // 🚨 Laporan
     fun reportPost(postId: String, reason: String) {
         reports.add(Report(postId, reason, System.currentTimeMillis()))
     }
 
     fun getReports(): List<Report> = reports
 
-    // ⭐ Admin-only: Toggle trending
     fun toggleTrending(postId: String): Boolean {
         val list = _posts.value?.toMutableList() ?: return false
         val index = list.indexOfFirst { it.id == postId }
@@ -176,7 +172,6 @@ object DataRepository {
         return false
     }
 
-    // 🙈 Admin-only: Sembunyikan post
     fun hidePost(postId: String) {
         val list = _posts.value?.toMutableList() ?: return
         val index = list.indexOfFirst { it.id == postId }
