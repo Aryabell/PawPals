@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
 import com.example.pawpals.model.Reply
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ReplyAdapter(
     private val items: MutableList<Reply>
@@ -19,7 +21,8 @@ class ReplyAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyVH {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_reply, parent, false)
+        val v =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_reply, parent, false)
         return ReplyVH(v)
     }
 
@@ -28,9 +31,26 @@ class ReplyAdapter(
         holder.tvAuthor.text = r.author
         holder.tvContent.text = r.content
 
-        holder.tvTime.text = getTimeAgo(r.timestamp) 
+        // ⬇️ FIX: createdAt dari API (String)
+        holder.tvTime.text =
+            getTimeAgo(parseReplyTimeToMillis(r.createdAt))
     }
 
-
     override fun getItemCount(): Int = items.size
+
+    fun updateData(newList: MutableList<Reply>) {
+        items.clear()
+        items.addAll(newList)
+        notifyDataSetChanged()
+    }
+}
+
+/* ===== TIME PARSER ===== */
+fun parseReplyTimeToMillis(time: String): Long {
+    return try {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        sdf.parse(time)?.time ?: System.currentTimeMillis()
+    } catch (e: Exception) {
+        System.currentTimeMillis()
+    }
 }

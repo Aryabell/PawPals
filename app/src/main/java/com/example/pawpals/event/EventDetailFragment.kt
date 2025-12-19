@@ -10,6 +10,8 @@ import com.example.pawpals.R
 import com.example.pawpals.databinding.FragmentEventDetailBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
 
@@ -37,7 +39,7 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
         viewModel.events.observe(viewLifecycleOwner) { list ->
             val ev = list.find { it.id == eventId } ?: return@observe
             b.tvTitle.text = ev.title
-            b.tvDate.text = ev.date
+            b.tvDate.text = formatDate(ev.date)
             b.tvLocation.text = ev.location
             b.tvDesc.text = ev.description
 
@@ -83,6 +85,16 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
                     .setNegativeButton(R.string.back, null)
                     .show()
             }
+        }
+    }
+
+    private fun formatDate(dateStr: String): String {
+        return try {
+            val input = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val output = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale("id", "ID"))
+            output.format(input.parse(dateStr)!!)
+        } catch (e: Exception) {
+            dateStr
         }
     }
 

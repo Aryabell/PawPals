@@ -2,198 +2,183 @@ package com.example.pawpals.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.pawpals.R
+import com.example.pawpals.api.LikeResponse
+import com.example.pawpals.api.PostApiClient
 import com.example.pawpals.model.Post
 import com.example.pawpals.model.Reply
-import java.util.*
-
-data class Report(
-    val postId: String,
-    val reason: String,
-    val timestamp: Long
-)
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 object DataRepository {
 
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> get() = _posts
+    /* ================= STATE ================= */
 
-    private val repliesMap: MutableMap<String, MutableList<Reply>> = mutableMapOf()
-    private val reports = mutableListOf<Report>()
+    private val _posts = MutableLiveData<List<Post>>(emptyList())
+    val posts: LiveData<List<Post>> = _posts
+    private const val CURRENT_USER_ID = 1
 
-    init {
-        val now = System.currentTimeMillis()
+    /* ================= POSTS ================= */
 
-        val initialPosts = listOf(
-            Post(
-                id = "1",
-                content = "Butuh saran vet untuk kulit anjing...",
-                author = "Ari",
-                timestamp = now - 2 * 60 * 60 * 1000,
-                category = "Health",
-                imageUri = null,
-                userRole = "Anggota",
-                commentCount = 5,
-                likeCount = 10,
-                userAvatar = R.drawable.ic_profile_placeholder,
-                isTrending = true,
-                isHidden = false
-            ),
-            Post(
-                id = "2",
-                content = "Ayo ngumpul playdate minggu depan!",
-                author = "Sinta",
-                timestamp = now - 6 * 60 * 60 * 1000,
-                category = "Playdate",
-                imageUri = null,
-                userRole = "Anggota",
-                commentCount = 15,
-                likeCount = 30,
-                userAvatar = R.drawable.ic_profile_placeholder,
-                isTrending = true,
-                isHidden = false
-            ),
-            Post(
-                id = "3",
-                content = "Ada rekomendasi mainan tahan lama?",
-                author = "Rizal",
-                timestamp = now - 24 * 60 * 60 * 1000,
-                category = "Recommend",
-                imageUri = null,
-                userRole = "Anggota",
-                commentCount = 2,
-                likeCount = 5,
-                userAvatar = R.drawable.ic_profile_placeholder,
-                isTrending = true,
-                isHidden = false
-            ),
-            Post(
-                id = "4",
-                content = "Siapa yang pakai makanan merk X? share dong",
-                author = "Tia",
-                timestamp = now - 26 * 60 * 60 * 1000,
-                category = "Talks",
-                imageUri = null,
-                userRole = "Anggota",
-                commentCount = 20,
-                likeCount = 55,
-                userAvatar = R.drawable.ic_profile_placeholder,
-                isTrending = true,
-                isHidden = false
-            )
-        )
-
-        _posts.value = initialPosts
+    suspend fun getPosts(): List<Post> {
+        val result = PostApiClient.api.getPosts(CURRENT_USER_ID)
+        _posts.postValue(result)
+        return result
     }
 
+    fun getPostsByCategory(categoryId: String): List<Post> {
+        val list = _posts.value ?: emptyList()
+        return if (categoryId == "talks") {
+            list.filter { !it.isHidden }
+        } else {
+            list.filter { !it.isHidden && it.category.equals(categoryId, true) }
+        }
+    }
 
-    fun addPost(
+    suspend fun addPost(
         content: String,
-        author: String = "Anon",
-        category: String = "Talks",
-        imageUri: String? = null,
-        userRole: String = "Anggota",
-        commentCount: Int = 0,
-        likeCount: Int = 0,
-        userAvatar: Int = R.drawable.ic_profile_placeholder
-    ): Post {
-        val newPost = Post(
-            id = UUID.randomUUID().toString(),
-            content = content,
-            author = author,
-            timestamp = System.currentTimeMillis(),
-            category = category,
-            imageUri = imageUri,
-            userRole = userRole,
-            commentCount = commentCount,
-            likeCount = likeCount,
-            userAvatar = userAvatar,
-            isTrending = false,
-            isHidden = false
+        author: String,
+        category: String,
+        userRole: String,
+        imageFile: File?
+    ): Boolean {
+
+        fun String.rb() =
+            toRequestBody("text/plain".toMediaType())
+
+        val imagePart = imageFile?.let {
+            val mime = when {
+                it.name.endsWith("png") -> "image/png"
+                else -> "image/jpeg"
+            }
+
+            MultipartBody.Part.createFormData(
+                "image",
+                it.name,
+                it.asRequestBody(mime.toMediaType())
+            )
+        }
+
+        val response = PostApiClient.api.addPost(
+            content = content.rb(),
+            author = author.rb(),
+            category = category.rb(),
+            userRole = userRole.rb(),
+            image = imagePart
         )
 
-        val currentList = _posts.value?.toMutableList() ?: mutableListOf()
-        currentList.add(0, newPost)
-        _posts.value = currentList
-        return newPost
+        if (response.isSuccessful) {
+            // refresh list setelah post baru
+            getPosts()
+        }
+
+        return response.isSuccessful
     }
 
-    fun getPostsByCategory(category: String): List<Post> {
-        return _posts.value?.filter {
-            !it.isHidden && it.category.equals(category, ignoreCase = true)
-        } ?: emptyList()
-    }
-
-    fun getTrendingPosts(limit: Int = 5): List<Post> {
-        return _posts.value?.filter {
-            it.isTrending && !it.isHidden
-        }?.take(limit) ?: emptyList()
-    }
-
-    fun getTrendingPostsByCategory(category: String, limit: Int = 5): List<Post> {
-        return _posts.value?.filter {
-            it.isTrending && !it.isHidden && it.category.equals(category, ignoreCase = true)
-        }?.take(limit) ?: emptyList()
-    }
-
-    fun addReply(postId: String, author: String, content: String, imageUri: String? = null): Reply {
-        val reply = Reply(
-            id = UUID.randomUUID().toString(),
-            post_id = postId,
-            author = author,
-            content = content,
-            timestamp = System.currentTimeMillis(),
-            image_path = imageUri
-        )
-        val list = repliesMap.getOrPut(postId) { mutableListOf() }
-        list.add(reply)
-        return reply
-    }
-
-    fun getReplies(postId: String): MutableList<Reply> =
-        repliesMap.getOrPut(postId) { mutableListOf() }
-
-    fun reportPost(postId: String, reason: String) {
-        reports.add(Report(postId, reason, System.currentTimeMillis()))
-    }
-
-    fun getReports(): List<Report> = reports
+    /* ================= ADMIN ACTIONS ================= */
 
     fun toggleTrending(postId: String): Boolean {
         val list = _posts.value?.toMutableList() ?: return false
         val index = list.indexOfFirst { it.id == postId }
-        if (index != -1) {
-            val post = list[index]
-            val updated = post.copy(isTrending = !post.isTrending)
-            list[index] = updated
-            _posts.value = list
-            return updated.isTrending
-        }
-        return false
+        if (index == -1) return false
+
+        val post = list[index]
+        val updated = post.copy(isTrending = !post.isTrending)
+        list[index] = updated
+        _posts.value = list
+
+        return updated.isTrending
     }
 
     fun hidePost(postId: String) {
-        val list = _posts.value?.toMutableList() ?: return
-        val index = list.indexOfFirst { it.id == postId }
-        if (index != -1) {
-            val post = list[index]
-            list[index] = post.copy(isHidden = true, isTrending = false)
-            _posts.value = list
-        }
+        updateHidden(postId, true)
     }
 
     fun unhidePost(postId: String) {
-        val list = _posts.value?.toMutableList() ?: return
-        val index = list.indexOfFirst { it.id == postId }
-        if (index != -1) {
-            val post = list[index]
-            list[index] = post.copy(isHidden = false)
-            _posts.value = list
-        }
+        updateHidden(postId, false)
     }
 
-    fun deletePost(postId: String) {
-        val newList = _posts.value?.filterNot { it.id == postId } ?: return
-        _posts.value = newList
+    suspend fun toggleLike(postId: String): LikeResponse {
+        val response = PostApiClient.api.toggleLike(
+            postId = postId,
+            userId = CURRENT_USER_ID
+        )
+
+        val list = _posts.value?.toMutableList() ?: return response
+        val index = list.indexOfFirst { it.id == postId }
+
+        if (index != -1) {
+            list[index] = list[index].copy(
+                isLiked = response.isLiked,
+                likeCount = response.like_count
+            )
+            _posts.postValue(list)
+        }
+
+        return response
+    }
+
+
+    private fun updateHidden(postId: String, hidden: Boolean) {
+        val list = _posts.value?.toMutableList() ?: return
+        val index = list.indexOfFirst { it.id == postId }
+        if (index == -1) return
+
+        list[index] = list[index].copy(isHidden = hidden)
+        _posts.value = list
+    }
+
+    fun reportPost(postId: String, reason: String) {
+        // sementara lokal / log
+        // nanti bisa sambung API report
+        println("POST REPORTED: $postId | reason=$reason")
+    }
+
+    /* ================= REPLIES ================= */
+
+    suspend fun getReplies(postId: String): List<Reply> {
+        return PostApiClient.api.getReplies(postId)
+    }
+
+    fun getTrendingPosts(): List<Post> {
+        return posts.value
+            ?.filter { it.isTrending && !it.isHidden }
+            ?: emptyList()
+    }
+
+    suspend fun addReply(
+        postId: String,
+        author: String,
+        content: String,
+        imageFile: File?
+    ): Boolean {
+
+        fun String.rb() =
+            toRequestBody("text/plain".toMediaType())
+
+        val imagePart = imageFile?.let {
+            val mime = when {
+                it.name.endsWith("png") -> "image/png"
+                else -> "image/jpeg"
+            }
+
+            MultipartBody.Part.createFormData(
+                "image",
+                it.name,
+                it.asRequestBody(mime.toMediaType())
+            )
+        }
+
+
+        val response = PostApiClient.api.addReply(
+            postId = postId.rb(),
+            author = author.rb(),
+            content = content.rb(),
+            image = imagePart
+        )
+
+        return response.isSuccessful
     }
 }

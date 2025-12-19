@@ -11,7 +11,6 @@ interface AdoptionApiService {
     @Multipart
     @POST("adopt_dog.php")
     fun submitAdoption(
-        @Part("user_id") userId: RequestBody,
         @Part("dog_id") dogId: RequestBody,
         @Part("dog_name") dogName: RequestBody,
         @Part("adopter_name") adopterName: RequestBody,

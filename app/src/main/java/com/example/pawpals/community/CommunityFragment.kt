@@ -12,14 +12,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
-import com.example.pawpals.data.DataRepository
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.MainActivity
 import com.example.pawpals.R
+import com.example.pawpals.data.DataRepository
+import com.example.pawpals.model.Post
+import kotlinx.coroutines.launch
 
 class CommunityFragment : Fragment(R.layout.fragment_community) {
 
@@ -40,12 +43,15 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
     private lateinit var createPostLauncher: ActivityResultLauncher<Intent>
 
     private var selectedCategoryId: String? = null
+    private var allPostsCache: List<Post> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         createPostLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
+                    fetchPostsFromApi()
                 }
             }
     }
@@ -54,8 +60,7 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         super.onViewCreated(view, savedInstanceState)
 
         val nestedScrollView = view.findViewById<NestedScrollView>(R.id.community_scroll_view)
-        val mainActivity = activity as? MainActivity
-        val toolbar = mainActivity?.binding?.toolbar
+        val toolbar = (activity as? MainActivity)?.binding?.toolbar
 
         tvTitle = view.findViewById(R.id.tvForumTitle)
         rvCommunities = view.findViewById(R.id.rvCommunities)
@@ -65,44 +70,17 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
         searchContainer = view.findViewById(R.id.searchBarContainer)
         btnSearchCommunityToggle = view.findViewById(R.id.btnSearchCommunityToggle)
 
-
-        DataRepository.posts.observe(viewLifecycleOwner) { allPosts ->
-            val trending = if (selectedCategoryId != null) {
-                allPosts.filter {
-                    it.isTrending && !it.isHidden &&
-                            it.category.equals(selectedCategoryId, ignoreCase = true)
-                }
-            } else {
-                allPosts.filter { it.isTrending && !it.isHidden }
-            }
-            trendingAdapter.updateData(trending)
+        // ================= TRENDING RV =================
+        rvTrending.layoutManager = LinearLayoutManager(requireContext())
+        trendingAdapter = TrendingAdapter(listOf()) { post ->
+            val intent = Intent(requireContext(), ReplyActivity::class.java)
+            intent.putExtra("post_id", post.id)
+            intent.putExtra("post_content", post.content)
+            startActivity(intent)
         }
+        rvTrending.adapter = trendingAdapter
 
-
-        if (nestedScrollView != null && toolbar != null) {
-            toolbar.elevation = 0f
-            nestedScrollView.setOnScrollChangeListener(
-                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                    toolbar.elevation =
-                        if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
-                }
-            )
-        }
-
-
-        btnSearchCommunityToggle.setOnClickListener {
-            if (searchContainer.visibility == View.GONE) {
-                searchContainer.visibility = View.VISIBLE
-                tvTitle.visibility = View.GONE
-                etSearch.requestFocus()
-            } else {
-                searchContainer.visibility = View.GONE
-                tvTitle.visibility = View.VISIBLE
-                etSearch.text.clear()
-            }
-        }
-
-
+        // ================= CATEGORY RV =================
         val communities = listOf(
             CommunityCategory("health", "Kesehatan"),
             CommunityCategory("talks", "Talks"),
@@ -114,35 +92,10 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvCommunities.adapter = CommunityListAdapter(communities) { category ->
             selectedCategoryId = category.id
-            DataRepository.posts.value?.let { allPosts ->
-                val filtered = allPosts.filter {
-                    it.isTrending && !it.isHidden &&
-                            it.category.equals(selectedCategoryId, ignoreCase = true)
-                }
-                trendingAdapter.updateData(filtered)
-            }
+            applyTrendingFilter()
         }
 
-
-        rvTrending.layoutManager = LinearLayoutManager(requireContext())
-        trendingAdapter = TrendingAdapter(listOf()) { post ->
-            val intent = Intent(requireContext(), ReplyActivity::class.java)
-            intent.putExtra("post_id", post.id)
-            intent.putExtra("post_content", post.content)
-            startActivity(intent)
-        }
-        rvTrending.adapter = trendingAdapter
-
-
-        fabNew.setOnClickListener {
-            val intent = Intent(requireContext(), NewPostActivity::class.java)
-            val currentCategory =
-                (rvCommunities.adapter as? CommunityListAdapter)?.getCurrentSelectedCategory()?.id
-                    ?: "Talks"
-            intent.putExtra("category", currentCategory)
-            createPostLauncher.launch(intent)
-        }
-
+        // ================= SEARCH =================
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -150,7 +103,65 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
                 trendingAdapter.filterData(s.toString())
             }
         })
+
+        // ================= SEARCH TOGGLE =================
+        btnSearchCommunityToggle.setOnClickListener {
+            if (searchContainer.visibility == View.GONE) {
+                searchContainer.visibility = View.VISIBLE
+                tvTitle.visibility = View.GONE
+                etSearch.requestFocus()
+            } else {
+                searchContainer.visibility = View.GONE
+                tvTitle.visibility = View.VISIBLE
+                etSearch.text.clear()
+                applyTrendingFilter()
+            }
+        }
+
+        // ================= NEW POST =================
+        fabNew.setOnClickListener {
+            val intent = Intent(requireContext(), NewPostActivity::class.java)
+            intent.putExtra("category", selectedCategoryId ?: "talks")
+            createPostLauncher.launch(intent)
+        }
+
+        // ================= TOOLBAR ELEVATION =================
+        if (nestedScrollView != null && toolbar != null) {
+            toolbar.elevation = 0f
+            nestedScrollView.setOnScrollChangeListener(
+                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                    toolbar.elevation =
+                        if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
+                }
+            )
+        }
+
+        // ================= LOAD DATA =================
+        fetchPostsFromApi()
     }
+
+    private fun fetchPostsFromApi() {
+        lifecycleScope.launch {
+            allPostsCache = DataRepository.getPosts()
+            applyTrendingFilter()
+        }
+    }
+
+    private fun applyTrendingFilter() {
+        val filtered = if (selectedCategoryId != null) {
+            allPostsCache.filter {
+                it.isTrending &&
+                        !it.isHidden &&
+                        it.category.equals(selectedCategoryId, ignoreCase = true)
+            }
+        } else {
+            allPostsCache.filter {
+                it.isTrending && !it.isHidden
+            }
+        }
+        trendingAdapter.updateData(filtered)
+    }
+
 
     override fun onResume() {
         super.onResume()

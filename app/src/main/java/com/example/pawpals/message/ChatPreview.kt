@@ -1,9 +1,9 @@
 package com.example.pawpals.message
 
 data class ChatPreview(
-    val chatId: String = "",
-    val userName: String = "",
-    val lastMessage: String = "",
-    val userImageResId: Int = 0,
-    val timestamp: Long = 0L
+    val chat_id: Int,
+    val user_id: Int,
+    val user_name: String,
+    val last_message: String?,
+    val timestamp: Long?
 )

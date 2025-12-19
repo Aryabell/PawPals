@@ -1,105 +1,157 @@
 package com.example.pawpals.data
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.pawpals.api.DogApiService
-import com.example.pawpals.api.DogResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.example.pawpals.api.ApiResponse
+import com.example.pawpals.api.EventApiService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.MediaType.Companion.toMediaType
 
 object EventRepository {
 
+    // ==============================
+    // RETROFIT
+    // ==============================
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://10.0.2.2/pawpals_api/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(EventApiService::class.java)
+
+    // ==============================
+    // LIVE DATA
+    // ==============================
     private val _events = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> get() = _events
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://dog.ceo/api/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-
-    private val dogApi = retrofit.create(DogApiService::class.java)
-
-    init {
-        val initialEvents = listOf(
-            Event(1, "Dog Morning Walk", "Jalan santai pagi bareng doggos.", "2025-10-01 07:00", "Taman Merdeka"),
-            Event(2, "Playdate at Park", "Bawa mainan & snack, social time.", "2025-10-03 16:00", "Taman Bunga"),
-            Event(3, "Puppy Socialization", "Sesi puppy + grooming tips.", "2025-10-05 10:00", "Community Hall")
-        )
-        _events.value = initialEvents
-        fetchDogImages()
-    }
-
-    private fun fetchDogImages() {
-        _events.value?.forEach { event ->
-            dogApi.getRandomDog().enqueue(object : Callback<DogResponse> {
-                override fun onResponse(call: Call<DogResponse>, response: Response<DogResponse>) {
-                    val url = response.body()?.message
-                    _events.postValue(
-                        _events.value?.map {
-                            if (it.id == event.id) it.copy(imageUrl = url) else it
-                        }
-                    )
+    // ==============================
+    // FETCH EVENTS
+    // ==============================
+    fun fetchEvents() {
+        api.getEvents().enqueue(object : Callback<List<Event>> {
+            override fun onResponse(
+                call: Call<List<Event>>,
+                response: Response<List<Event>>
+            ) {
+                if (response.isSuccessful) {
+                    _events.value = response.body() ?: emptyList()
                 }
-
-                override fun onFailure(call: Call<DogResponse>, t: Throwable) {}
-            })
-        }
-    }
-
-    fun deleteEvent(eventId: Int) {
-        val currentList = _events.value?.toMutableList() ?: return
-        val newList = currentList.filterNot { it.id == eventId }
-        _events.value = newList
-    }
-
-    fun addEvent(title: String, description: String, date: String, location: String) {
-        val currentList = _events.value?.toMutableList() ?: mutableListOf()
-        val newId = (currentList.maxOfOrNull { it.id } ?: 0) + 1
-
-        val newEvent = Event(
-            id = newId,
-            title = title,
-            description = description,
-            date = date,
-            location = location
-        )
-
-        currentList.add(newEvent)
-        _events.value = currentList
-
-        dogApi.getRandomDog().enqueue(object : Callback<DogResponse> {
-            override fun onResponse(call: Call<DogResponse>, response: Response<DogResponse>) {
-                val url = response.body()?.message
-                _events.postValue(
-                    _events.value?.map {
-                        if (it.id == newId) it.copy(imageUrl = url) else it
-                    }
-                )
             }
 
-            override fun onFailure(call: Call<DogResponse>, t: Throwable) {}
+            override fun onFailure(call: Call<List<Event>>, t: Throwable) {}
+        })
+    }
+
+    // ==============================
+    // ADD EVENT WITH IMAGE (ADMIN)
+    // ==============================
+    fun addEventWithImage(
+        context: Context,
+        title: String,
+        description: String,
+        date: String,
+        location: String,
+        imageUri: Uri?
+    ) {
+        val titleBody = title.toRequestBody("text/plain".toMediaType())
+        val descBody = description.toRequestBody("text/plain".toMediaType())
+        val dateBody = date.toRequestBody("text/plain".toMediaType())
+        val locBody = location.toRequestBody("text/plain".toMediaType())
+
+        var imagePart: MultipartBody.Part? = null
+
+        if (imageUri != null) {
+            val inputStream = context.contentResolver.openInputStream(imageUri)
+            val bytes = inputStream?.readBytes()
+            inputStream?.close()
+
+            if (bytes != null) {
+                val reqFile = bytes.toRequestBody("image/jpeg".toMediaType())
+                imagePart = MultipartBody.Part.createFormData(
+                    "image",
+                    "event_${System.currentTimeMillis()}.jpg",
+                    reqFile
+                )
+            }
+        }
+
+        api.addEventWithImage(
+            titleBody,
+            descBody,
+            dateBody,
+            locBody,
+            imagePart
+        ).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                fetchEvents()
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
         })
     }
 
 
+    // ==============================
+    // DELETE EVENT
+    // ==============================
+    fun deleteEvent(eventId: Int) {
+        api.deleteEvent(eventId).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                fetchEvents()
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {}
+        })
+    }
+
+    // ==============================
+    // JOIN / CANCEL
+    // ==============================
     fun joinEvent(eventId: Int) {
-        _events.value = _events.value?.map { ev ->
-            if (ev.id == eventId) ev.copy(isJoined = true) else ev
-        }
+        api.joinEvent(eventId).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                fetchEvents() // 🔥 INI WAJIB
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {}
+        })
     }
 
     fun cancelJoin(eventId: Int) {
-        _events.value = _events.value?.map { ev ->
-            if (ev.id == eventId) ev.copy(isJoined = false) else ev
-        }
+        api.cancelJoin(eventId).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                fetchEvents()
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {}
+        })
     }
 
-    fun getEventById(id: Int): Event? = _events.value?.find { it.id == id }
+    fun getEventById(id: Int): Event? =
+        _events.value?.find { it.id == id }
 
     fun refreshEvents() {
-        fetchDogImages()
+        fetchEvents()
     }
 }

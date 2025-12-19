@@ -25,6 +25,7 @@ import android.widget.TextView
 import com.example.pawpals.event.EventDetailFragment
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.pawpals.admin.fragments.EventDetailAdminFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -259,6 +260,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.visibility = View.GONE
 
+        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
+    }
+
+    fun openEventDetailAdmin(eventId: Int) {
+        val frag = EventDetailAdminFragment.newInstance(eventId)
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, frag)
+            .addToBackStack("EventDetailAdmin")
+            .commit()
+
+        supportActionBar?.hide()
+        binding.toolbar.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
         findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
     }
 

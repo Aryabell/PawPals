@@ -11,7 +11,7 @@ import com.example.pawpals.message.ChatMessage
 
 class ChatAdapter(
     private val messages: List<ChatMessage>,
-    private val currentUserId: String
+    private val currentUserId: Int
 ) : RecyclerView.Adapter<ChatAdapter.VH>() {
 
     inner class VH(private val binding: ItemChatMessageBinding) : RecyclerView.ViewHolder(binding.root) {
