@@ -44,6 +44,7 @@ class PostFragment : Fragment() {
 
         for (post in posts) {
             val item = inflaterRef.inflate(R.layout.item_admin_post, layout, false)
+
             val txtContent = item.findViewById<TextView>(R.id.txtContent)
             val txtAuthor = item.findViewById<TextView>(R.id.txtAuthor)
             val btnMark = item.findViewById<Button>(R.id.btnMark)
@@ -58,14 +59,16 @@ class PostFragment : Fragment() {
                 btnMark.text = if (isNowTrending) "⭐ Trending" else "☆ Jadikan Trending"
                 Toast.makeText(
                     requireContext(),
-                    if (isNowTrending) "Post ditandai sebagai trending ⭐" else "Post tidak lagi trending",
+                    if (isNowTrending)
+                        "Post ditandai sebagai trending ⭐"
+                    else
+                        "Post tidak lagi trending",
                     Toast.LENGTH_SHORT
                 ).show()
             }
 
             if (post.isHidden) {
                 btnDelete.text = "Tampilkan"
-                btnDelete.isEnabled = true
                 btnDelete.setOnClickListener {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Tampilkan Postingan")
@@ -79,7 +82,6 @@ class PostFragment : Fragment() {
                 }
             } else {
                 btnDelete.text = "Sembunyikan"
-                btnDelete.isEnabled = true
                 btnDelete.setOnClickListener {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Sembunyikan Postingan")

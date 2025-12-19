@@ -15,13 +15,15 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
 
     private var _b: FragmentEventsListBinding? = null
     private val b get() = _b!!
+
     private lateinit var viewModel: EventViewModel
     private lateinit var adapter: EventAdapter
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         _b = FragmentEventsListBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity()).get(EventViewModel::class.java)
+
+        viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
 
         adapter = EventAdapter(
             items = emptyList(),
@@ -37,29 +39,27 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
                     .show()
             },
             onItemClick = { ev ->
-                val frag = EventDetailFragment.newInstance(ev.id)
-                (requireActivity() as? MainActivity)?.openEventDetail(ev.id)
+                (requireActivity() as MainActivity).openEventDetail(ev.id)
             },
-            isAdmin = false // <-- ini penting
+            isAdmin = false
         )
-
-        b.swipeRefresh.setOnRefreshListener{
-            viewModel.refreshEvents()
-
-            viewModel.events.observe(viewLifecycleOwner){
-                adapter.submitList(it)
-                b.swipeRefresh.isRefreshing = false
-            }
-        }
 
         b.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         b.recyclerView.adapter = adapter
 
+        // 🔥 OBSERVE SEKALI SAJA
         viewModel.events.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
+            b.swipeRefresh.isRefreshing = false
         }
 
+        // 🔥 FETCH DATA DARI DATABASE
+        viewModel.fetchEvents()
 
+        // Swipe refresh
+        b.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshEvents()
+        }
     }
 
     override fun onDestroyView() {

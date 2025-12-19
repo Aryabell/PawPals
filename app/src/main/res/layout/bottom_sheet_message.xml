@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mulai Chat Baru"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Pilih Member -->
+    <Spinner
+        android:id="@+id/spinnerUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:background="@drawable/bg_input"
+        android:padding="12dp"/>
+
+
+    <!-- Isi pesan -->
+    <EditText
+        android:id="@+id/etMessageForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tulis pesan..."
+        android:minLines="3"
+        android:gravity="top"
+        android:background="@drawable/bg_input"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnSendForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kirim"/>
+</LinearLayout>

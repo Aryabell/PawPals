@@ -1,118 +1,124 @@
 package com.example.pawpals.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.pawpals.MainActivity
 import com.example.pawpals.R
 import com.example.pawpals.community.CommunityAdapter
+import com.example.pawpals.community.ReplyActivity
+import com.example.pawpals.data.DataRepository
 import com.example.pawpals.model.Post
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-    private val SCROLLED_ELEVATION_DP = 4f
-    private val SCROLLED_ELEVATION_PX by lazy {
-        resources.displayMetrics.density * SCROLLED_ELEVATION_DP
-    }
 
     private lateinit var rvPosts: RecyclerView
     private lateinit var postAdapter: CommunityAdapter
-    private lateinit var allPosts: MutableList<Post>
     private lateinit var etSearch: EditText
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    private var allPosts: MutableList<Post> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val nestedScrollView: NestedScrollView = view.findViewById(R.id.home)
         rvPosts = view.findViewById(R.id.rv_posts)
         etSearch = view.findViewById(R.id.et_search_home)
-
-        val dummyPosts = getDummyPosts()
-        allPosts = dummyPosts.toMutableList()
+        swipeRefresh = view.findViewById(R.id.swipe_refresh)
 
         postAdapter = CommunityAdapter(
-            items = dummyPosts.toMutableList(),
-            onItemClick = { post ->
+            mutableListOf(),
+            { post, position -> handleLike(post, position) },
+            { post ->
+                val intent = Intent(requireContext(), ReplyActivity::class.java)
+                intent.putExtra("post_id", post.id)
+                intent.putExtra("author", post.author)
+                intent.putExtra("content", post.content)
+                intent.putExtra("community_tag", post.category)
+                intent.putExtra("like_count", post.likeCount)
+                intent.putExtra("comment_count", post.commentCount)
+                intent.putExtra("is_liked", post.isLiked)
+                startActivity(intent)
             }
         )
 
-        rvPosts.layoutManager = LinearLayoutManager(context)
+        rvPosts.layoutManager = LinearLayoutManager(requireContext())
         rvPosts.adapter = postAdapter
 
-        nestedScrollView.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                val toolbar = (activity as? MainActivity)?.binding?.toolbar
-                if (toolbar != null) {
-                    toolbar.elevation = if (scrollY > 0) SCROLLED_ELEVATION_PX else 0f
-                }
-            }
-        )
+        // FIRST LOAD
+        loadPosts()
 
-        (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
+        // PULL TO REFRESH
+        swipeRefresh.setOnRefreshListener {
+            loadPosts()
+        }
 
+        // SEARCH
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filterPosts(s.toString())
             }
         })
     }
 
-    private fun filterPosts(query: String?) {
-        val filteredList = if (query.isNullOrBlank()) {
-            allPosts
-        } else {
-            allPosts.filter {
-                it.content.contains(query, ignoreCase = true) ||
-                        it.author.contains(query, ignoreCase = true) ||
-                        it.category.contains(query, ignoreCase = true)
-            }.toMutableList()
+    private fun loadPosts() {
+        swipeRefresh.isRefreshing = true
+
+        lifecycleScope.launch {
+            try {
+                val posts = DataRepository.getPosts()
+                allPosts = posts.toMutableList()
+                postAdapter.updateData(allPosts)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                swipeRefresh.isRefreshing = false
+            }
         }
-        rvPosts.adapter = CommunityAdapter(filteredList) { post ->
+    }
+
+    private fun handleLike(post: Post, position: Int) {
+        lifecycleScope.launch {
+            try {
+                val res = DataRepository.toggleLike(post.id)
+
+                post.isLiked = res.isLiked
+                post.likeCount = res.like_count
+                postAdapter.notifyItemChanged(position)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+    }
+
+    private fun filterPosts(query: String) {
+        val filtered = if (query.isBlank()) allPosts
+        else allPosts.filter {
+            it.content.contains(query, true) ||
+                    it.author.contains(query, true) ||
+                    it.category.contains(query, true)
+        }
+        postAdapter.updateData(filtered.toMutableList())
     }
 
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.title = "PawPals!"
         (activity as? MainActivity)?.binding?.toolbar?.elevation = 0f
-    }
 
-    private fun getDummyPosts(): List<Post> {
-        return listOf(
-            Post(
-                id = "p001",
-                author = "Paw Admin",
-                userRole = "Pengurus",
-                category = "Lost Dogs",
-                timestamp = 10245454,
-                content = "Halo, Mipaw nemu lost doggi di deket esdisi",
-                imageUri = "image_1",
-                commentCount = 12,
-                likeCount = 45,
-                userAvatar = R.drawable.ava_paw
-            ),
-            Post(
-                id = "p002",
-                author = "OggyGooey",
-                userRole = "Anggota",
-                category = "Paw Playground",
-                timestamp = 10242424,
-                content = "saran cafe buat main sama Oggy dong guys 🥺",
-                imageUri = null,
-                commentCount = 8,
-                likeCount = 30,
-                userAvatar = R.drawable.image2
-            )
-        )
+        loadPosts()
     }
 }

@@ -13,8 +13,10 @@ object ApiClient {
     }
 
     private val client = OkHttpClient.Builder()
+        .cookieJar(SessionCookieJar)
         .addInterceptor(logger)
         .build()
+
 
     val instance: ApiService by lazy {
         Retrofit.Builder()

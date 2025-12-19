@@ -30,12 +30,16 @@ class TrendingAdapter(
 
     override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
         val post = items[position]
+
         holder.tvAuthor.text = post.author
         holder.tvContent.text = post.content
 
-        holder.imgTrending.visibility = if (post.isTrending) View.VISIBLE else View.GONE
+        holder.imgTrending.visibility =
+            if (post.isTrending) View.VISIBLE else View.GONE
 
-        holder.itemView.setOnClickListener { onClick(post) }
+        holder.itemView.setOnClickListener {
+            onClick(post)
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -51,8 +55,8 @@ class TrendingAdapter(
             allItems
         } else {
             allItems.filter {
-                it.content.contains(query, ignoreCase = true) ||
-                        it.author.contains(query, ignoreCase = true)
+                it.content.contains(query, true) ||
+                        it.author.contains(query, true)
             }
         }
         notifyDataSetChanged()

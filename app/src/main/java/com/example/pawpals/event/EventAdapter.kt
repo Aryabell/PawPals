@@ -9,6 +9,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.pawpals.R
 import com.example.pawpals.data.Event
 import com.example.pawpals.databinding.ItemEventBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class   EventAdapter(
     private var items: List<Event>,
@@ -21,7 +23,7 @@ class   EventAdapter(
     inner class VH(private val b: ItemEventBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(e: Event) {
             b.tvTitle.text = e.title
-            b.tvDate.text = e.date
+            b.tvDate.text = formatDate(e.date)
             b.tvLocation.text = e.location
 
             // Gambar banner pakai Glide
@@ -73,6 +75,16 @@ class   EventAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    private fun formatDate(dateStr: String): String {
+        return try {
+            val input = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val output = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale("id", "ID"))
+            output.format(input.parse(dateStr)!!)
+        } catch (e: Exception) {
+            dateStr
+        }
+    }
 
     fun submitList(newList: List<Event>) {
         items = newList

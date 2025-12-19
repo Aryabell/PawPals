@@ -1,68 +1,151 @@
 package com.example.pawpals.message
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+
+import com.example.pawpals.api.ChatSessionManager
+import com.example.pawpals.api.MessageApiClient
 import com.example.pawpals.databinding.ActivityChatBinding
-import com.example.pawpals.message.ChatMessage
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private lateinit var adapter: ChatAdapter
-    private lateinit var userName: String
-    private val currentUserId = "USER_1"
+    private val messages = mutableListOf<ChatMessage>()
+
+    private val currentUserId by lazy {
+        ChatSessionManager(this).userId
+    }
+
+    private var chatId = 0
+    private var receiverId = 0
+    private var receiverName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userName = intent.getStringExtra("receiverName")
-            ?: intent.getStringExtra("userName")
-                    ?: "Teman Baru"
-        val dogName = intent.getStringExtra("dogName")
+        receiverId = intent.getIntExtra("receiverId", 0)
+        receiverName = intent.getStringExtra("receiverName") ?: "Chat"
+        chatId = intent.getIntExtra("chatId", 0)
 
-        binding.toolbarChat.title = userName
+        if (receiverId == 0) {
+            finish()
+            return
+        }
+
+        setupToolbar()
+        setupRecyclerView()
+        setupSendButton()
+
+        if (chatId == 0) {
+            createChat()
+        } else {
+            loadMessages()
+        }
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbarChat)
+
+        supportActionBar?.apply {
+            title = receiverName
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         binding.toolbarChat.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            finish()
         }
-
-        val messages = ChatStorage.getMessages(userName)
-
-        if (messages.isEmpty() && !dogName.isNullOrEmpty()) {
-            messages.add(
-                ChatMessage(
-                    senderId = currentUserId,
-                    message = "Hai! Aku tertarik adopsi $dogName, masih tersedia kah?",
-                    timestamp = System.currentTimeMillis()
-                )
-            )
-        } else if (messages.isEmpty()) {
-            messages.addAll(
-                listOf(
-                    ChatMessage("USER_2", "Hai! Kamu tertarik adopsi anjingku?", System.currentTimeMillis()),
-                    ChatMessage("USER_1", "Iya, aku liat di halaman adoption, lucu banget 😍", System.currentTimeMillis()),
-                    ChatMessage("USER_2", "Hehe iya, dia jinak banget!", System.currentTimeMillis())
-                )
-            )
-        }
+    }
 
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+
+    private fun setupRecyclerView() {
         adapter = ChatAdapter(messages, currentUserId)
-        binding.rvChat.layoutManager = LinearLayoutManager(this)
-        binding.rvChat.adapter = adapter
-        binding.rvChat.scrollToPosition(messages.size - 1)
-
-        binding.btnSend.setOnClickListener {
-            val text = binding.etMessage.text.toString().trim()
-            if (text.isNotEmpty()) {
-                val newMessage = ChatMessage(currentUserId, text, System.currentTimeMillis())
-                ChatStorage.addMessage(userName, newMessage)
-                adapter.notifyItemInserted(messages.size - 1)
-                binding.rvChat.scrollToPosition(messages.size - 1)
-                binding.etMessage.text.clear()
-            }
+        binding.rvChat.layoutManager = LinearLayoutManager(this).apply {
+            stackFromEnd = true
         }
+        binding.rvChat.adapter = adapter
+    }
+
+    private fun setupSendButton() {
+        binding.btnSend.setOnClickListener { sendMessage() }
+    }
+
+    private fun createChat() {
+        MessageApiClient.api.createOrGetChat(currentUserId, receiverId)
+            .enqueue(object : Callback<Map<String, Any>> {
+
+                override fun onResponse(
+                    call: Call<Map<String, Any>>,
+                    response: Response<Map<String, Any>>
+                ) {
+                    chatId = (response.body()?.get("chat_id") as Double).toInt()
+                    loadMessages()
+                }
+
+                override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                    Log.e("CHAT", "Create chat failed", t)
+                }
+            })
+    }
+
+    private fun loadMessages() {
+        MessageApiClient.api.getMessages(chatId)
+            .enqueue(object : Callback<List<ChatMessage>> {
+
+                override fun onResponse(
+                    call: Call<List<ChatMessage>>,
+                    response: Response<List<ChatMessage>>
+                ) {
+                    messages.clear()
+                    messages.addAll(response.body() ?: emptyList())
+                    adapter.notifyDataSetChanged()
+
+                    if (messages.isNotEmpty()) {
+                        binding.rvChat.scrollToPosition(messages.size - 1)
+                    }
+                }
+
+                override fun onFailure(call: Call<List<ChatMessage>>, t: Throwable) {
+                    Log.e("CHAT", "Load messages failed", t)
+                }
+            })
+    }
+
+    private fun sendMessage() {
+        val text = binding.etMessage.text.toString().trim()
+        if (text.isEmpty() || chatId == 0) return
+
+        MessageApiClient.api.sendMessage(chatId, currentUserId, text)
+            .enqueue(object : Callback<Map<String, Any>> {
+
+                override fun onResponse(
+                    call: Call<Map<String, Any>>,
+                    response: Response<Map<String, Any>>
+                ) {
+                    val success = response.body()?.get("success") as? Boolean ?: false
+                    if (success) {
+                        binding.etMessage.text.clear()
+                        loadMessages()
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                    Log.e("CHAT", "Send error", t)
+                }
+            })
     }
 }

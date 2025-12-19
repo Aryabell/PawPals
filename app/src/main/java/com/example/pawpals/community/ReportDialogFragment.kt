@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.pawpals.data.DataRepository
 
 class ReportDialogFragment : DialogFragment() {
 
@@ -13,16 +12,17 @@ class ReportDialogFragment : DialogFragment() {
         private const val ARG_POST_ID = "post_id"
 
         fun newInstance(postId: String): ReportDialogFragment {
-            val fragment = ReportDialogFragment()
-            val args = Bundle()
-            args.putString(ARG_POST_ID, postId)
-            fragment.arguments = args
-            return fragment
+            return ReportDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_POST_ID, postId)
+                }
+            }
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val postId = arguments?.getString(ARG_POST_ID)
+        val postId = arguments?.getString(ARG_POST_ID).orEmpty()
+
         val reasons = arrayOf(
             "Melanggar peraturan komunitas",
             "Saya tidak tertarik dengan postingan ini",
@@ -35,8 +35,13 @@ class ReportDialogFragment : DialogFragment() {
             .setTitle("Laporkan Postingan")
             .setItems(reasons) { _, which ->
                 val reason = reasons[which]
-                DataRepository.reportPost(postId ?: "", reason)
-                Toast.makeText(requireContext(), "Laporan dikirim: $reason", Toast.LENGTH_SHORT).show()
+
+                // TODO: Implement report API
+                Toast.makeText(
+                    requireContext(),
+                    "Laporan dikirim: $reason",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .setNegativeButton("Batal", null)
             .create()

@@ -17,6 +17,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.text.InputType
 
 
 class MemberFragment : Fragment() {
@@ -75,10 +76,80 @@ class MemberFragment : Fragment() {
 
     // createUser() -> sama seperti sebelumnya, tapi gunakan ApiClient.instance.addMember(...)
     private fun createUser() {
-        // ... build dialog same as you had, but on positive:
-        // ApiClient.instance.addMember(name,email,password,role).enqueue(...)
-        // on success -> Toast + loadMembers()
+        val context = requireContext()
+
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 10)
+        }
+
+        val etName = EditText(context).apply {
+            hint = "Nama"
+        }
+
+        val etEmail = EditText(context).apply {
+            hint = "Email"
+            inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        }
+
+        val etPassword = EditText(context).apply {
+            hint = "Password"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+
+        val spinnerRole = Spinner(context)
+        val roles = arrayOf("Member", "Pengurus")
+        spinnerRole.adapter = ArrayAdapter(
+            context,
+            android.R.layout.simple_spinner_dropdown_item,
+            roles
+        )
+
+        layout.addView(etName)
+        layout.addView(etEmail)
+        layout.addView(etPassword)
+        layout.addView(spinnerRole)
+
+        AlertDialog.Builder(context)
+            .setTitle("Tambah User")
+            .setView(layout)
+            .setPositiveButton("Simpan") { _, _ ->
+                val name = etName.text.toString().trim()
+                val email = etEmail.text.toString().trim()
+                val password = etPassword.text.toString().trim()
+                val role = spinnerRole.selectedItem.toString()
+
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(context, "Semua field wajib diisi", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                ApiClient.instance.addMember(name, email, password, role)
+                    .enqueue(object : Callback<JsonObject> {
+                        override fun onResponse(
+                            call: Call<JsonObject>,
+                            response: Response<JsonObject>
+                        ) {
+                            if (response.isSuccessful && response.body() != null) {
+                                val body = response.body()!!
+                                if (body.get("status").asString == "success") {
+                                    Toast.makeText(context, "User berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                    loadMembers()
+                                } else {
+                                    Toast.makeText(context, "Gagal menambah user", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                            Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
+
 
     private fun toggleRole(user: Member) {
         val newRole = if (user.role == "Member") "Pengurus" else "Member"
