@@ -48,4 +48,18 @@ interface PostApiService {
         @Field("post_id") postId: String,
         @Field("user_id") userId: Int
     ): LikeResponse
+
+    @FormUrlEncoded
+    @POST("toggle_trending.php")
+    suspend fun toggleTrending(
+        @Field("post_id") postId: String
+    ): Response<Unit>
+
+    @FormUrlEncoded
+    @POST("set_hidden.php")
+    suspend fun setHidden(
+        @Field("post_id") postId: String,
+        @Field("is_hidden") isHidden: Int
+    ): Response<Unit>
+
 }
