@@ -1,5 +1,6 @@
 package com.example.pawpals.event
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawpals.MainActivity
 import com.example.pawpals.R
+import com.example.pawpals.data.EventRepository
 import com.example.pawpals.databinding.FragmentEventsListBinding
 
 class EventsListFragment : Fragment(R.layout.fragment_events_list) {
@@ -25,6 +27,14 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
 
         viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
 
+        val prefs = requireContext()
+            .getSharedPreferences("user_session", Context.MODE_PRIVATE)
+
+        val userId = prefs.getString("user_id", null)?.toInt() ?: return
+
+        EventRepository.setUserId(userId)
+        viewModel.fetchEvents()
+
         adapter = EventAdapter(
             items = emptyList(),
             onJoinClick = { ev ->
@@ -32,7 +42,7 @@ class EventsListFragment : Fragment(R.layout.fragment_events_list) {
                     .setTitle("Konfirmasi")
                     .setMessage("Yakin mau join event \"${ev.title}\"?")
                     .setPositiveButton("Join") { _, _ ->
-                        viewModel.joinEvent(ev.id)
+                        viewModel.joinEvent(ev.id, userId)
                         Toast.makeText(requireContext(), "Joined: ${ev.title}", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("Batal", null)

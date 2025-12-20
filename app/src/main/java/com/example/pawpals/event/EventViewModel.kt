@@ -13,7 +13,10 @@ class EventViewModel : ViewModel() {
     val events: LiveData<List<Event>> = EventRepository.events
     fun fetchEvents() = EventRepository.fetchEvents()
     fun deleteEvent(eventId: Int) = EventRepository.deleteEvent(eventId)
-    fun joinEvent(eventId: Int) = EventRepository.joinEvent(eventId)
+    fun joinEvent(eventId: Int, userId: Int) {
+        EventRepository.joinEvent(eventId, userId)
+    }
+
     fun cancelJoin(eventId: Int) = EventRepository.cancelJoin(eventId)
     fun getEventById(id: Int): LiveData<Event?> {
         return EventRepository.events.map { list ->

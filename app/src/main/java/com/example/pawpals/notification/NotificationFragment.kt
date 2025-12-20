@@ -23,13 +23,15 @@ class NotificationFragment : Fragment() {
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager = view.findViewById(R.id.viewPager)
 
+
         val adapter = NotificationTabAdapter(this)
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            when (position) {
-                0 -> tab.text = "Semua"
-                1 -> tab.text = "Event"
+            tab.text = when (position) {
+                0 -> "Semua"
+                1 -> "Event"
+                else -> ""
             }
         }.attach()
 
