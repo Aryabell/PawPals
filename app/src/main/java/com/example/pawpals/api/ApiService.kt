@@ -1,5 +1,6 @@
 package com.example.pawpals.api
 
+import com.example.pawpals.model.DashboardStats
 import com.example.pawpals.model.Member
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -33,4 +34,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("delete_member.php")
     fun deleteMember(@Field("id") id: Int): Call<JsonObject>
+
+    @GET("dashboard_stats.php")
+    suspend fun getDashboardStats(): DashboardStats
 }

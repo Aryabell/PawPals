@@ -79,26 +79,21 @@ object DataRepository {
 
     /* ================= ADMIN ACTIONS ================= */
 
-    fun toggleTrending(postId: String): Boolean {
-        val list = _posts.value?.toMutableList() ?: return false
-        val index = list.indexOfFirst { it.id == postId }
-        if (index == -1) return false
-
-        val post = list[index]
-        val updated = post.copy(isTrending = !post.isTrending)
-        list[index] = updated
-        _posts.value = list
-
-        return updated.isTrending
+    suspend fun toggleTrending(postId: String) {
+        PostApiClient.api.toggleTrending(postId)
+        getPosts() // refresh dari database
     }
 
-    fun hidePost(postId: String) {
-        updateHidden(postId, true)
+    suspend fun hidePost(postId: String) {
+        PostApiClient.api.setHidden(postId, 1)
+        getPosts()
     }
 
-    fun unhidePost(postId: String) {
-        updateHidden(postId, false)
+    suspend fun unhidePost(postId: String) {
+        PostApiClient.api.setHidden(postId, 0)
+        getPosts()
     }
+
 
     suspend fun toggleLike(postId: String): LikeResponse {
         val response = PostApiClient.api.toggleLike(

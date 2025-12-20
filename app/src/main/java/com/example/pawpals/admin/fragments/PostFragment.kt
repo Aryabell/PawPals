@@ -5,9 +5,11 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.pawpals.R
 import com.example.pawpals.data.DataRepository
 import com.example.pawpals.model.Post
+import kotlinx.coroutines.launch
 
 class PostFragment : Fragment() {
 
@@ -19,15 +21,22 @@ class PostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val v = inflater.inflate(R.layout.fragment_post, container, false)
-        layout = v.findViewById(R.id.layoutPosts)
+        val view = inflater.inflate(R.layout.fragment_post, container, false)
+
+        layout = view.findViewById(R.id.layoutPosts)
         inflaterRef = inflater
 
-        DataRepository.posts.observe(viewLifecycleOwner) { postList ->
-            refreshPosts(postList)
+        // Observe data dari repository (database)
+        DataRepository.posts.observe(viewLifecycleOwner) { posts ->
+            refreshPosts(posts)
         }
 
-        return v
+        // Load post pertama kali dari database
+        lifecycleScope.launch {
+            DataRepository.getPosts()
+        }
+
+        return view
     }
 
     private fun refreshPosts(posts: List<Post>?) {
@@ -42,53 +51,81 @@ class PostFragment : Fragment() {
             return
         }
 
-        for (post in posts) {
-            val item = inflaterRef.inflate(R.layout.item_admin_post, layout, false)
+        posts.forEach { post ->
+            val item = inflaterRef.inflate(
+                R.layout.item_admin_post,
+                layout,
+                false
+            )
 
             val txtContent = item.findViewById<TextView>(R.id.txtContent)
             val txtAuthor = item.findViewById<TextView>(R.id.txtAuthor)
-            val btnMark = item.findViewById<Button>(R.id.btnMark)
-            val btnDelete = item.findViewById<Button>(R.id.btnDelete)
+            val btnTrending = item.findViewById<Button>(R.id.btnMark)
+            val btnHidden = item.findViewById<Button>(R.id.btnDelete)
 
+            // Author + category
             txtAuthor.text = "👤 ${post.author} • ${post.category}"
-            txtContent.text = if (post.isHidden) "(disembunyikan)" else post.content
 
-            btnMark.text = if (post.isTrending) "⭐ Trending" else "☆ Jadikan Trending"
-            btnMark.setOnClickListener {
-                val isNowTrending = DataRepository.toggleTrending(post.id)
-                btnMark.text = if (isNowTrending) "⭐ Trending" else "☆ Jadikan Trending"
-                Toast.makeText(
-                    requireContext(),
-                    if (isNowTrending)
-                        "Post ditandai sebagai trending ⭐"
-                    else
-                        "Post tidak lagi trending",
-                    Toast.LENGTH_SHORT
-                ).show()
+            // Content
+            txtContent.text =
+                if (post.isHidden) "(disembunyikan)" else post.content
+
+            /* ================= TRENDING ================= */
+
+            btnTrending.text =
+                if (post.isTrending) "⭐ Trending"
+                else "☆ Jadikan Trending"
+
+            btnTrending.setOnClickListener {
+                lifecycleScope.launch {
+                    DataRepository.toggleTrending(post.id)
+                    Toast.makeText(
+                        requireContext(),
+                        if (!post.isTrending)
+                            "Post ditandai sebagai trending ⭐"
+                        else
+                            "Post tidak lagi trending",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
+            /* ================= HIDE / UNHIDE ================= */
+
             if (post.isHidden) {
-                btnDelete.text = "Tampilkan"
-                btnDelete.setOnClickListener {
+                btnHidden.text = "Tampilkan"
+                btnHidden.setOnClickListener {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Tampilkan Postingan")
                         .setMessage("Ingin menampilkan kembali postingan ini?")
                         .setPositiveButton("Ya") { _, _ ->
-                            DataRepository.unhidePost(post.id)
-                            Toast.makeText(requireContext(), "Postingan ditampilkan kembali ✅", Toast.LENGTH_SHORT).show()
+                            lifecycleScope.launch {
+                                DataRepository.unhidePost(post.id)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Postingan ditampilkan kembali ✅",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                         .setNegativeButton("Batal", null)
                         .show()
                 }
             } else {
-                btnDelete.text = "Sembunyikan"
-                btnDelete.setOnClickListener {
+                btnHidden.text = "Sembunyikan"
+                btnHidden.setOnClickListener {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Sembunyikan Postingan")
                         .setMessage("Yakin ingin menyembunyikan postingan ini?")
                         .setPositiveButton("Ya") { _, _ ->
-                            DataRepository.hidePost(post.id)
-                            Toast.makeText(requireContext(), "Postingan disembunyikan ❌", Toast.LENGTH_SHORT).show()
+                            lifecycleScope.launch {
+                                DataRepository.hidePost(post.id)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Postingan disembunyikan ❌",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                         .setNegativeButton("Batal", null)
                         .show()
