@@ -31,11 +31,19 @@ object EventRepository {
     private val _events = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> get() = _events
 
+    private var userId: Int = 0
+
+    fun setUserId(id: Int) {
+        userId = id
+    }
+
     // ==============================
     // FETCH EVENTS
     // ==============================
     fun fetchEvents() {
-        api.getEvents().enqueue(object : Callback<List<Event>> {
+        if (userId == 0) return
+
+        api.getEvents(userId).enqueue(object : Callback<List<Event>> {
             override fun onResponse(
                 call: Call<List<Event>>,
                 response: Response<List<Event>>
@@ -122,8 +130,8 @@ object EventRepository {
     // ==============================
     // JOIN / CANCEL
     // ==============================
-    fun joinEvent(eventId: Int) {
-        api.joinEvent(eventId).enqueue(object : Callback<ApiResponse> {
+    fun joinEvent(eventId: Int, userId: Int) {
+        api.joinEvent(eventId, userId).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(
                 call: Call<ApiResponse>,
                 response: Response<ApiResponse>
@@ -136,7 +144,7 @@ object EventRepository {
     }
 
     fun cancelJoin(eventId: Int) {
-        api.cancelJoin(eventId).enqueue(object : Callback<ApiResponse> {
+        api.cancelJoin(eventId, userId).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(
                 call: Call<ApiResponse>,
                 response: Response<ApiResponse>

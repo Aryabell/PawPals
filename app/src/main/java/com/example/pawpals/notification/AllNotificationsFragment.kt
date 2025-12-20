@@ -8,28 +8,76 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
+import com.example.pawpals.api.NotificationApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class AllNotificationsFragment : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotificationAdapter
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+
     private val notificationList = mutableListOf<NotificationModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_all_notifications, container, false)
+
+        swipeRefresh = view.findViewById(R.id.swipeRefresh)
         recyclerView = view.findViewById(R.id.recyclerViewAll)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = NotificationAdapter(notificationList)
         recyclerView.adapter = adapter
 
-        // Dummy data contoh
-        notificationList.add(NotificationModel("❤️ Fay menyukai postinganmu"))
-        notificationList.add(NotificationModel("💬 Sae membalas postinganmu"))
-        notificationList.add(NotificationModel("📅 2 hari lagi Event Playdate dimulai!"))
-        adapter.notifyDataSetChanged()
+        // 🔄 Swipe refresh
+        swipeRefresh.setOnRefreshListener {
+            loadNotifications()
+        }
+
+        loadNotifications()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadNotifications()
+    }
+
+    private fun loadNotifications() {
+        swipeRefresh.isRefreshing = true
+
+        val prefs = requireContext()
+            .getSharedPreferences("user_session", android.content.Context.MODE_PRIVATE)
+
+        val userId = prefs.getString("user_id", null)?.toInt() ?: run {
+            swipeRefresh.isRefreshing = false
+            return
+        }
+
+        NotificationApiClient.api.getAllNotifications(userId)
+            .enqueue(object : Callback<List<NotificationModel>> {
+
+                override fun onResponse(
+                    call: Call<List<NotificationModel>>,
+                    response: Response<List<NotificationModel>>
+                ) {
+                    notificationList.clear()
+                    notificationList.addAll(response.body() ?: emptyList())
+                    adapter.notifyDataSetChanged()
+                    swipeRefresh.isRefreshing = false
+                }
+
+                override fun onFailure(call: Call<List<NotificationModel>>, t: Throwable) {
+                    swipeRefresh.isRefreshing = false
+                    t.printStackTrace()
+                }
+            })
     }
 }

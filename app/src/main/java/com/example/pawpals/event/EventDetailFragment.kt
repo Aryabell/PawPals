@@ -26,11 +26,23 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
     private val b get() = _b!!
     private lateinit var viewModel: EventViewModel
     private var eventId: Int = 0
+    private var userId: Int = 0   // ✅ INI YANG KURANG
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _b = FragmentEventDetailBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity()).get(EventViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
         eventId = arguments?.getInt(ARG_ID) ?: 0
+
+        // ✅ Ambil userId dari SharedPreferences
+        val prefs = requireContext()
+            .getSharedPreferences("user_session", android.content.Context.MODE_PRIVATE)
+
+        userId = prefs.getString("user_id", null)?.toInt() ?: 0
+
+        if (userId == 0) {
+            Toast.makeText(requireContext(), "Session user tidak valid", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         b.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -38,6 +50,7 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
 
         viewModel.events.observe(viewLifecycleOwner) { list ->
             val ev = list.find { it.id == eventId } ?: return@observe
+
             b.tvTitle.text = ev.title
             b.tvDate.text = formatDate(ev.date)
             b.tvLocation.text = ev.location
@@ -53,11 +66,9 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
                 .into(b.ivBannerDetail)
 
             if (ev.isJoined) {
-                // Jika sudah Joined, tampilkan tombol Cancel
                 b.btnJoin.visibility = View.GONE
                 b.btnCancelJoin.visibility = View.VISIBLE
             } else {
-                // Jika belum Joined, tampilkan tombol Join
                 b.btnJoin.visibility = View.VISIBLE
                 b.btnCancelJoin.visibility = View.GONE
             }
@@ -67,8 +78,12 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
                     .setTitle(getString(R.string.confirm))
                     .setMessage(getString(R.string.confirm_join, ev.title))
                     .setPositiveButton(R.string.join) { _, _ ->
-                        viewModel.joinEvent(ev.id)
-                        Toast.makeText(requireContext(), "Joined: ${ev.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.joinEvent(ev.id, userId)
+                        Toast.makeText(
+                            requireContext(),
+                            "Joined: ${ev.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
@@ -80,7 +95,11 @@ class EventDetailFragment : Fragment(R.layout.fragment_event_detail) {
                     .setMessage(getString(R.string.confirm_cancel, ev.title))
                     .setPositiveButton(R.string.cancel_join) { _, _ ->
                         viewModel.cancelJoin(ev.id)
-                        Toast.makeText(requireContext(), "Cancelled: ${ev.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Cancelled: ${ev.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     .setNegativeButton(R.string.back, null)
                     .show()

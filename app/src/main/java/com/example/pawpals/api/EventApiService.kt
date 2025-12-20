@@ -10,11 +10,15 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface EventApiService {
 
     @GET("get_events.php")
-    fun getEvents(): Call<List<Event>>
+    fun getEvents(
+        @Query("user_id") userId: Int
+    ): Call<List<Event>>
+
 
     @Multipart
     @POST("add_event.php")
@@ -32,9 +36,15 @@ interface EventApiService {
 
     @FormUrlEncoded
     @POST("join_event.php")
-    fun joinEvent(@Field("event_id") id: Int): Call<ApiResponse>
+    fun joinEvent(
+        @Field("event_id") eventId: Int,
+        @Field("user_id") userId: Int
+    ): Call<ApiResponse>
 
     @FormUrlEncoded
     @POST("cancel_join.php")
-    fun cancelJoin(@Field("event_id") id: Int): Call<ApiResponse>
+    fun cancelJoin(
+        @Field("event_id") eventId: Int,
+        @Field("user_id") userId: Int
+    ): Call<ApiResponse>
 }
