@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="0dp">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,22 +18,24 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgProfile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ava_paw" android:layout_marginEnd="8dp"
+                android:src="@drawable/ava_paw"
+                android:layout_marginEnd="12dp"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
             <LinearLayout
                 android:id="@+id/author_info_container"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgProfile"
-                android:layout_marginStart="8dp"
-                android:orientation="vertical">
+                android:layout_toStartOf="@id/moreBtn"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
@@ -47,31 +48,38 @@
                         android:textStyle="bold"
                         android:textColor="@android:color/black"
                         android:fontFamily="@font/intervariable"
-                        android:textSize="14sp" />
+                        android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/tv_community_tag"
+                        android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_tag_community"
+                        android:layout_height="wrap_content"
+                        android:text="• 7m"
+                        android:textSize="13sp"
+                        android:layout_marginStart="6dp"
                         android:fontFamily="@font/intervariable"
-                        android:paddingStart="6dp"           android:paddingTop="2dp"
-                        android:paddingEnd="6dp"
-                        android:paddingBottom="2dp"
-                        android:text="Lost Dogs"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp"
-                        android:drawableStart="@drawable/ic_paw_tag"  android:drawablePadding="4dp"          />
+                        android:textColor="#757575" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvTime"
+                    android:id="@+id/tv_community_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7 mins ago"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_tag_pill"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="Lost Dogs"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/intervariable"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
             <ImageView
@@ -79,7 +87,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_more" />
+                android:src="@drawable/ic_more"
+                app:tint="#757575"/>
         </RelativeLayout>
 
         <TextView
@@ -87,33 +96,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="56dp" android:text="Halo, Mipaw nemu lost doggi di deket esdisi"
-            android:textSize="14sp"
+            android:layout_marginStart="60dp"
+            android:text="Halo, Mipaw nemu lost doggi di deket esdisi"
+            android:textSize="15sp"
+            android:lineSpacingExtra="3dp"
+            android:textColor="#212121"
             android:fontFamily="@font/intervariable" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_post_image_container"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPostImage"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="56dp" android:layout_marginEnd="16dp" app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            android:visibility="visible">
-
-            <ImageView
-                android:id="@+id/imgPostImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/image_1" /> </androidx.cardview.widget.CardView>
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="60dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:maxHeight="300dp"
+            android:src="@drawable/image_1"
+            android:visibility="visible"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorners"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="56dp"
-            android:paddingEnd="16dp"
-            android:gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="60dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -121,47 +127,56 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:paddingEnd="24dp"
+                android:paddingVertical="8dp">
+
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_comment" />
+                    android:src="@drawable/ic_comment"
+                    app:tint="#757575"/>
+
                 <TextView
                     android:id="@+id/tv_comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="6dp"
                     android:text="12"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray"/>
+                    android:textSize="13sp"
+                    android:fontFamily="@font/intervariable"
+                    android:textColor="#757575"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_like_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:paddingEnd="24dp"
+                android:paddingVertical="8dp">
 
                 <ImageView
                     android:id="@+id/iv_like_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_favorite" />
-
-                <TextView
-                    android:id="@+id/tv_like_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="45"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:src="@drawable/ic_favorite"
+                    app:tint="#757575"/> <TextView
+                android:id="@+id/tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="45"
+                android:textSize="13sp"
+                android:fontFamily="@font/intervariable"
+                android:textColor="#757575" />
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0" />
+
+</LinearLayout>

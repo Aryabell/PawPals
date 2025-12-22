@@ -1,95 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="?android:attr/selectableItemBackground"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1.2dp"
+    app:strokeColor="#F0F0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="Nama Author"
+                android:textSize="14sp"
+                android:textColor="#333333" />
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/bg_circle_gray" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2 jam lalu"
+                android:textSize="11sp"
+                android:textColor="#999999" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nama Author"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:textColor="@color/black" />
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Isi konten trending yang sangat menarik perhatian warga Pawpals..."
+            android:textSize="15sp"
+            android:textColor="#444444" />
 
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="2 jam lalu"
-            android:textSize="12sp"
-            android:textColor="@color/gray_light" />
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_gray"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_comment"
+                    app:tint="#888888" />
+                <TextView
+                    android:id="@+id/tvCommentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="15"
+                    android:textSize="12sp"
+                    android:textColor="#888888" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_pink"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_favorite"
+                    app:tint="@color/pink_badge" />
+                <TextView
+                    android:id="@+id/tvLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="30"
+                    android:textSize="12sp"
+                    android:textColor="@color/pink_badge" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/tvContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Isi konten trending..."
-        android:textSize="13sp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:textColor="@color/black" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="6dp"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_comment"
-            app:tint="@color/gray_light"
-            android:contentDescription="Komentar"/>
-
-        <TextView
-            android:id="@+id/tvCommentCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15"
-            android:textSize="12sp"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/gray_light" />
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_favorite"
-            android:contentDescription="Suka"/>
-
-        <TextView
-            android:id="@+id/tvLikeCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30"
-            android:textSize="12sp"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/gray_light" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="#EEEEEE" />
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

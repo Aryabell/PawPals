@@ -2,36 +2,40 @@ package com.example.pawpals
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.example.pawpals.adoption.AdoptionFragment
+import com.example.pawpals.admin.LoginActivity
+import com.example.pawpals.admin.fragments.EventDetailAdminFragment
+import com.example.pawpals.admin.fragments.ModelFragment
 import com.example.pawpals.community.CommunityListFragment
 import com.example.pawpals.community.NewPostActivity
 import com.example.pawpals.databinding.ActivityMainBinding
+import com.example.pawpals.event.EventDetailFragment
 import com.example.pawpals.event.EventsListFragment
 import com.example.pawpals.message.MessageListFragment
-import com.example.pawpals.admin.fragments.ModelFragment
+import com.example.pawpals.notification.NotificationFragment
 import com.example.pawpals.ui.HomeFragment
 import com.example.pawpals.ui.ProfileFragment
-import com.example.pawpals.notification.NotificationFragment
-import com.example.pawpals.admin.LoginActivity
-import android.widget.TextView
-import com.example.pawpals.event.EventDetailFragment
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts
-import com.example.pawpals.admin.fragments.EventDetailAdminFragment
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     private var currentCategory = "Talks"
-    private lateinit var drawerToggle: ActionBarDrawerToggle
+    lateinit var drawerToggle: ActionBarDrawerToggle
 
     private val newPostLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -41,22 +45,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 1. Setup Toolbar
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
+        // 2. Setup Notifikasi
         val ivNotification = findViewById<ImageView>(R.id.iv_notification)
         ivNotification.setOnClickListener {
             loadFragment(NotificationFragment())
         }
 
-
+        // 3. Setup Drawer
         drawerToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -67,51 +71,24 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
+        // 4. Setup Sidebar Navigation
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                /*R.id.nav_home -> {
-                    loadFragment(HomeFragment())
-                }*/
-                R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
-                }
-                /*R.id.nav_notifications -> {
-                    loadFragment(NotificationFragment())
-                }*/
-                R.id.nav_adoption -> {
-                    loadFragment(AdoptionFragment())
-                }
-
-                R.id.nav_logout -> {
-                    AlertDialog.Builder(this)
-                        .setTitle("Konfirmasi Logout")
-                        .setMessage("Apakah kamu yakin ingin keluar dari akun?")
-                        .setPositiveButton("Ya") { _, _ ->
-                            Toast.makeText(this, "Keluar dari akun", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                        .setNegativeButton("Batal", null)
-                        .show()
-                }
+                R.id.nav_profile -> loadFragment(ProfileFragment())
+                R.id.nav_adoption -> loadFragment(AdoptionFragment())
+                R.id.nav_logout -> showLogoutDialog()
             }
-
-
             binding.drawerLayout.closeDrawers()
             true
-
-
         }
 
-
-        setupNavHeader()
-
+        updateNavHeader()
 
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
         }
 
+        // 5. Setup Bottom Navigation
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
@@ -124,61 +101,42 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabAdd.setOnClickListener {
-            Toast.makeText(this, "Membuka halaman Buat Post Baru", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, NewPostActivity::class.java)
             intent.putExtra("category", currentCategory)
             newPostLauncher.launch(intent)
         }
 
-
+        // 6. Handle Back Button
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container)
 
-                if (supportFragmentManager.backStackEntryCount > 0) {
-
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container)
-
-                    if (currentFragment is EventDetailFragment) {
-                        supportFragmentManager.popBackStack()
-
-                        supportActionBar?.show()
-                        binding.toolbar.visibility = View.VISIBLE
-                        binding.bottomNavigation.visibility = View.VISIBLE
-                        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.VISIBLE // Tampilkan Notifikasi
-
-
-                        supportActionBar?.title = "Paw Event"
-
-                        drawerToggle.isDrawerIndicatorEnabled = true
-
-                    } else {
-                        isEnabled = false
-                        onBackPressedDispatcher.onBackPressed()
-                        isEnabled = true
-                    }
+                if (currentFragment is EventDetailFragment || currentFragment is EventDetailAdminFragment) {
+                    supportFragmentManager.popBackStack()
+                    restoreDefaultUI()
+                } else if (currentFragment is ProfileFragment || currentFragment is ModelFragment) {
+                    loadFragment(HomeFragment()) // Balik ke Home
+                    binding.bottomNavigation.selectedItemId = R.id.nav_home
                 } else {
-
                     if (binding.drawerLayout.isDrawerOpen(binding.navigationView)) {
                         binding.drawerLayout.closeDrawer(binding.navigationView)
                     } else {
                         isEnabled = false
                         onBackPressedDispatcher.onBackPressed()
+                        isEnabled = true
                     }
                 }
             }
         })
     }
 
-    private fun setupNavHeader() {
-        val headerView = binding.navigationView.getHeaderView(0)
-
-
-        val tvDisplayName = headerView.findViewById<TextView>(R.id.tv_display_name)
-        val tvUsername = headerView.findViewById<TextView>(R.id.tv_username)
-
-        tvDisplayName.text = "Paw Admin" // Contoh Display Name
-        tvUsername.text = "@minpaw"     // Contoh Username
-
+    private fun getToolbarHeight(): Int {
+        val styledAttributes = theme.obtainStyledAttributes(
+            intArrayOf(android.R.attr.actionBarSize)
+        )
+        val toolbarHeight = styledAttributes.getDimension(0, 0f).toInt()
+        styledAttributes.recycle()
+        return toolbarHeight
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -186,95 +144,143 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.main_fragment_container, fragment)
             .commit()
 
-        drawerToggle.toolbarNavigationClickListener = View.OnClickListener {
-            binding.drawerLayout.openDrawer(binding.navigationView)
+        // 1. Reset Style Default (Putih & Bersih)
+        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.fabAdd.hide()
+        binding.toolbar.visibility = View.VISIBLE
+        supportActionBar?.show()
+        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.VISIBLE
+
+        // Reset Warna Toolbar ke Putih & Teks Hitam
+        binding.toolbar.setBackgroundColor(androidx.core.content.ContextCompat.getColor(this, R.color.white))
+        binding.toolbar.setTitleTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.black))
+        drawerToggle.drawerArrowDrawable.color = androidx.core.content.ContextCompat.getColor(this, R.color.black)
+
+        if (fragment is ModelFragment) {
+            binding.mainFragmentContainer.setPadding(0, 0, 0, 0)
+        } else {
+            binding.mainFragmentContainer.setPadding(0, getToolbarHeight(), 0, 0)
         }
-        drawerToggle.isDrawerIndicatorEnabled = true
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
         when (fragment) {
-            is HomeFragment -> {
-                supportActionBar?.title = "PawPals"
-                binding.fabAdd.hide()
-            }
+            is HomeFragment -> supportActionBar?.title = "PawPals"
+
             is CommunityListFragment -> {
                 supportActionBar?.title = "Pals Komunitas"
                 binding.fabAdd.show()
             }
-            is EventsListFragment -> {
-                supportActionBar?.title = "Paw Event"
-                binding.fabAdd.hide()
-            }
-            is ModelFragment -> {
-                supportActionBar?.title = "Deteksi Penyakit"
-                binding.fabAdd.hide()
-            }
+            is EventsListFragment -> supportActionBar?.title = "Paw Event"
+            is MessageListFragment -> supportActionBar?.title = "Pals Pesan"
+            is AdoptionFragment -> supportActionBar?.title = "Paw Adopsi"
+            is NotificationFragment -> supportActionBar?.title = "Notifikasi"
+
             is ProfileFragment -> {
                 supportActionBar?.title = "Paw Profile"
-                binding.fabAdd.hide()
+                binding.bottomNavigation.visibility = View.GONE
+            }
 
+            // SETUP KHUSUS PAW CHECK (Kamera)
+            is ModelFragment -> {
+                supportActionBar?.title = "Paw Check"
                 binding.bottomNavigation.visibility = View.GONE
 
-                drawerToggle.isDrawerIndicatorEnabled = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                // Bikin Transparan
+                binding.toolbar.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                binding.toolbar.setTitleTextColor(android.graphics.Color.WHITE)
+                drawerToggle.drawerArrowDrawable.color = android.graphics.Color.WHITE
 
-
-                binding.toolbar.setNavigationOnClickListener {
-                    onSupportNavigateUp()
-                }
-            }
-
-            is MessageListFragment -> {
-                supportActionBar?.title = "Pals Pesan"
-                binding.fabAdd.hide()
-            }
-            is AdoptionFragment -> {
-                supportActionBar?.title = "Paw Adopsi"
-                binding.fabAdd.hide()
-            }
-            is NotificationFragment -> {
-                supportActionBar?.title = "Notifikasi"
-                binding.fabAdd.hide()
-            }
-
-            else -> {
-                binding.bottomNavigation.visibility = View.VISIBLE
-                binding.fabAdd.hide()
-                drawerToggle.isDrawerIndicatorEnabled = true
-                drawerToggle.setToolbarNavigationClickListener(null)
+                // Pastikan toolbar di layer paling atas
+                binding.toolbar.bringToFront()
             }
         }
 
-
+        setupToolbarIcon(fragment)
     }
 
-    fun openEventDetail(eventId: Int) {
-        val frag = EventDetailFragment.newInstance(eventId)
+    private fun setupToolbarIcon(fragment: Fragment) {
+        // Daftar halaman yg pake tombol BACK
+        val isBackMode = fragment is ProfileFragment ||
+                fragment is ModelFragment ||
+                fragment is AdoptionFragment ||
+                fragment is NotificationFragment
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, frag)
-            .addToBackStack("EventDetail")
-            .commit()
+        if (isBackMode) {
+            // Mode Back Arrow
+            drawerToggle.isDrawerIndicatorEnabled = false
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-        supportActionBar?.hide()
-        binding.toolbar.visibility = View.GONE
+            drawerToggle.setToolbarNavigationClickListener {
+                // Kalau dipencet, balik ke Home
+                loadFragment(HomeFragment())
+                binding.bottomNavigation.selectedItemId = R.id.nav_home
+            }
 
-        binding.bottomNavigation.visibility = View.GONE
-
-        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
+        } else {
+            // Mode Burger Menu
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            drawerToggle.isDrawerIndicatorEnabled = true
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            drawerToggle.syncState()
+            drawerToggle.setToolbarNavigationClickListener(null)
+        }
     }
 
-    fun openEventDetailAdmin(eventId: Int) {
-        val frag = EventDetailAdminFragment.newInstance(eventId)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, frag)
-            .addToBackStack("EventDetailAdmin")
-            .commit()
+    fun updateNavHeader() {
+        val headerView = binding.navigationView.getHeaderView(0)
+        val tvDisplayName = headerView.findViewById<TextView>(R.id.tv_display_name)
+        val tvUsername = headerView.findViewById<TextView>(R.id.tv_username)
+        val imgProfile = headerView.findViewById<ImageView>(R.id.img_profile)
 
-        supportActionBar?.hide()
-        binding.toolbar.visibility = View.GONE
-        binding.bottomNavigation.visibility = View.GONE
-        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
+        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+        val username = prefs.getString("username", "Paw Admin")
+        val handle = prefs.getString("handle", "@minpaw")
+        val profilePicPath = prefs.getString("profile_pic", null)
+
+        tvDisplayName.text = username
+        tvUsername.text = handle
+
+        if (!profilePicPath.isNullOrEmpty()) {
+            com.bumptech.glide.Glide.with(this)
+                .load(android.net.Uri.parse(profilePicPath))
+                .circleCrop()
+                .error(R.drawable.ava_paw)
+                .into(imgProfile)
+        } else {
+            imgProfile.setImageResource(R.drawable.ava_paw)
+        }
+    }
+
+    fun restoreDefaultUI() {
+        supportActionBar?.show()
+        binding.toolbar.visibility = View.VISIBLE
+        binding.bottomNavigation.visibility = View.VISIBLE
+        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.VISIBLE
+        supportActionBar?.title = "Paw Event"
+
+        // Reset warna toolbar (Safety)
+        binding.toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        binding.toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.black))
+        drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, R.color.black)
+
+        drawerToggle.isDrawerIndicatorEnabled = true
+        drawerToggle.syncState()
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Konfirmasi Logout")
+            .setMessage("Apakah kamu yakin ingin keluar dari akun?")
+            .setPositiveButton("Ya") { _, _ ->
+                val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+                prefs.edit().clear().apply()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun loadPosts(category: String) {
@@ -284,29 +290,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container)
+    fun openEventDetail(eventId: Int) {
+        val frag = EventDetailFragment.newInstance(eventId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, frag)
+            .addToBackStack("EventDetail")
+            .commit()
 
-        if (currentFragment is ProfileFragment) {
-            loadFragment(HomeFragment())
+        supportActionBar?.hide()
+        binding.toolbar.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
+        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
+    }
 
-            supportActionBar?.title = "PawPals"
-            binding.bottomNavigation.visibility = View.VISIBLE
-            binding.bottomNavigation.selectedItemId = R.id.nav_home // Memastikan Home terpilih
-
-            drawerToggle.isDrawerIndicatorEnabled = true
-
-            binding.toolbar.setNavigationOnClickListener {
-                binding.drawerLayout.openDrawer(binding.navigationView)
-            }
-            return true
-
-        } else if (binding.drawerLayout.isDrawerOpen(binding.navigationView)) {
-            binding.drawerLayout.closeDrawer(binding.navigationView)
-            return true
-        } else {
-            binding.drawerLayout.openDrawer(binding.navigationView)
-            return true
-        }
+    fun openEventDetailAdmin(eventId: Int) {
+        val frag = EventDetailAdminFragment.newInstance(eventId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, frag)
+            .addToBackStack("EventDetailAdmin")
+            .commit()
+        supportActionBar?.hide()
+        binding.toolbar.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
+        findViewById<ImageView>(R.id.iv_notification)?.visibility = View.GONE
     }
 }
