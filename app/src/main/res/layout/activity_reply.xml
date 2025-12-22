@@ -1,266 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary_blue"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Balasan" />
+        android:background="@android:color/white"
+        android:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Detail Post"
+        app:titleCentered="true"
+        app:titleTextColor="@android:color/black"
+        tools:layout_editor_absoluteX="0dp"></com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <View
+        android:id="@+id/dividerToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="12dp">
+        android:layout_height="0.5dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
-        <androidx.cardview.widget.CardView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/dividerToolbar"
+        app:layout_constraintBottom_toTopOf="@id/layoutInputSection">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:cardElevation="0dp">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:padding="16dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgProfile"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ava_paw"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/imgProfile"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ava_paw"
-                        android:layout_marginEnd="8dp"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/imgProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/imgProfile"
+                    app:layout_constraintEnd_toEndOf="@id/imgProfile"/>
 
-                    <LinearLayout
-                        android:id="@+id/author_info_container"
+                <LinearLayout
+                    android:id="@+id/userInfoLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintStart_toEndOf="@id/imgProfile"
+                    app:layout_constraintTop_toTopOf="@id/imgProfile"
+                    app:layout_constraintEnd_toStartOf="@id/moreBtn">
+
+                    <TextView
+                        android:id="@+id/tvAuthor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/imgProfile"
-                        android:layout_marginStart="8dp"
-                        android:orientation="vertical">
+                        android:text="Rizal"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="• 2j"
+                        android:textSize="14sp"
+                        android:layout_marginStart="6dp"
+                        android:textColor="#757575" />
+                </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tvAuthor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Rizal"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                <ImageView
+                    android:id="@+id/moreBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_more"
+                    app:tint="#757575"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/imgProfile" />
 
-                            <TextView
-                                android:id="@+id/tv_community_tag"
-                                android:layout_width="wrap_content"
-                                android:layout_height="20dp"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/bg_tag_community"
-                                android:paddingStart="6dp"
-                                android:paddingTop="2dp"
-                                android:paddingEnd="6dp"
-                                android:paddingBottom="2dp"
-                                android:text="Mainan"
-                                android:textColor="@android:color/black"
-                                android:textSize="10sp"
-                                android:drawableStart="@drawable/ic_paw_tag"
-                                android:drawablePadding="4dp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tvTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1 min ago"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/darker_gray" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/moreBtn"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_more"
-                        app:tint="@color/gray_light" /> </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_community_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mainan"
+                    android:textSize="11sp"
+                    android:textColor="#0277BD"
+                    android:background="@drawable/bg_tag_pill"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="@id/userInfoLayout"
+                    app:layout_constraintTop_toBottomOf="@id/userInfoLayout" />
 
                 <TextView
                     android:id="@+id/tvContent"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="56dp"
-                    android:text="Ada rekomendasi mainan tahan lama?"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="12dp"
+                    android:text="Ada rekomendasi mainan tahan lama buat Golden Retriever?"
+                    android:textSize="16sp"
+                    android:textColor="#212121"
+                    android:lineSpacingExtra="4dp"
+                    app:layout_constraintStart_toStartOf="@id/userInfoLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_community_tag" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_post_image_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="56dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="0dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/imgPostImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Gambar Post" />
-                </androidx.cardview.widget.CardView>
-
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgPostImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="300dp"
+                    android:visibility="gone"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorners"
+                    app:layout_constraintStart_toStartOf="@id/userInfoLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvContent" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginTop="16dp"
-                    android:layout_marginStart="56dp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_comment_action"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_comment" />
-                        <TextView
-                            android:id="@+id/tv_comment_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="0"
-                            android:textSize="12sp"
-                            android:textColor="@color/gray_light"/>
-                    </LinearLayout>
+                    app:layout_constraintTop_toBottomOf="@id/imgPostImage"
+                    app:layout_constraintStart_toStartOf="@id/userInfoLayout">
 
                     <LinearLayout
                         android:id="@+id/ll_like_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-
+                        android:paddingEnd="16dp">
                         <ImageView
                             android:id="@+id/iv_like_icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_favorite"/>
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_favorite"
+                            app:tint="#757575"/>
                         <TextView
                             android:id="@+id/tv_like_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="0"
-                            android:textSize="12sp"
-                            android:textColor="@color/gray_light" />
+                            android:layout_marginStart="6dp"
+                            android:text="12"
+                            android:textSize="14sp"
+                            android:textColor="#757575" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_comment_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_comment"
+                            app:tint="#757575"/>
+                        <TextView
+                            android:id="@+id/tv_comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="4"
+                            android:textSize="14sp"
+                            android:textColor="#757575" />
                     </LinearLayout>
                 </LinearLayout>
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F0F0F0"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReplies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="80dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutInputSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:elevation="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="#DDDDDD" />
+            android:background="#F0F0F0"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReplies"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp" />
-
-        <ImageView
-            android:id="@+id/imgReplyPreview"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardReplyPreview"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cardCornerRadius="8dp"
             android:visibility="gone"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/inputContainer">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_rounded_reply_input"
-            android:padding="4dp">
-
-            <EditText
-                android:id="@+id/etReply"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:hint="Tulis balasan..."
-                android:background="@null"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
-                android:textSize="16sp"
-                android:inputType="textCapSentences|textMultiLine"
-                android:maxLines="5" />
-
-            <ImageButton
-                android:id="@+id/btnPickReplyImage"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Pilih Gambar untuk Balasan"
-                android:src="@drawable/ic_image"
-                app:tint="@color/primary_blue" />
+            <ImageView
+                android:id="@+id/imgReplyPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
 
             <ImageButton
                 android:id="@+id/btnRemoveReplyImage"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Hapus Gambar Balasan"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_close"
-                app:tint="@color/pink_badge"
-                android:visibility="gone" />
+                android:background="#80000000"
+                app:tint="@android:color/white"
+                android:padding="4dp"
+                android:layout_gravity="top|end"/>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/inputContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSend"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
-                android:id="@+id/btnSend"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/btnPickReplyImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_gallery"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Kirim Balasan"
-                android:src="@drawable/ic_send"
-                app:tint="@color/primary_blue" />
+                app:tint="#5CE4FF"
+                android:padding="8dp"/>
+
+            <EditText
+                android:id="@+id/etReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chat_input"
+                android:hint="Balas..."
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:textSize="14sp"
+                android:maxLines="4"
+                android:layout_marginStart="4dp"/>
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnSend"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_send"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            app:tint="#5CE4FF"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
