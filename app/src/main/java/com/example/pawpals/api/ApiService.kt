@@ -1,13 +1,16 @@
 package com.example.pawpals.api
 
 import com.example.pawpals.model.DashboardStats
-import com.example.pawpals.model.Member
+// import com.example.pawpals.model.Member // (Biarin yg lama)
+// import com.example.pawpals.model.ScanResponse // (!) Bikin model ini nanti (cek bawah)
 import com.google.gson.JsonObject
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
 
+    // --- BAGIAN PHP
     @FormUrlEncoded
     @POST("login.php")
     fun login(@Field("email") email: String, @Field("password") password: String): Call<JsonObject>
@@ -37,4 +40,12 @@ interface ApiService {
 
     @GET("dashboard_stats.php")
     suspend fun getDashboardStats(): DashboardStats
+
+    // --- BAGIAN PYTHON ML
+    @Multipart
+    @POST
+    fun scanPenyakit(
+        @Url url: String,  // <--- Disini nanti kita masukin Link Ngrok
+        @Part file: MultipartBody.Part
+    ): Call<JsonObject>
 }

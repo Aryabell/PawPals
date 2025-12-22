@@ -4,6 +4,8 @@
     <!-- Izin internet untuk API/Retrofit -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" />
 
 
     <application
