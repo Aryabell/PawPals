@@ -45,12 +45,14 @@ fun getTagColor(context: Context, tag: String): Int {
     return when (tag) {
         "Lost Dogs" -> ContextCompat.getColor(context, R.color.color_tag_lost_dogs)
         "Paw Playground" -> ContextCompat.getColor(context, R.color.color_tag_playground)
-        "Adoption" -> ContextCompat.getColor(context, R.color.color_tag_adoption)
-        "Health" -> ContextCompat.getColor(context, R.color.color_tag_health)
+
+        "Adopsi", "Adoption" -> ContextCompat.getColor(context, R.color.color_tag_adoption)
+        "Kesehatan", "Health" -> ContextCompat.getColor(context, R.color.color_tag_health)
         "Playdate" -> ContextCompat.getColor(context, R.color.color_tag_playdate)
-        "Recommend" -> ContextCompat.getColor(context, R.color.color_tag_recommend)
+        "Rekomendasi", "Recommend" -> ContextCompat.getColor(context, R.color.color_tag_recommend)
         "Events" -> ContextCompat.getColor(context, R.color.color_tag_events)
         "Talks" -> ContextCompat.getColor(context, R.color.color_tag_talks)
+
         else -> ContextCompat.getColor(context, android.R.color.darker_gray)
     }
 }
@@ -76,7 +78,6 @@ class CommunityAdapter(
         val tvTime: TextView = view.findViewById(R.id.tvTime)
         val tvRoleTag: TextView = view.findViewById(R.id.tv_community_tag)
         val tvContent: TextView = view.findViewById(R.id.tvContent)
-        val cvImageContainer: View = view.findViewById(R.id.cv_post_image_container)
         val imgPostImage: ImageView = view.findViewById(R.id.imgPostImage)
         val tvCommentCount: TextView = view.findViewById(R.id.tv_comment_count)
         val tvLikeCount: TextView = view.findViewById(R.id.tv_like_count)
@@ -114,12 +115,12 @@ class CommunityAdapter(
 
         /* ===== IMAGE ===== */
         if (!post.imageUri.isNullOrEmpty()) {
-            holder.cvImageContainer.visibility = View.VISIBLE
+            holder.imgPostImage.visibility = View.VISIBLE // Langsung di ImageView
             Glide.with(context)
                 .load("http://10.0.2.2/pawpals_api/${post.imageUri}")
                 .into(holder.imgPostImage)
         } else {
-            holder.cvImageContainer.visibility = View.GONE
+            holder.imgPostImage.visibility = View.GONE // Langsung di ImageView
         }
 
         /* ===== COUNTS ===== */

@@ -1,42 +1,57 @@
-<LinearLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:layout_marginBottom="6dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#F0F0F0"
+    android:backgroundTint="#FAFAFA">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="12dp"
         android:gravity="center_vertical">
 
-        <!-- ⭐ Icon Trending -->
         <ImageView
             android:id="@+id/imgTrending"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
             android:src="@drawable/ic_star"
-            android:contentDescription="Trending Icon"
-            android:visibility="gone"
-            android:layout_marginEnd="6dp" />
+            android:background="@drawable/bg_circle_pastel_yellow"
+            app:tint="#FFB300" />
 
-        <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:text="Author" />
-    </LinearLayout>
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Post content..."
-        android:textSize="14sp"
-        android:layout_marginTop="2dp" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="13sp"
+                android:textColor="#333333"
+                android:text="Author Name" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Topik yang lagi ramai dibicarakan..."
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

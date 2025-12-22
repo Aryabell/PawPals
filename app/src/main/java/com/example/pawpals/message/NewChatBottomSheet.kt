@@ -61,14 +61,12 @@ class NewChatBottomSheet(
                     response: Response<JsonObject>
                 ) {
                     val body = response.body() ?: return
-
                     val dataArray = body.getAsJsonArray("members") ?: return
 
                     members.clear()
 
                     for (json in dataArray) {
                         val obj = json.asJsonObject
-
                         val member = Member(
                             id = obj.get("id").asInt,
                             name = obj.get("name").asString,
@@ -77,40 +75,27 @@ class NewChatBottomSheet(
                             blocked = obj.get("blocked").asInt
                         )
 
-                        // ❌ skip diri sendiri & user diblok
                         if (member.id != currentUserId && member.blocked == 0) {
                             members.add(member)
                         }
                     }
 
+                    // 1. Siapkan Adapter
                     val adapter = ArrayAdapter(
-                        context ?: return,
-                        android.R.layout.simple_spinner_item,
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
                         members.map { it.name }
                     )
 
-                    adapter.setDropDownViewResource(
-                        android.R.layout.simple_spinner_dropdown_item
-                    )
+                    // 2. Pasang Adapter (Pake setAdapter, bukan .adapter =)
+                    binding.spinnerUser.setAdapter(adapter)
 
-                    binding.spinnerUser.adapter = adapter
+                    // 3. Handle Klik Item (Pake setOnItemClickListener)
+                    binding.spinnerUser.setOnItemClickListener { _, _, position, _ ->
+                        selectedMember = members[position]
 
-                    binding.spinnerUser.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-
-                            override fun onItemSelected(
-                                parent: AdapterView<*>,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                selectedMember = members[position]
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>) {
-                                selectedMember = null
-                            }
-                        }
+                        Log.d("ChatSheet", "Selected: ${selectedMember?.name}")
+                    }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {

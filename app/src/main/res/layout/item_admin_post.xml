@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#F0F0F0"
+    app:strokeWidth="1.2dp"
+    android:backgroundTint="@android:color/white">
 
     <LinearLayout
         android:orientation="vertical"
@@ -13,51 +17,79 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtAuthor"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/txtAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Pawpals"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="PENDING"
+                android:textSize="10sp"
+                android:textColor="@color/blue_pale"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:background="@drawable/bg_label_status_light"
+                android:fontFamily="sans-serif-black" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/txtContent"
-            android:layout_marginTop="6dp"
-            android:textSize="14sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Ini adalah contoh konten postingan yang perlu dimoderasi oleh admin..."
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:lineSpacingExtra="3dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp" />
 
         <LinearLayout
-            android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMark"
-                android:text="⭐ Tandai Trending"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/primary_blue"
-                android:textColor="@android:color/white"
-                app:cornerRadius="8dp"
+                android:layout_height="wrap_content"
+                android:text="Trending"
+                app:icon="@drawable/ic_star"
                 android:textSize="12sp"
-                android:paddingHorizontal="12dp"
-                style="@style/Widget.MaterialComponents.Button.TextButton" />
+                android:textColor="@color/primary_blue"
+                app:iconTint="@color/primary_blue"
+                app:rippleColor="#E3F2FD" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDelete"
-                android:text="🗑️ Sembunyikan"
-                android:layout_marginStart="8dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/pink_badge"
-                android:textColor="@android:color/white"
-                app:cornerRadius="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Sembunyikan"
+                app:icon="@drawable/ic_hide"
                 android:textSize="12sp"
-                android:paddingHorizontal="12dp"
-                style="@style/Widget.MaterialComponents.Button.TextButton" />
+                android:textColor="@color/pink_badge"
+                app:iconTint="@color/pink_badge"
+                app:rippleColor="#FFEBEE" />
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

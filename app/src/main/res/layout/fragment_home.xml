@@ -11,61 +11,80 @@
         android:id="@+id/home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="16dp">
+            android:paddingBottom="80dp">
 
-            <!-- 🔍 Search bar -->
-            <EditText
-                android:id="@+id/et_search_home"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Cari post, username..."
-                android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_search_rounded"
-                android:padding="10dp"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray" />
-
-            <!-- 🎉 Banner -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_banner"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_margin="16dp"
-                app:cardCornerRadius="12dp">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#9EEFFF" />
+                android:padding="16dp"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selamat Datang di PawPals! 🐾"
-                    android:textColor="@android:color/black"
+                    android:text="Halo, Admin!"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:layout_margin="16dp"/>
-            </androidx.cardview.widget.CardView>
+                    android:textColor="#212121"
+                    android:layout_marginBottom="12dp"/>
+
+                <EditText
+                    android:id="@+id/et_search_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Cari post, username..."
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="12dp"
+                    android:background="@drawable/bg_chat_input"
+                    android:paddingHorizontal="20dp"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="#9E9E9E" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Community Timeline"
+                android:text="Pengumuman"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#212121"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_announcement"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingHorizontal="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginVertical="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timeline Komunitas"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="#212121"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="4dp"/>
 
-            <!-- 📰 Posts -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_posts"
                 android:layout_width="match_parent"

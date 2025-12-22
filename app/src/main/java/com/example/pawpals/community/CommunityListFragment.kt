@@ -21,10 +21,10 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
     private var allPosts: List<Post> = emptyList()
 
     private val categories = listOf(
-        "Health" to "health",
-        "Playdate" to "playdate",
-        "Talks" to "talks",
-        "Recommend" to "reco"
+        Triple("Health", "health", R.drawable.ic_community_health),
+        Triple("Playdate", "playdate", R.drawable.ic_community_playdate),
+        Triple("Talks", "talks", R.drawable.ic_community_talks),
+        Triple("Recommend", "reco", R.drawable.ic_community_recommend)
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,11 +51,17 @@ class CommunityListFragment : Fragment(R.layout.fragment_community_list) {
         rvCategories.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        val titles = categories.map { it.first }
+        // 1. Buat data yang benar untuk adapter: List<Pair<String, Int>> (Nama, ID Gambar)
+        val adapterData = categories.map { Pair(it.first, it.third) }
 
-        rvCategories.adapter = CategoryAdapter(titles) { selectedTitle ->
-            val pair = categories.find { it.first == selectedTitle }
-            val categoryId = pair?.second ?: "talks"
+        // 2. Kirim data yang sudah benar ke CategoryAdapter
+        rvCategories.adapter = CategoryAdapter(adapterData) { selectedPair ->
+            // selectedPair adalah Pair<String, Int> yang diklik
+            val selectedTitle = selectedPair.first
+
+            // Cari kategori asli (Triple) berdasarkan nama yang diklik
+            val originalCategory = categories.find { it.first == selectedTitle }
+            val categoryId = originalCategory?.second ?: "talks" // Ambil ID kategori ("health", "talks", dll)
 
             val frag = CommunityPostsFragment.newInstance(
                 selectedTitle,

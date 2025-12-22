@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pawpals.R
 
 
-data class CommunityCategory(val id: String, val title: String)
+data class CommunityCategory(val id: String, val title: String, val iconResId: Int)
 
 class CommunityListAdapter(
     private val items: List<CommunityCategory>,
@@ -20,26 +20,26 @@ class CommunityListAdapter(
     private var selectedCategory: CommunityCategory? = null
 
     inner class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val img: ImageView = itemView.findViewById(R.id.imgCommunity)
-        val tv: TextView = itemView.findViewById(R.id.tvCommunityName)
+        val img: ImageView = itemView.findViewById(R.id.ivIcon)
+        val tv: TextView = itemView.findViewById(R.id.tvCategoryName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_community, parent, false)
+            .inflate(R.layout.item_category, parent, false)
         return CatViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val category = items[position]
         holder.tv.text = category.title
-
+        holder.img.setImageResource(category.iconResId)
 
         val drawableRes = when (category.id.lowercase()) {
-            "health" -> R.drawable.profilepicture
-            "talks" -> R.drawable.profilepicture
-            "playdate" -> R.drawable.profilepicture
-            "recommend" -> R.drawable.profilepicture
+            "health" -> R.drawable.ic_community_health
+            "talks" -> R.drawable.ic_community_talks
+            "playdate" -> R.drawable.ic_community_playdate
+            "recommend" -> R.drawable.ic_community_recommend
             else -> R.drawable.ic_placeholder
         }
 

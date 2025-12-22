@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.example.pawpals.MainActivity
 import com.example.pawpals.R
 import com.example.pawpals.community.CommunityAdapter
@@ -26,6 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var postAdapter: CommunityAdapter
     private lateinit var etSearch: EditText
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var vpAnnouncement: ViewPager2
 
     private var allPosts: MutableList<Post> = mutableListOf()
 
@@ -35,6 +37,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         rvPosts = view.findViewById(R.id.rv_posts)
         etSearch = view.findViewById(R.id.et_search_home)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
+        vpAnnouncement = view.findViewById(R.id.vp_announcement)
+
+        // --- SETUP CAROUSEL (BANNER) ---
+        setupBanner()
 
         postAdapter = CommunityAdapter(
             mutableListOf(),
@@ -71,6 +77,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 filterPosts(s.toString())
             }
         })
+    }
+
+    private fun setupBanner() {
+        // Data Dummy 3 Kartu
+        val banners = listOf(
+            Banner(
+                "Selamat Datang di PawPals! 🐾",
+                "Temukan komunitas pecinta anabul di sekitarmu.",
+                R.color.blue_pale
+            ),
+            Banner(
+                "Jadwal Vaksinasi Massal",
+                "Minggu ini di Taman Kota. Cek detail di menu Event.",
+                R.color.bg_result_healthy
+            ),
+            Banner(
+                "Yuk, Cari Teman Baru!",
+                "Join keseruan playdate minggu ini. Cek detail di menu Event",
+                R.color.bg_result_sick
+            )
+        )
+
+        val bannerAdapter = AnnouncementAdapter(banners)
+        vpAnnouncement.adapter = bannerAdapter
+
+        // Efek transisi biar keren pas digeser (Optional)
+        vpAnnouncement.setPageTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
     }
 
     private fun loadPosts() {

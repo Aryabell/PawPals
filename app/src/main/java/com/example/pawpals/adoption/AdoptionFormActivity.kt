@@ -93,7 +93,7 @@ class AdoptionFormActivity : AppCompatActivity() {
 
         // Disable UI + show loading
         binding.btnSubmit.isEnabled = false
-        binding.progressBar.visibility = View.VISIBLE
+        binding.loadingOverlay.visibility = View.VISIBLE
 
         val rbDogId = dogId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val rbDogName = dogName.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -123,7 +123,8 @@ class AdoptionFormActivity : AppCompatActivity() {
                 response: Response<AdoptionResponse>
             ) {
                 binding.btnSubmit.isEnabled = true
-                binding.progressBar.visibility = View.GONE
+                binding.loadingOverlay.visibility = View.GONE
+                binding.btnSubmit.isEnabled = true
 
                 if (response.isSuccessful && response.body()?.status == "success") {
                     Toast.makeText(
@@ -142,8 +143,8 @@ class AdoptionFormActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<AdoptionResponse>, t: Throwable) {
+                binding.loadingOverlay.visibility = View.GONE
                 binding.btnSubmit.isEnabled = true
-                binding.progressBar.visibility = View.GONE
                 Toast.makeText(this@AdoptionFormActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })

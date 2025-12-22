@@ -44,7 +44,9 @@ class ReplyActivity : AppCompatActivity() {
 
         // ===== TOOLBAR =====
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Balasan"
 

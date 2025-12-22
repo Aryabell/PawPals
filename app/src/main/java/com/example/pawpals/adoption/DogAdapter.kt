@@ -17,17 +17,17 @@ class DogAdapter(
 
         fun bind(dog: Dog) = with(binding) {
 
-            // TEXT
-            tvDogName.text = dog.name
-            tvAdopterName.text = dog.breed
-            tvStatus.text = dog.location
-            tvReason.text = "Klik untuk detail"
-            tvCreatedAt.text = ""
+            tvName.text = dog.name
+            tvBreed.text = dog.breed
+            tvLocation.text = dog.location
 
-            // === LOAD IMAGE FROM dog.imageUrl ===
+            tvAgeTag.text = "${dog.ageInYears} Thn"
+
+            // === LOAD IMAGE ===
             Glide.with(root.context)
-                .load(dog.imageUrl)                // URL dari database
-                .into(ivDog)                   // ImageView dari layout
+                .load(dog.imageUrl)
+                .centerCrop()
+                .into(imgDog)
 
             root.setOnClickListener { onClick(dog) }
         }

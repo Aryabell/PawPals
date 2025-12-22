@@ -8,21 +8,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Konten utama aplikasi -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Toolbar -->
+        <FrameLayout
+            android:id="@+id/main_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="56dp" />
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="0dp">
 
-            <!-- Icon notifikasi di ujung kanan -->
             <ImageView
                 android:id="@+id/iv_notification"
                 android:layout_width="wrap_content"
@@ -33,7 +35,6 @@
                 android:contentDescription="Notifikasi" />
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
@@ -43,15 +44,6 @@
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="unlabeled" />
 
-        <!-- Container Fragment -->
-        <FrameLayout
-            android:id="@+id/main_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
-            android:layout_above="@id/bottom_navigation" />
-
-        <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
@@ -63,12 +55,11 @@
             android:src="@drawable/ic_add"
             app:tint="@android:color/white"
             android:contentDescription="Tambah Post"
-            app:backgroundTint="@color/design_default_color_error"
+            app:backgroundTint="@color/primary_blue"
             app:maxImageSize="32dp" />
 
     </RelativeLayout>
 
-    <!-- Sidebar Navigation -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
@@ -77,14 +68,9 @@
         android:background="@android:color/white"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
-
         app:itemIconTint="@color/nav_item_selector"
         app:itemTextColor="@color/nav_item_selector"
-
         app:itemBackground="@drawable/nav_item_background"
-
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.NavigationView"
-
-        />
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.NavigationView" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
