@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"> <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:clipToPadding="false"
-        android:paddingTop="16dp"
+        android:paddingTop="8dp"
         android:paddingBottom="88dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-
         tools:listitem="@layout/item_message" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNewChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="24dp"
         android:contentDescription="New Chat"
         android:src="@drawable/ic_chat"
-
-        app:layout_anchorGravity="bottom|end"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:backgroundTint="#5CE4FF"
+        app:tint="@android:color/white"
+        app:elevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

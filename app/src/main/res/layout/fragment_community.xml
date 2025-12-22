@@ -1,119 +1,140 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".community.CommunityFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/community_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp">
+            android:paddingBottom="80dp"> <LinearLayout
+            android:id="@+id/headerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="12dp">
 
-            <!-- 🔹 Header dengan Title + Search Icon -->
             <LinearLayout
-                android:id="@+id/headerContainer"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingTop="16dp"
-                android:paddingBottom="8dp"
-                android:baselineAligned="false">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvForumTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Pals Community"
-                    android:textSize="18sp"
+                    android:text="Explore Community"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black" />
+                    android:textColor="#212121" />
 
-                <ImageView
-                    android:id="@+id/btnSearchCommunityToggle"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_search"
-                    android:contentDescription="Search"
-                    app:tint="@android:color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Temukan circle anabulmu"
+                    android:textSize="14sp"
+                    android:textColor="#757575" />
             </LinearLayout>
 
-            <!-- 🔍 Search bar (tampil saat toggle diklik) -->
+            <ImageView
+                android:id="@+id/btnSearchCommunityToggle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_search"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#212121" />
+        </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/searchBarContainer"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_search_rounded"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_search"
-                    app:tint="@android:color/darker_gray" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:visibility="gone"
+                android:animateLayoutChanges="true">
 
                 <EditText
                     android:id="@+id/etSearchCommunity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Cari di Community..."
-                    android:background="@android:color/transparent"
-                    android:paddingStart="8dp"
+                    android:layout_height="50dp"
+                    android:hint="Cari topik..."
+                    android:background="@drawable/bg_chat_input"
+                    android:paddingHorizontal="20dp"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="12dp"
                     android:textSize="14sp"
                     android:inputType="text"
-                    android:imeOptions="actionSearch"
                     android:textColor="@android:color/black"
-                    android:textColorHint="@android:color/darker_gray" />
+                    android:textColorHint="#9E9E9E"
+                    android:layout_marginBottom="12dp"/>
             </LinearLayout>
 
-            <!-- 🔸 Horizontal list kategori -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCommunities"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
                 android:layout_marginTop="8dp"
-                android:overScrollMode="never" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_community" />
 
-            <!-- 🔸 Sub Title -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sedang ramai dibicarakan"
-                android:textSize="16sp"
+                android:text="🔥 Sedang Ramai"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:paddingVertical="12dp" />
+                android:textColor="#212121"
+                android:paddingHorizontal="20dp"
+                android:layout_marginBottom="8dp" />
 
-            <!-- 🔹 Trending posts -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTrending"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_post" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ➕ Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNewPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="Tambah Post"
-        app:tint="@android:color/white" />
-</FrameLayout>
+        app:backgroundTint="@color/primary_blue"
+        app:tint="@android:color/white"
+        app:elevation="6dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
