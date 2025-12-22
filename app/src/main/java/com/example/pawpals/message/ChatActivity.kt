@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawpals.api.ChatSessionManager
 import com.example.pawpals.api.MessageApiClient
 import com.example.pawpals.databinding.ActivityChatBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+import com.example.pawpals.R
 
 class ChatActivity : AppCompatActivity() {
 
@@ -32,6 +35,9 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbarChat)
+        setSupportActionBar(toolbar)
+
         receiverId = intent.getIntExtra("receiverId", 0)
         receiverName = intent.getStringExtra("receiverName") ?: "Chat"
         chatId = intent.getIntExtra("chatId", 0)
@@ -49,6 +55,10 @@ class ChatActivity : AppCompatActivity() {
             createChat()
         } else {
             loadMessages()
+        }
+
+        toolbar.setNavigationOnClickListener {
+            finish()
         }
     }
 

@@ -82,14 +82,13 @@ class CommunityFragment : Fragment(R.layout.fragment_community) {
 
         // ================= CATEGORY RV =================
         val communities = listOf(
-            CommunityCategory("health", "Kesehatan"),
-            CommunityCategory("talks", "Talks"),
-            CommunityCategory("playdate", "Playdate"),
-            CommunityCategory("recommend", "Recommend")
+            CommunityCategory("health", "Kesehatan", R.drawable.ic_community_health),
+            CommunityCategory("talks", "Talks", R.drawable.ic_community_talks),
+            CommunityCategory("playdate", "Playdate", R.drawable.ic_community_playdate),
+            CommunityCategory("recommend", "Rekomendasi", R.drawable.ic_community_recommend)
         )
 
-        rvCommunities.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rvCommunities.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvCommunities.adapter = CommunityListAdapter(communities) { category ->
             selectedCategoryId = category.id
             applyTrendingFilter()

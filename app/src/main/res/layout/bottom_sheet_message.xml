@@ -1,43 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_bottom_sheet_white">
+
+    <View
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#E0E0E0"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Mulai Chat Baru"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_marginBottom="12dp"/>
+        android:textColor="#333333"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- Pilih Member -->
-    <Spinner
-        android:id="@+id/spinnerUser"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/bg_input"
-        android:padding="12dp"/>
+        android:text="Pilih teman anabulmu untuk mengobrol"
+        android:textSize="14sp"
+        android:textColor="#9E9E9E"
+        android:textAlignment="center"
+        android:layout_marginBottom="24dp"/>
 
-
-    <!-- Isi pesan -->
-    <EditText
-        android:id="@+id/etMessageForm"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tulis pesan..."
-        android:minLines="3"
-        android:gravity="top"
-        android:background="@drawable/bg_input"
-        android:layout_marginBottom="12dp"/>
+        android:hint="Kirim ke siapa?"
+        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxStrokeColor="@color/primary_blue"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="@color/primary_blue"
+        android:layout_marginBottom="16dp">
 
-    <Button
+        <AutoCompleteTextView
+            android:id="@+id/spinnerUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:padding="16dp"
+            android:text="Pilih User..."
+            android:textColor="#333333"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxStrokeColor="@color/primary_blue"
+        android:layout_marginBottom="24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMessageForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tulis pesan pertamamu..."
+            android:minLines="3"
+            android:gravity="top"
+            android:padding="16dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSendForm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Kirim"/>
+        android:layout_height="56dp"
+        android:text="Kirim Pesan"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:cornerRadius="28dp"
+        android:backgroundTint="@color/primary_blue"
+        android:textColor="@android:color/white"
+        app:elevation="4dp"/>
+
 </LinearLayout>

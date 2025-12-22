@@ -94,6 +94,18 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("io.coil-kt:coil:2.6.0")
 
+    // Retrofit buat networking
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Logging biar keliatan kalo ada error
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    // CameraX core library
+    val camerax_version = "1.3.0-alpha04"
+    implementation("androidx.camera:camera-core:$camerax_version")
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation("androidx.camera:camera-view:$camerax_version")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
