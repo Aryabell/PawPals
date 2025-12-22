@@ -3,134 +3,121 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:fillViewport="true"
     android:background="@android:color/white">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:padding="24dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProfile"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_profile_placeholder"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/ava_paw"
             android:scaleType="centerCrop"
-            android:background="@drawable/circle_background"
-            android:padding="4dp"
-            android:layout_marginTop="32dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            />
+            android:background="#F0F0F0"
+            android:padding="2dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnChangePic"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_ch_pic"
-            android:background="@drawable/button_profile"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/white"
-            app:backgroundTint="@null"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="8dp"
-            android:textStyle="bold"/>
+            android:layout_marginTop="8dp"
+            android:text="Ubah Foto Profil"
+            android:textColor="#03A9F4"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:letterSpacing="0"
+            app:rippleColor="#D1F1FF" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
             android:hint="@string/hint_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:textColorHint="#AAAAAA"
-            app:hintTextColor="#6ABFED"
-            app:boxStrokeColor="#FFF87B"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
+            app:boxStrokeColor="#03A9F4"
+            app:boxStrokeWidth="1.5dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:startIconTint="#AAAAAA">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:padding="12dp"
-                android:text="arya" />
+                android:text="Arya"
+                android:textColor="#333333" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUsername"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/hint_username"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:textColorHint="#AAAAAA"
-            app:hintTextColor="#6ABFED"
-            app:boxStrokeColor="#FFF87B"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
+            app:boxStrokeColor="#03A9F4"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:padding="12dp"
-
-                android:text="\@minpaw" />
+                android:text="\@minpaw"
+                android:textColor="#333333" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPassword"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="40dp"
             android:hint="@string/hint_new_pw"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:textColorHint="#AAAAAA"
-            app:hintTextColor="#6ABFED"
-            app:boxStrokeColor="#FFF87B"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="#03A9F4"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
             app:endIconMode="password_toggle"
-            app:endIconTint="#45A0D0">
+            app:endIconTint="#03A9F4">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:padding="12dp"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="@string/btn_save"
-            android:background="@drawable/button_profile"
-            android:textColor="@android:color/white"
-            android:paddingVertical="12dp"
-            android:layout_marginBottom="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:backgroundTint="@null"/>
+            android:textAllCaps="false"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#5CE4FF"
+            android:textColor="@android:color/white"
+            app:cornerRadius="30dp"
+            app:elevation="4dp" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"/>
     </LinearLayout>
 </ScrollView>
